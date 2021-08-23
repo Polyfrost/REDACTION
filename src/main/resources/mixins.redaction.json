@@ -1,0 +1,10 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7",
+  "package": "net.wyvest.redaction.mixin",
+  "refmap": "mixins.redaction.refmap.json",
+  "mixins": [
+    "GuiIngameMixin"
+  ],
+  "verbose": true
+}

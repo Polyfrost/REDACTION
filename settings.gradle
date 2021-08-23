@@ -1,0 +1,29 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+
+        /* Add the Forge repository so ForgeGradle can fetch assets or libraries. */
+        maven {
+            name = "Forge"
+            url = "https://maven.minecraftforge.net"
+        }
+
+        /* Adds the Jitpack repository to our plugin management repositories, we need this to fetch ForgeGradle and MixinGradle. */
+        maven {
+            name = "Jitpack"
+            url = "https://jitpack.io/"
+        }
+    }
+    resolutionStrategy {
+        eachPlugin {
+            /* Check for plugin requests and redirect them their corresponding artifact. */
+            if (requested.id.id == "net.minecraftforge.gradle.forge")
+                useModule("com.github.asbyth:ForgeGradle:${requested.version}")
+            if (requested.id.id == "org.spongepowered.mixin")
+                useModule("com.github.LXGaming:MixinGradle:${requested.version}")
+        }
+    }
+}
+
+rootProject.name = mod_name

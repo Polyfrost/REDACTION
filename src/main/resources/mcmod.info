@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "redaction",
+    "name": "Redaction",
+    "description": "REDACTION.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "Wyvest"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

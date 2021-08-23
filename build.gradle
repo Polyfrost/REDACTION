@@ -1,0 +1,170 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+    id "net.minecraftforge.gradle.forge" version "86b2392"
+    id "org.jetbrains.kotlin.jvm" version "1.5.21"
+    id "org.spongepowered.mixin" version "d75e32e"
+    id "java"
+}
+
+version = mod_ver
+group = "net.wyvest"
+archivesBaseName = mod_name
+
+sourceCompatibility = targetCompatibility = 1.8
+compileJava.options.encoding = "UTF-8"
+
+minecraft {
+    /* Define Minecraft properties. */
+    version = "1.8.9-11.15.1.2318-1.8.9"
+    runDir = "run"
+    mappings = "stable_22"
+
+    makeObfSourceJar = false
+
+    clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.redaction.tweaker.RedactionLoadingPlugin'
+    clientRunArgs += '--tweakClass net.wyvest.redaction.tweaker.RequisiteEssentialTweaker'
+    clientRunArgs += "--mixin mixins.redaction.json"
+}
+
+configurations {
+    /* This creates an additional dependency configuration which shades libraries into your built jar file and adds them to your workspace classpath. */
+    shade
+    implementation.extendsFrom(shade)
+}
+
+repositories {
+    /* Allows us to get dependencies from the central Maven repository. */
+    mavenCentral()
+
+    /* Defines third-party repositories that we have to use for dependencies. */
+    maven {
+        name = 'Sk1er Public'
+        url = 'https://repo.sk1er.club/repository/maven-releases/'
+    }
+    maven {
+        name = 'Jitpack'
+        url = 'https://jitpack.io/'
+    }
+    maven {
+        name = 'Spongepowered Public'
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
+    }
+    maven {
+        name = 'TGMDevelopment Public'
+        url = 'http://maven.matthewtgm.xyz/repository/maven-public/'
+        allowInsecureProtocol = true
+    }
+}
+
+dependencies {
+    /* This defines dependencies required by the mod. */
+    implementation('xyz.matthewtgm:Requisite:1.1.1')
+    shade('xyz.matthewtgm:RequisiteLaunchwrapper:1.1') {
+        transitive = false
+    }
+    implementation('gg.essential:essential-1.8.9-forge:1300')
+    shade('gg.essential:loader-launchwrapper:1.1.0') {
+        transitive = false
+    }
+
+    annotationProcessor("org.spongepowered:mixin:0.7.11-SNAPSHOT")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+mixin {
+    /* Stops mixin from warning us about duplicate refmaps. We don't care. */
+    disableRefMapWarning = true
+
+    /* Sets the mixin obfuscation environment to SEARGE. */
+    defaultObfuscationEnv = searge
+
+    /* Adds our refmap to our main sourceset. */
+    add sourceSets.main, "mixins.redaction.refmap.json"
+}
+
+jar {
+    /* Defines qualities for Forge and external mods or libraries to use. */
+    manifest.attributes(
+            'ModSide': 'CLIENT',
+            'FMLCorePlugin': 'net.wyvest.redaction.tweaker.RedactionLoadingPlugin',
+            'FMLCorePluginContainsFMLMod': true,
+            'ForceLoadAsMod': true,
+            "MixinConfigs": "mixins.redaction.json",
+            'TweakClass': 'net.wyvest.redaction.tweaker.RequisiteEssentialTweaker',
+            'TweakOrder': '0'
+    )
+
+    /* Disables the default jar so we can use a custom naming scheme. */
+    enabled = false
+}
+
+/* This task simply replaces the `${version}` and `${mcversion}` properties in the mcmod.info with the data from Gradle. */
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
+
+        // replace version and mcversion
+        expand "version": project.version, "mcversion": project.minecraft.version
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+    }
+}
+
+/* Moves resources from our own resources to the build's resources, Forge doesn't work properly. */
+task moveResources {
+    doLast {
+        ant.move file: "${buildDir}/resources/main",
+            todir: "${buildDir}/classes/java"
+    }
+}
+
+moveResources.dependsOn processResources
+classes.dependsOn moveResources
+
+/* This will force shadowJar to be ran after jar */
+tasks.jar.finalizedBy(tasks.shadowJar)
+
+// This adds support to our "shade" dependency configuration so we can embed our libraries into our jar file.
+shadowJar {
+    archiveClassifier.set("")
+    configurations = [project.configurations.shade]
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    exclude 'LICENSE.md'
+    exclude 'pack.mcmeta'
+    exclude 'dummyThing'
+    exclude '**/module-info.class'
+    exclude '*.so'
+    exclude '*.dylib'
+    exclude '*.dll'
+    exclude '*.jnilib'
+    exclude 'ibxm/**'
+    exclude 'com/jcraft/**'
+    exclude 'org/lwjgl/**'
+    exclude 'net/java/**'
+
+    exclude 'META-INF/proguard/**'
+    exclude 'META-INF/maven/**'
+    exclude 'META-INF/versions/**'
+    exclude 'META-INF/com.android.tools/**'
+
+    exclude 'fabric.mod.json'
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
