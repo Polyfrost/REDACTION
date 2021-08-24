@@ -22,6 +22,8 @@ minecraft {
     makeObfSourceJar = false
 
     clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.redaction.tweaker.RedactionLoadingPlugin'
+    clientJvmArgs += '-Delementa.dev=true'
+    clientJvmArgs += '-Delementa.debug=true'
     clientRunArgs += '--tweakClass net.wyvest.redaction.tweaker.RequisiteEssentialTweaker'
     clientRunArgs += "--mixin mixins.redaction.json"
 }
@@ -49,11 +51,6 @@ repositories {
         name = 'Spongepowered Public'
         url = 'https://repo.spongepowered.org/repository/maven-public/'
     }
-    maven {
-        name = 'TGMDevelopment Public'
-        url = 'http://maven.matthewtgm.xyz/repository/maven-public/'
-        allowInsecureProtocol = true
-    }
 }
 
 dependencies {
@@ -68,18 +65,6 @@ dependencies {
     }
 
     annotationProcessor("org.spongepowered:mixin:0.7.11-SNAPSHOT")
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-}
-
-mixin {
-    /* Stops mixin from warning us about duplicate refmaps. We don't care. */
-    disableRefMapWarning = true
-
-    /* Sets the mixin obfuscation environment to SEARGE. */
-    defaultObfuscationEnv = searge
-
-    /* Adds our refmap to our main sourceset. */
-    add sourceSets.main, "mixins.redaction.refmap.json"
 }
 
 jar {
@@ -118,19 +103,7 @@ processResources {
     }
 }
 
-/* Moves resources from our own resources to the build's resources, Forge doesn't work properly. */
-task moveResources {
-    doLast {
-        ant.move file: "${buildDir}/resources/main",
-            todir: "${buildDir}/classes/java"
-    }
-}
-
-moveResources.dependsOn processResources
-classes.dependsOn moveResources
-
-/* This will force shadowJar to be ran after jar */
-tasks.jar.finalizedBy(tasks.shadowJar)
+tasks.reobfJar.dependsOn tasks.shadowJar
 
 // This adds support to our "shade" dependency configuration so we can embed our libraries into our jar file.
 shadowJar {
@@ -166,5 +139,29 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+mixin {
+    /* Stops mixin from warning us about duplicate refmaps. We don't care. */
+    disableRefMapWarning = true
+
+    /* Sets the mixin obfuscation environment to SEARGE. */
+    defaultObfuscationEnv = searge
+
+    /* Adds our refmap to our main sourceset. */
+    add sourceSets.main, "mixins.redaction.refmap.json"
+}
+
+reobf {
+    shadowJar {
+        classpath = sourceSets.main.compileClasspath
+    }
+}
+
+sourceSets {
+    main {
+        ext.refMap = "mixins.redaction.refmap.json"
+        output.resourcesDir = file("${buildDir}/classes/kotlin/main")
     }
 }
