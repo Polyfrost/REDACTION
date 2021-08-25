@@ -7,18 +7,14 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
 import net.wyvest.redaction.Redaction.mc
-import xyz.matthewtgm.requisite.data.ColourRGB
-import xyz.matthewtgm.requisite.util.GlHelper
+import net.wyvest.redaction.config.RedactionConfig
+import net.wyvest.redaction.utils.GlUtil
 import xyz.matthewtgm.requisite.util.MathHelper
 import xyz.matthewtgm.requisite.util.RenderHelper
-import java.awt.Color
 
 object BlackBarManager {
 
     private var data: BlackBarData? = null
-
-    private val color = Color(0, 0, 0, 85)
-    private val white = ColourRGB(Color.WHITE)
     private val texPath = ResourceLocation("textures/gui/widgets.png")
     private var firstTime = true
 
@@ -41,7 +37,7 @@ object BlackBarManager {
                 it.hiding = Minecraft.getMinecraft().currentScreen is GuiChat
                 if (firstTime) {
                     firstTime = false
-                    it.x = scaledWidth / 2 - 90.5F + entityplayer.inventory.currentItem * 20
+                    it.x = 0F
                     it.y = scaledHeight - 22
                     it.hiding = false
                 }
@@ -60,10 +56,13 @@ object BlackBarManager {
                     it.lastSlot = entityplayer.inventory.currentItem
                     it.x = scaledWidth / 2 - 90.5F + entityplayer.inventory.currentItem * 20
                 }
-                RenderHelper.drawRectEnhanced(0, it.y, scaledWidth, 22, color.rgb)
-                GlHelper.drawRectangle(it.x,
-                    it.y.toFloat(), 22F, 22F, white
-                )
+                if (RedactionConfig.blackbarColor.alpha != 0) {
+                    RenderHelper.drawRectEnhanced(0, it.y, scaledWidth, 22, RedactionConfig.blackbarColor.rgb)
+                }
+                if (RedactionConfig.blackbarItemColor.alpha != 0) {
+                    GlUtil.drawRectangle(it.x,
+                        it.y.toFloat(), 22F, 22F, RedactionConfig.blackbarItemColor)
+                }
             }
         }
     }
@@ -75,5 +74,5 @@ private class BlackBarData(
     var y: Int
 ) {
     var hiding = false
-    var lastSlot = 4
+    var lastSlot = 10
 }

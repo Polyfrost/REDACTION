@@ -9,9 +9,35 @@ import net.wyvest.redaction.Redaction.NAME
 import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.gui.DownloadConfirmGui
 import net.wyvest.redaction.utils.Updater
+import java.awt.Color
 import java.io.File
 
 object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml"), NAME) {
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Blackbar",
+        description = "Replace the hotbar with a cleaner blackbar.",
+        category = "Blackbar"
+    )
+    var blackbar = false
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Blackbar Color",
+        description = "Choose the color for the blackbar.",
+        category = "Blackbar"
+    )
+    var blackbarColor : Color = Color(0, 0, 0, 85)
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Blackbar Item Highlight Color",
+        description = "Choose the color for the blackbar item highlight color",
+        category = "Blackbar"
+    )
+    var blackbarItemColor : Color = Color.WHITE
+
     @Property(
         type = PropertyType.SWITCH,
         name = "Show Update Notification",
@@ -26,7 +52,7 @@ object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml
         description = "Update $NAME by clicking the button.",
         category = "Updater"
     )
-    fun update() {
+    private fun update() {
         if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
             .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
             .push(NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")

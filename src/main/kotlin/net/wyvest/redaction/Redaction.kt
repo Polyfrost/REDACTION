@@ -17,7 +17,7 @@ import java.io.File
 object Redaction {
 
     const val NAME = "REDACTION"
-    const val VERSION = "0.1.0-BETA2"
+    const val VERSION = "0.1.0"
     const val ID = "redaction"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()

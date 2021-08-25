@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.wyvest.redaction.blackbar.BlackBarManager;
+import net.wyvest.redaction.config.RedactionConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,21 +21,23 @@ public abstract class GuiIngameMixin {
 
     @Inject(method = "renderTooltip", at = @At("HEAD"), cancellable = true)
     private void cancel(ScaledResolution res, float partialTicks, CallbackInfo ci) {
-        ci.cancel();
-        BlackBarManager.INSTANCE.render(res, partialTicks);
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
-        for (int j = 0; j < 9; ++j)
-        {
-            int k = res.getScaledWidth() / 2 - 90 + j * 20 + 2;
-            int l = res.getScaledHeight() - 16 - 3;
-            renderHotbarItem(j, k, l, partialTicks, (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity());
+        if (RedactionConfig.INSTANCE.getBlackbar()) {
+            ci.cancel();
+            BlackBarManager.INSTANCE.render(res, partialTicks);
+            GlStateManager.enableRescaleNormal();
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+            net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+            for (int j = 0; j < 9; ++j)
+            {
+                int k = res.getScaledWidth() / 2 - 90 + j * 20 + 2;
+                int l = res.getScaledHeight() - 16 - 3;
+                renderHotbarItem(j, k, l, partialTicks, (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity());
+            }
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.disableBlend();
         }
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.disableBlend();
     }
 
 }

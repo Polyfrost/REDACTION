@@ -24,7 +24,7 @@ minecraft {
     clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.redaction.tweaker.RedactionLoadingPlugin'
     clientJvmArgs += '-Delementa.dev=true'
     clientJvmArgs += '-Delementa.debug=true'
-    clientRunArgs += '--tweakClass net.wyvest.redaction.tweaker.RequisiteEssentialTweaker'
+    clientRunArgs += '--tweakClass net.wyvest.requisiteessentialloader.RequisiteEssentialTweaker'
     clientRunArgs += "--mixin mixins.redaction.json"
 }
 
@@ -56,14 +56,10 @@ repositories {
 dependencies {
     /* This defines dependencies required by the mod. */
     implementation('xyz.matthewtgm:Requisite:1.1.1')
-    shade('xyz.matthewtgm:RequisiteLaunchwrapper:1.1') {
-        transitive = false
-    }
-    implementation('gg.essential:essential-1.8.9-forge:1300')
-    shade('gg.essential:loader-launchwrapper:1.1.0') {
-        transitive = false
-    }
-
+    shade 'com.github.W-OVERFLOW:RequisiteEssentialLoader:b9b55008f0'
+    implementation ('xyz.matthewtgm:RequisiteLaunchwrapper:1.1')
+    implementation ('gg.essential:loader-launchwrapper:1.1.1')
+    implementation('gg.essential:essential-1.8.9-forge:1318')
     annotationProcessor("org.spongepowered:mixin:0.7.11-SNAPSHOT")
 }
 
@@ -75,7 +71,7 @@ jar {
             'FMLCorePluginContainsFMLMod': true,
             'ForceLoadAsMod': true,
             "MixinConfigs": "mixins.redaction.json",
-            'TweakClass': 'net.wyvest.redaction.tweaker.RequisiteEssentialTweaker',
+            'TweakClass': 'net.wyvest.requisiteessentialloader.RequisiteEssentialTweaker',
             'TweakOrder': '0'
     )
 

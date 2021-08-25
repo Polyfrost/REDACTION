@@ -19,7 +19,6 @@ import java.util.*
  * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
  */
 object APIUtil {
-    private val parser = JsonParser()
 
     private val builder: HttpClientBuilder =
         HttpClients.custom().setUserAgent("${Redaction.NAME}/${Redaction.VERSION}")
@@ -36,7 +35,7 @@ object APIUtil {
             val response: HttpResponse = client.execute(request)
             val entity = response.entity
             if (response.statusLine.statusCode == 200) {
-                return parser.parse(EntityUtils.toString(entity)).asJsonObject
+                return JsonParser.parseString(EntityUtils.toString(entity)).asJsonObject
             } else {
                 if (urlString.startsWithAny(
                         "https://api.ashcon.app/mojang/v2/user/",
@@ -48,7 +47,7 @@ object APIUtil {
                         scanner.useDelimiter("\\Z")
                         val error = scanner.next()
                         if (error.startsWith("{")) {
-                            return parser.parse(error).asJsonObject
+                            return JsonParser.parseString(error).asJsonObject
                         }
                     }
                 }
