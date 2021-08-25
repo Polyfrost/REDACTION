@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.net.URL;
 import java.util.Map;
 
 /**
@@ -76,15 +75,6 @@ public class RedactionLoadingPlugin implements IFMLLoadingPlugin {
             }
         });
 
-        Icon icon = null;
-        try {
-            URL url = RedactionLoadingPlugin.class.getResource("/assets/redaction/wyvest.png");
-            if (url != null) {
-                icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(url).getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         JButton close = new JButton("Close");
         close.addMouseListener(new MouseAdapter() {
@@ -101,7 +91,7 @@ public class RedactionLoadingPlugin implements IFMLLoadingPlugin {
                 "Redaction Error",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.ERROR_MESSAGE,
-                icon,
+                null,
                 options,
                 options[0]
         );
