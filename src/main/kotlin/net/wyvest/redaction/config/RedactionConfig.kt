@@ -40,6 +40,30 @@ object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Show Blackbar Item Highlight Second Color",
+        description = "Show blackbar item highlight second color.",
+        category = "Blackbar"
+    )
+    var blackbarSecondColor = true
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Blackbar Item Highlight Second Color",
+        description = "Choose the color for the blackbar item highlight second color",
+        category = "Blackbar"
+    )
+    var blackbarItemColor2 : Color = Color.BLACK
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Hide Blackbar",
+        description = "Hide blackbar when chat is open",
+        category = "Blackbar"
+    )
+    var hideBlackbar = true
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Show Update Notification",
         description = "Show a notification when you start Minecraft informing you of new updates.",
         category = "Updater"

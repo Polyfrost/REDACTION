@@ -6,6 +6,8 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.event.world.WorldEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.utils.GlUtil
@@ -18,7 +20,8 @@ object BlackBarManager {
     private val texPath = ResourceLocation("textures/gui/widgets.png")
     private var firstTime = true
 
-    fun initialize() {
+    @SubscribeEvent
+    fun initialize(event: WorldEvent.Load) {
         val resolution = ScaledResolution(Minecraft.getMinecraft())
         data = BlackBarData(-1.0F, resolution.scaledHeight - 22)
     }
@@ -41,7 +44,7 @@ object BlackBarManager {
                     it.y = scaledHeight - 22
                     it.hiding = false
                 }
-                if (it.hiding) {
+                if (it.hiding && RedactionConfig.hideBlackbar) {
                     it.y = MathHelper.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, partialTicks / 4).toInt()
                 } else if (!it.hiding && it.y != scaledHeight - 22) {
                     it.y = MathHelper.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, partialTicks / 4).toInt()
@@ -62,6 +65,10 @@ object BlackBarManager {
                 if (RedactionConfig.blackbarItemColor.alpha != 0) {
                     GlUtil.drawRectangle(it.x,
                         it.y.toFloat(), 22F, 22F, RedactionConfig.blackbarItemColor)
+                }
+                if(RedactionConfig.blackbarSecondColor && RedactionConfig.blackbarItemColor2.alpha != 0) {
+                    GlUtil.drawRectangle(it.x + 2,
+                        it.y.toFloat() + 2F, 18F, 18F, RedactionConfig.blackbarItemColor2)
                 }
             }
         }

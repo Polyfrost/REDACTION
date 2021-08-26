@@ -37,7 +37,7 @@ object Redaction {
         RedactionConfig.initialize()
         RedactionCommand.register()
 
-        BlackBarManager.initialize()
+        //BlackBarManager.initialize()
         ForgeHelper.registerEventListener(BlackBarManager)
         Updater.update()
     }
