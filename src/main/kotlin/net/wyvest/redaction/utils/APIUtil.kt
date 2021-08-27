@@ -1,8 +1,8 @@
 package net.wyvest.redaction.utils
 
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import net.wyvest.redaction.Redaction
+import net.wyvest.redaction.Redaction.parser
 import org.apache.http.HttpRequest
 import org.apache.http.HttpResponse
 import org.apache.http.HttpVersion
@@ -35,7 +35,7 @@ object APIUtil {
             val response: HttpResponse = client.execute(request)
             val entity = response.entity
             if (response.statusLine.statusCode == 200) {
-                return JsonParser.parseString(EntityUtils.toString(entity)).asJsonObject
+                return parser.parse(EntityUtils.toString(entity)).asJsonObject
             } else {
                 if (urlString.startsWithAny(
                         "https://api.ashcon.app/mojang/v2/user/",
@@ -47,7 +47,7 @@ object APIUtil {
                         scanner.useDelimiter("\\Z")
                         val error = scanner.next()
                         if (error.startsWith("{")) {
-                            return JsonParser.parseString(error).asJsonObject
+                            return parser.parse(error).asJsonObject
                         }
                     }
                 }

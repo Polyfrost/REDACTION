@@ -12,7 +12,7 @@ import net.wyvest.redaction.utils.Updater
 import java.awt.Color
 import java.io.File
 
-object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml"), NAME) {
+object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml"), NAME) {
 
     @Property(
         type = PropertyType.SWITCH,
@@ -46,6 +46,7 @@ object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml
     )
     var showUpdateNotification = true
 
+    @Suppress("unused")
     @Property(
         type = PropertyType.BUTTON,
         name = "Update Now",
