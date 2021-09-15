@@ -1,4 +1,4 @@
-package net.wyvest.redaction.utils
+package xyz.qalcyo.redaction.utils
 
 import gg.essential.api.EssentialAPI
 import kotlinx.coroutines.CoroutineName
@@ -7,10 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.minecraft.util.Util
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
-import net.wyvest.redaction.Redaction
-import net.wyvest.redaction.Redaction.mc
-import net.wyvest.redaction.config.RedactionConfig
-import net.wyvest.redaction.gui.DownloadConfirmGui
+import xyz.qalcyo.redaction.Redaction
+import xyz.qalcyo.redaction.Redaction.mc
+import xyz.qalcyo.redaction.config.RedactionConfig
+import xyz.qalcyo.redaction.gui.DownloadConfirmGui
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
@@ -34,7 +34,7 @@ object Updater {
     fun update() {
         CoroutineScope(Dispatchers.IO + CoroutineName("${Redaction.NAME}-UpdateChecker")).launch {
             val latestRelease =
-                APIUtil.getJSONResponse("https://api.github.com/repos/W-OVERFLOW/${Redaction.ID}/releases/latest")
+                APIUtil.getJSONResponse("https://api.github.com/repos/Qalcyo/${Redaction.ID}/releases/latest")
             latestTag = latestRelease.get("tag_name").asString
 
             val currentVersion = DefaultArtifactVersion(Redaction.VERSION.substringBefore("-"))
@@ -48,7 +48,11 @@ object Updater {
             if (updateUrl.isNotEmpty()) {
                 if (RedactionConfig.showUpdateNotification) {
                     EssentialAPI.getNotifications()
-                        .push("Mod Update", "${Redaction.NAME} $latestTag is available!\nClick here to download it!", 5f) {
+                        .push(
+                            "Mod Update",
+                            "${Redaction.NAME} $latestTag is available!\nClick here to download it!",
+                            5f
+                        ) {
                             EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
                         }
                 }

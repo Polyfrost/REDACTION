@@ -1,16 +1,15 @@
-package net.wyvest.redaction.gui
+package xyz.qalcyo.redaction.gui
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import net.minecraft.client.gui.GuiButton
-import net.minecraft.client.gui.GuiMainMenu
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
-import net.wyvest.redaction.Redaction
-import net.wyvest.redaction.utils.Updater
-import net.wyvest.redaction.utils.Updater.shouldUpdate
-import net.wyvest.redaction.utils.Updater.updateUrl
+import xyz.qalcyo.redaction.Redaction
+import xyz.qalcyo.redaction.utils.Updater
+import xyz.qalcyo.redaction.utils.Updater.shouldUpdate
+import xyz.qalcyo.redaction.utils.Updater.updateUrl
 import java.io.File
 import kotlin.math.max
 
@@ -25,7 +24,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
             0 -> {
-                mc.displayGuiScreen(GuiMainMenu())
+                mc.displayGuiScreen(parent)
                 Multithreading.runAsync {
                     if (Updater.download(
                             updateUrl,

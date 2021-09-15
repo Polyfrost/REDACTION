@@ -1,4 +1,4 @@
-package net.wyvest.redaction.hud.elements
+package xyz.qalcyo.redaction.hud.elements
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
@@ -6,11 +6,11 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
-import net.wyvest.redaction.Redaction
-import net.wyvest.redaction.config.RedactionConfig
-import net.wyvest.redaction.hud.Element
-import net.wyvest.redaction.utils.GlUtil
-import net.wyvest.redaction.utils.MathUtil
+import xyz.qalcyo.redaction.Redaction
+import xyz.qalcyo.redaction.config.RedactionConfig
+import xyz.qalcyo.redaction.hud.Element
+import xyz.qalcyo.redaction.utils.GlUtil
+import xyz.qalcyo.redaction.utils.MathUtil
 
 class BlackBar : Element() {
 
@@ -24,8 +24,10 @@ class BlackBar : Element() {
         data = BlackBarData(-1.0F, resolution.scaledHeight - 22)
     }
 
-    override fun render(res: ScaledResolution,
-                        partialTicks: Float) {
+    override fun render(
+        res: ScaledResolution,
+        partialTicks: Float
+    ) {
         data?.let {
             if (Redaction.mc.renderViewEntity is EntityPlayer) {
                 val entityplayer = Redaction.mc.renderViewEntity as EntityPlayer
@@ -47,7 +49,11 @@ class BlackBar : Element() {
                 }
                 if (it.lastSlot != entityplayer.inventory.currentItem) {
                     if (scaledWidth / 2 - 90.5F + entityplayer.inventory.currentItem * 20 != it.x) {
-                        it.x = MathUtil.lerp(it.x, scaledWidth / 2 - 90.5F + entityplayer.inventory.currentItem * 20, partialTicks / 4)
+                        it.x = MathUtil.lerp(
+                            it.x,
+                            scaledWidth / 2 - 90.5F + entityplayer.inventory.currentItem * 20,
+                            partialTicks / 4
+                        )
                     } else {
                         it.lastSlot = entityplayer.inventory.currentItem
                     }
@@ -59,8 +65,10 @@ class BlackBar : Element() {
                     GlUtil.drawRectEnhanced(0, it.y, scaledWidth, 22, RedactionConfig.blackbarColor.rgb)
                 }
                 if (RedactionConfig.blackbarItemColor.alpha != 0) {
-                    GlUtil.drawRectangle(it.x,
-                        it.y.toFloat(), 22F, 22F, RedactionConfig.blackbarItemColor)
+                    GlUtil.drawRectangle(
+                        it.x,
+                        it.y.toFloat(), 22F, 22F, RedactionConfig.blackbarItemColor
+                    )
                 }
             }
         }

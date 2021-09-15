@@ -1,11 +1,11 @@
-package net.wyvest.redaction.commands
+package xyz.qalcyo.redaction.commands
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.commands.Command
 import gg.essential.api.commands.DefaultHandler
 import gg.essential.api.commands.SubCommand
-import net.wyvest.redaction.Redaction
-import net.wyvest.redaction.config.RedactionConfig
+import xyz.qalcyo.redaction.Redaction
+import xyz.qalcyo.redaction.config.RedactionConfig
 
 @Suppress("unused")
 object RedactionCommand : Command(Redaction.ID, true) {

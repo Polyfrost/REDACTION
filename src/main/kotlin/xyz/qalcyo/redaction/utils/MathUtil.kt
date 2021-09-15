@@ -1,4 +1,4 @@
-package net.wyvest.redaction.utils
+package xyz.qalcyo.redaction.utils
 
 object MathUtil {
 

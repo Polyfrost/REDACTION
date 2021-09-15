@@ -1,18 +1,34 @@
-package net.wyvest.redaction.config
+package xyz.qalcyo.redaction.config
 
 import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
-import net.wyvest.redaction.Redaction
-import net.wyvest.redaction.Redaction.NAME
-import net.wyvest.redaction.Redaction.mc
-import net.wyvest.redaction.gui.DownloadConfirmGui
-import net.wyvest.redaction.utils.Updater
+import xyz.qalcyo.redaction.Redaction
+import xyz.qalcyo.redaction.Redaction.NAME
+import xyz.qalcyo.redaction.Redaction.mc
+import xyz.qalcyo.redaction.gui.DownloadConfirmGui
+import xyz.qalcyo.redaction.utils.Updater
 import java.awt.Color
 import java.io.File
 
 object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml"), NAME) {
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Force Text Shadow",
+        description = "Forcefully enables the text shadow for all text.\nCan negatively affect performance.",
+        category = "General"
+    )
+    var forceShadow = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Stop Forcing When GUI Opened",
+        description = "Return text to its original form when a GUI is opened.",
+        category = "General"
+    )
+    var guiOpenShadow = true
 
     @Property(
         type = PropertyType.SWITCH,
@@ -28,7 +44,7 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         description = "Choose the color for the blackbar.",
         category = "Blackbar"
     )
-    var blackbarColor : Color = Color(0, 0, 0, 85)
+    var blackbarColor: Color = Color(0, 0, 0, 85)
 
     @Property(
         type = PropertyType.COLOR,
@@ -36,7 +52,7 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         description = "Choose the color for the blackbar item highlight color",
         category = "Blackbar"
     )
-    var blackbarItemColor : Color = Color.WHITE
+    var blackbarItemColor: Color = Color.WHITE
 
     @Property(
         type = PropertyType.SWITCH,

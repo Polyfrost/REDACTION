@@ -1,10 +1,10 @@
-package net.wyvest.redaction.hud
+package xyz.qalcyo.redaction.hud
 
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.wyvest.redaction.Redaction.mc
-import net.wyvest.redaction.hud.elements.BlackBar
+import xyz.qalcyo.redaction.Redaction.mc
+import xyz.qalcyo.redaction.hud.elements.BlackBar
 
 object HudManager {
 
@@ -20,7 +20,7 @@ object HudManager {
     }
 
     @SubscribeEvent
-    fun render(event : RenderGameOverlayEvent.Post) {
+    fun render(event: RenderGameOverlayEvent.Post) {
         if (event.type == RenderGameOverlayEvent.ElementType.ALL) {
             if (mc.thePlayer != null) {
                 for (e in elements) {

@@ -1,4 +1,4 @@
-package net.wyvest.redaction.utils
+package xyz.qalcyo.redaction.utils
 
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager

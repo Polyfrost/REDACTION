@@ -1,8 +1,8 @@
-package net.wyvest.redaction.utils
+package xyz.qalcyo.redaction.utils
 
 import com.google.gson.JsonObject
-import net.wyvest.redaction.Redaction
-import net.wyvest.redaction.Redaction.parser
+import xyz.qalcyo.redaction.Redaction
+import xyz.qalcyo.redaction.Redaction.parser
 import org.apache.http.HttpRequest
 import org.apache.http.HttpResponse
 import org.apache.http.HttpVersion
