@@ -5,8 +5,10 @@ import gg.essential.universal.ChatColor
 import net.minecraft.client.Minecraft
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
+import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import xyz.qalcyo.redaction.commands.RedactionCommand
 import xyz.qalcyo.redaction.config.RedactionConfig
@@ -44,8 +46,13 @@ object Redaction {
     fun onFMLInitialization(event: FMLInitializationEvent) {
         RedactionConfig.initialize()
         RedactionCommand.register()
-        HudManager.initialize()
         Updater.update()
+        EVENT_BUS.register(this)
+    }
+
+    @Mod.EventHandler
+    fun onFMLPost(e: FMLLoadCompleteEvent) {
+        HudManager.initialize()
     }
 
 
