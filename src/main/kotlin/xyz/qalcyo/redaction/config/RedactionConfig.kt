@@ -23,6 +23,15 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     var forceShadow = false
 
     @Property(
+        type = PropertyType.COLOR,
+        name = "Color",
+        description = "yeah. only works with patcher",
+        category = "General",
+        allowAlpha = false
+    )
+    var color: Color = Color.RED
+
+    @Property(
         type = PropertyType.SWITCH,
         name = "Stop Forcing When GUI Opened",
         description = "Return text to its original form when a GUI is opened.",
@@ -73,5 +82,15 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
             .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
             .push(NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
+    }
+
+    var shadowColor: Color = Color.RED
+
+    init {
+        initialize()
+        registerListener("color") {color: Color ->
+            shadowColor = Color(color.rgb and 16579836 shr 2 or color.rgb and -16777216)
+            Redaction.await = true
+        }
     }
 }

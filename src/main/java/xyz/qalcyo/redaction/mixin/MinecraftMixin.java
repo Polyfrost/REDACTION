@@ -6,11 +6,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.qalcyo.redaction.Redaction;
+import xyz.qalcyo.redaction.render.ScreenRenderer;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
     @Inject(method = "startGame", at = @At("TAIL"))
     private void a(CallbackInfo ci) {
         Redaction.INSTANCE.setMainMenu(true);
+    }
+
+    @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/IReloadableResourceManager;registerReloadListener(Lnet/minecraft/client/resources/IResourceManagerReloadListener;)V", shift = At.Shift.AFTER, ordinal = 4))
+    private void initializeSmartFontRenderer(CallbackInfo ci) {
+        ScreenRenderer.init();
     }
 }
