@@ -25,11 +25,19 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     @Property(
         type = PropertyType.COLOR,
         name = "Color",
-        description = "yeah. only works with patcher",
-        category = "General",
+        description = "yeah.",
+        category = "AAAA",
         allowAlpha = false
     )
     var color: Color = Color.RED
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "BOLD",
+        description = "Make your name BOLD!!!",
+        category = "AAAA",
+    )
+    var bold = false
 
     @Property(
         type = PropertyType.SWITCH,
@@ -84,13 +92,7 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
             .push(NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
     }
 
-    var shadowColor: Color = Color.RED
-
     init {
         initialize()
-        registerListener("color") {color: Color ->
-            shadowColor = Color(color.rgb and 16579836 shr 2 or color.rgb and -16777216)
-            Redaction.await = true
-        }
     }
 }

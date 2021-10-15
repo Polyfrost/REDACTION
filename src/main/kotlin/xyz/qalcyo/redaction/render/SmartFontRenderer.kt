@@ -16,8 +16,10 @@ import kotlin.math.cos
 /**
  * Taken from Wynntils under GNU Affero General Public License v3.0
  * https://github.com/Wynntils/Wynntils/blob/development/LICENSE
+ * THIS IS NOT MEANT TO BE USED OUTSIDE THE FONT RENDERER HOOK.
  * @author Wynntils
  */
+//TODO: Port Patcher optimizations with license disclaimer + add underline and strikethrough support
 class SmartFontRenderer : FontRenderer(
     Minecraft.getMinecraft().gameSettings,
     ResourceLocation("textures/font/ascii.png"),
@@ -228,7 +230,7 @@ class SmartFontRenderer : FontRenderer(
     }
 
     private fun drawChars(text: String, color: Int, shadow: TextShadow?): Float {
-        var color1 = color
+        var color1 = if (shadow === TextShadow.NORMAL) color and 16579836 shr 2 or color and -16777216 else color
         if (text.isEmpty()) return (-CHAR_SPACING).toFloat()
         var textLength = 0f
         var obfuscated = false
@@ -260,20 +262,18 @@ class SmartFontRenderer : FontRenderer(
                             obfuscated = false
                             italic = false
                             bold = false
-                            detectedColor = color
-                                //if (shadow === TextShadow.NORMAL) color and 16579836 shr 2 or color and -16777216 else color
+                            detectedColor = if (shadow === TextShadow.NORMAL) color and 16579836 shr 2 or color and -16777216 else color
                             index++ // skips the next char
                         }
                     }
                 } else { // if a valid color is found remove special effects
-                    obfuscated = false
-                    italic = false
-                    bold = false
-                    index++
+                        obfuscated = false
+                        italic = false
+                        bold = if (text[index + 1].lowercaseChar() == 'w') RedactionConfig.bold else false
+                        index++
                 }
                 if (detectedColor != null) {
-                    detectedColor = detectedColor and 0xFFFFFF
-                    detectedColor = detectedColor or (color1 and -0x1000000)
+                    detectedColor = if (shadow === TextShadow.NORMAL) detectedColor and 16579836 shr 2 or detectedColor and -16777216 else detectedColor
                     color1 = detectedColor
                 }
                 index++
@@ -311,15 +311,6 @@ class SmartFontRenderer : FontRenderer(
                         posY += offset * 2
                         renderChar(character)
                         posY -= offset
-                        i++
-                    }
-                }
-                TextShadow.NORMAL -> {
-                    posY = y + offset
-                    var i = 0
-                    while (i < if (bold) 2 else 1) {
-                        posX += offset
-                        renderChar(character)
                         i++
                     }
                 }
