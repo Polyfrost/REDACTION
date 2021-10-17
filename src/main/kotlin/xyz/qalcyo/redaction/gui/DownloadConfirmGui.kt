@@ -30,8 +30,8 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
                             updateUrl,
                             File("mods/${Redaction.NAME}-${Updater.latestTag.substringAfter("v")}.jar")
                         ) && Updater.download(
-                            "https://github.com/Wyvest/Deleter/releases/download/v1.2/Deleter-1.2.jar",
-                            File("config/Wyvest/Deleter-1.2.jar")
+                            "https://github.com/Qalcyo/Deleter/releases/download/v1.2/Deleter-1.2.jar",
+                            File("config/Qalcyo/Deleter-1.2.jar")
                         )
                     ) {
                         EssentialAPI.getNotifications()

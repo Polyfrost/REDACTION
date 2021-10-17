@@ -6,7 +6,7 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
-import xyz.qalcyo.redaction.Redaction
+import xyz.qalcyo.redaction.Redaction.mc
 import xyz.qalcyo.redaction.config.RedactionConfig
 import xyz.qalcyo.redaction.hud.Element
 import xyz.qalcyo.redaction.utils.GlUtil
@@ -29,10 +29,10 @@ class BlackBar : Element() {
         partialTicks: Float
     ) {
         data?.let {
-            if (Redaction.mc.renderViewEntity is EntityPlayer) {
-                val entityplayer = Redaction.mc.renderViewEntity as EntityPlayer
+            if (mc.renderViewEntity is EntityPlayer) {
+                val entityplayer = mc.renderViewEntity as EntityPlayer
                 GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-                Redaction.mc.textureManager.bindTexture(texPath)
+                mc.textureManager.bindTexture(texPath)
                 val scaledWidth = res.scaledWidth
                 val scaledHeight = res.scaledHeight
                 it.hiding = Minecraft.getMinecraft().currentScreen is GuiChat
@@ -43,16 +43,16 @@ class BlackBar : Element() {
                     it.hiding = false
                 }
                 if (it.hiding) {
-                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, partialTicks / 4).toInt()
+                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, partialTicks / (Minecraft.getDebugFPS() / 120 * 4)).toInt()
                 } else if (!it.hiding && it.y != scaledHeight - 22) {
-                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, partialTicks / 4).toInt()
+                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, partialTicks / (Minecraft.getDebugFPS() / 120 * 4)).toInt()
                 }
                 if (it.lastSlot != entityplayer.inventory.currentItem) {
                     if (scaledWidth / 2 - 90.5F + entityplayer.inventory.currentItem * 20 != it.x) {
                         it.x = MathUtil.lerp(
                             it.x,
                             scaledWidth / 2 - 90.5F + entityplayer.inventory.currentItem * 20,
-                            partialTicks / 4
+                            partialTicks / (Minecraft.getDebugFPS() / 120 * 4)
                         )
                     } else {
                         it.lastSlot = entityplayer.inventory.currentItem

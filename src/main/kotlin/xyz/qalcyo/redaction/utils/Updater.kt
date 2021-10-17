@@ -102,7 +102,7 @@ object Updater {
                     Desktop.getDesktop().open(Redaction.jarFile.parentFile)
                 }
                 println("Using runtime $runtime")
-                val file = File("config/Wyvest/Deleter-1.2.jar")
+                val file = File("config/Qalcyo/Deleter-1.2.jar")
                 println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Redaction.jarFile.absolutePath}\"")
                 Runtime.getRuntime()
                     .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Redaction.jarFile.absolutePath}\"")

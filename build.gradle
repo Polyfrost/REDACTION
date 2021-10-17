@@ -57,9 +57,8 @@ dependencies {
     shade ('gg.essential:loader-launchwrapper:1.1.1') {
         transitive = false
     }
-    implementation('gg.essential:essential-1.8.9-forge:1501+release-launch')
+    implementation('gg.essential:essential-1.8.9-forge:1520+release-launch')
     annotationProcessor("org.spongepowered:mixin:0.7.11-SNAPSHOT")
-    //implementation files('Patcher-1.7.0-beta1.jar')
 }
 
 jar {

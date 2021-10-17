@@ -5,13 +5,11 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import xyz.qalcyo.redaction.Redaction.mc
 import xyz.qalcyo.redaction.hud.elements.BlackBar
-import xyz.qalcyo.redaction.hud.elements.PlayerInfo
 
 object HudManager {
 
     val elements = listOf(
-        BlackBar(),
-        PlayerInfo()
+        BlackBar()
     )
 
     fun initialize() {

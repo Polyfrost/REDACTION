@@ -23,23 +23,6 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     var forceShadow = false
 
     @Property(
-        type = PropertyType.COLOR,
-        name = "Color",
-        description = "yeah.",
-        category = "AAAA",
-        allowAlpha = false
-    )
-    var color: Color = Color.RED
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "BOLD",
-        description = "Make your name BOLD!!!",
-        category = "AAAA",
-    )
-    var bold = false
-
-    @Property(
         type = PropertyType.SWITCH,
         name = "Stop Forcing When GUI Opened",
         description = "Return text to its original form when a GUI is opened.",
