@@ -29,10 +29,12 @@ public abstract class GuiIngameMixin {
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
-            for (int j = 0; j < 9; ++j) {
-                int k = res.getScaledWidth() / 2 - 90 + j * 20 + 2;
-                int l = res.getScaledHeight() - 16 - 3;
-                renderHotbarItem(j, k, l, partialTicks, (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity());
+            if (Minecraft.getMinecraft().getRenderViewEntity() instanceof EntityPlayer) {
+                for (int j = 0; j < 9; ++j) {
+                    int k = res.getScaledWidth() / 2 - 90 + j * 20 + 2;
+                    int l = res.getScaledHeight() - 16 - 3;
+                    renderHotbarItem(j, k, l, partialTicks, (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity());
+                }
             }
             RenderHelper.disableStandardItemLighting();
             GlStateManager.disableRescaleNormal();
