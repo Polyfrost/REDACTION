@@ -1,4 +1,4 @@
-package xyz.qalcyo.redaction.gui
+package net.wyvest.redaction.gui
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
@@ -6,10 +6,10 @@ import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
-import xyz.qalcyo.redaction.Redaction
-import xyz.qalcyo.redaction.utils.Updater
-import xyz.qalcyo.redaction.utils.Updater.shouldUpdate
-import xyz.qalcyo.redaction.utils.Updater.updateUrl
+import net.wyvest.redaction.Redaction
+import net.wyvest.redaction.utils.Updater
+import net.wyvest.redaction.utils.Updater.shouldUpdate
+import net.wyvest.redaction.utils.Updater.updateUrl
 import java.io.File
 import kotlin.math.max
 
@@ -30,8 +30,8 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
                             updateUrl,
                             File("mods/${Redaction.NAME}-${Updater.latestTag.substringAfter("v")}.jar")
                         ) && Updater.download(
-                            "https://github.com/Qalcyo/Deleter/releases/download/v1.2/Deleter-1.2.jar",
-                            File("config/Qalcyo/Deleter-1.2.jar")
+                            "https://github.com/Wyvest/Deleter/releases/download/v1.2/Deleter-1.2.jar",
+                            File("config/W-OVERFLOW/Deleter-1.2.jar")
                         )
                     ) {
                         EssentialAPI.getNotifications()
@@ -47,11 +47,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
                 }
             }
             1 -> {
-                if (parent == null) {
-                    mc.displayGuiScreen(parent)
-                } else {
-                    EssentialAPI.getGuiUtil().openScreen(parent)
-                }
+                mc.displayGuiScreen(parent)
             }
         }
     }

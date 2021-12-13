@@ -1,14 +1,15 @@
-package xyz.qalcyo.redaction.config
+package net.wyvest.redaction.config
 
 import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
-import xyz.qalcyo.redaction.Redaction
-import xyz.qalcyo.redaction.Redaction.NAME
-import xyz.qalcyo.redaction.Redaction.mc
-import xyz.qalcyo.redaction.gui.DownloadConfirmGui
-import xyz.qalcyo.redaction.utils.Updater
+import net.wyvest.redaction.Redaction
+import net.wyvest.redaction.Redaction.NAME
+import net.wyvest.redaction.Redaction.hasChanged
+import net.wyvest.redaction.Redaction.mc
+import net.wyvest.redaction.gui.DownloadConfirmGui
+import net.wyvest.redaction.utils.Updater
 import java.awt.Color
 import java.io.File
 
@@ -16,19 +17,11 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Force Text Shadow",
-        description = "Forcefully enables the text shadow for all text.\nCan negatively affect performance.",
+        name = "Fix Skin Rendering",
+        description = "Fix a skin rendering bug where transparent skins will not be transparent.",
         category = "General"
     )
-    var forceShadow = false
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Stop Forcing When GUI Opened",
-        description = "Return text to its original form when a GUI is opened.",
-        category = "General"
-    )
-    var guiOpenShadow = true
+    var fixSkinRendering = true
 
     @Property(
         type = PropertyType.SWITCH,
@@ -53,6 +46,28 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         category = "Blackbar"
     )
     var blackbarItemColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Add Snow in Inventory",
+        description = "Add snow in the inventory.",
+        category = "Inventory"
+    )
+    var addSnow = false
+
+    @Property(
+        type = PropertyType.SLIDER,
+        name = "Amount of Particles",
+        description = "Modify the amount of snow / particles in the inventory.",
+        category = "Inventory",
+        min = 50,
+        max = 1000
+    )
+    var particles = 100
+    set(value) {
+        hasChanged = true
+        field = value
+    }
 
     @Property(
         type = PropertyType.SWITCH,

@@ -1,4 +1,4 @@
-package xyz.qalcyo.redaction.hud.elements
+package net.wyvest.redaction.hud.elements
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
@@ -6,11 +6,11 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
-import xyz.qalcyo.redaction.Redaction
-import xyz.qalcyo.redaction.config.RedactionConfig
-import xyz.qalcyo.redaction.hud.Element
-import xyz.qalcyo.redaction.utils.GlUtil
-import xyz.qalcyo.redaction.utils.MathUtil
+import net.wyvest.redaction.Redaction
+import net.wyvest.redaction.config.RedactionConfig
+import net.wyvest.redaction.hud.Element
+import net.wyvest.redaction.utils.GlUtil
+import net.wyvest.redaction.utils.MathUtil
 
 class BlackBar : Element() {
 
@@ -44,7 +44,7 @@ class BlackBar : Element() {
                 }
                 if (it.hiding) {
                     it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, partialTicks / 4).toInt()
-                } else if (!it.hiding && it.y != scaledHeight - 22) {
+                } else if (it.y != scaledHeight - 22) {
                     it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, partialTicks / 4).toInt()
                 }
                 if (it.lastSlot != entityplayer.inventory.currentItem) {

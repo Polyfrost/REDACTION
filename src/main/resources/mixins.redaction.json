@@ -1,12 +1,13 @@
 {
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
-  "package": "xyz.qalcyo.redaction.mixin",
+  "package": "net.wyvest.redaction.mixin",
   "refmap": "mixins.redaction.refmap.json",
   "mixins": [
-    "FontRendererMixin",
-    "GuiIngameMixin",
-    "MinecraftMixin"
+    "GuiIngameMixin"
   ],
-  "verbose": true
+  "verbose": true,
+  "client": [
+    "ImageBufferDownloadMixin"
+  ]
 }

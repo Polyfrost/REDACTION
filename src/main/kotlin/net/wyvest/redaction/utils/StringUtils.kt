@@ -1,4 +1,4 @@
-package xyz.qalcyo.redaction.utils
+package net.wyvest.redaction.utils
 
 import org.apache.commons.lang3.StringUtils as ApacheStringUtils
 

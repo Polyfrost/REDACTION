@@ -1,10 +1,10 @@
-package xyz.qalcyo.redaction.hud
+package net.wyvest.redaction.hud
 
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import xyz.qalcyo.redaction.Redaction.mc
-import xyz.qalcyo.redaction.hud.elements.BlackBar
+import net.wyvest.redaction.Redaction.mc
+import net.wyvest.redaction.hud.elements.BlackBar
 
 object HudManager {
 

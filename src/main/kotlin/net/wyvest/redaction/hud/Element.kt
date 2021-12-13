@@ -1,4 +1,4 @@
-package xyz.qalcyo.redaction.hud
+package net.wyvest.redaction.hud
 
 import net.minecraft.client.gui.ScaledResolution
 

@@ -1,13 +1,13 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
-    id "net.minecraftforge.gradle.forge" version "86b2392"
-    id "org.jetbrains.kotlin.jvm" version "1.5.30"
+    id "net.minecraftforge.gradle.forge" version "ddb1eb0"
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
     id "org.spongepowered.mixin" version "d75e32e"
     id "java"
 }
 
 version = mod_ver
-group = "xyz.qalcyo"
+group = "net.wyvest"
 archivesBaseName = mod_name
 
 sourceCompatibility = targetCompatibility = 1.8
@@ -54,7 +54,7 @@ repositories {
 
 dependencies {
     /* This defines dependencies required by the mod. */
-    shade ('gg.essential:loader-launchwrapper:1.1.1') {
+    shade ('gg.essential:loader-launchwrapper:1.1.2') {
         transitive = false
     }
     implementation('gg.essential:essential-1.8.9-forge:1520+release-launch')
