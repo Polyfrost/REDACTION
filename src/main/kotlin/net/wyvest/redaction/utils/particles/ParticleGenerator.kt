@@ -14,7 +14,7 @@ import java.util.*
  * @version 3.0
  */
 class ParticleGenerator {
-    private val particles: MutableList<Particle> = ArrayList<Particle>()
+    private val particles = ArrayList<Particle>()
     private var prevWidth = 0
     private var prevHeight = 0
     fun draw(mouseX: Int, mouseY: Int) {

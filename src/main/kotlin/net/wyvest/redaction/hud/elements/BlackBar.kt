@@ -30,14 +30,14 @@ class BlackBar : Element() {
                 it.hiding = Minecraft.getMinecraft().currentScreen is GuiChat
                 if (it.hiding) {
                     it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, partialTicks!! / 4).toInt()
-                } else if (it.y != scaledHeight - 22) {
+                } else if (it.y != scaledHeight - 21) {
                     it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, partialTicks!! / 4).toInt()
                 }
                 if (it.lastSlot != entityplayer!!.inventory.currentItem) {
-                    if (scaledWidth / 2 - 90.5F + entityplayer!!.inventory.currentItem * 20 != it.x) {
+                    if (scaledWidth / 2 - 91F + entityplayer!!.inventory.currentItem * 20 != it.x) {
                         it.x = MathUtil.lerp(
                             it.x,
-                            scaledWidth / 2 - 90.5F + entityplayer!!.inventory.currentItem * 20,
+                            scaledWidth / 2 - 91F + entityplayer!!.inventory.currentItem * 20,
                             partialTicks!! / 4
                         )
                     } else {
@@ -45,7 +45,7 @@ class BlackBar : Element() {
                     }
                 } else {
                     it.lastSlot = entityplayer!!.inventory.currentItem
-                    it.x = scaledWidth / 2 - 90.5F + entityplayer!!.inventory.currentItem * 20
+                    it.x = scaledWidth / 2 - 91F + entityplayer!!.inventory.currentItem * 20
                 }
             }
         }

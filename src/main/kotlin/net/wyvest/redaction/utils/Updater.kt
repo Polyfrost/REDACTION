@@ -23,7 +23,7 @@ import java.io.IOException
 
 
 object Updater {
-    var updateUrl: String = ""
+    var updateUrl = ""
     lateinit var latestTag: String
     var shouldUpdate = false
 
