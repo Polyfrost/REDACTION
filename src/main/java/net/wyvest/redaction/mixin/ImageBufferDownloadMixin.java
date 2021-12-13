@@ -28,7 +28,7 @@ public class ImageBufferDownloadMixin {
         throw new AssertionError("REDACTION shadow mixin methods have failed! Please contact support in https://inv.wtf/w-overflow.");
     }
 
-    @Inject(method = "parseUserSkin", at = @At("HEAD"))
+    @Inject(method = "parseUserSkin", at = @At("HEAD"), cancellable = true)
     private void fixSkinRendering(BufferedImage image, CallbackInfoReturnable<BufferedImage> cir) {
         if (image != null && RedactionConfig.INSTANCE.getFixSkinRendering()) {
             this.imageWidth = 64;

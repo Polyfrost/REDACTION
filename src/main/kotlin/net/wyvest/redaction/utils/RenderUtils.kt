@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -49,7 +50,7 @@ object RenderUtils {
         val wr = tessellator.worldRenderer
         wr.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION)
         for (i in 0..360) {
-            wr.pos(x + sin(i * Math.PI / 180.0) * radius, y + cos(i * Math.PI / 180.0) * radius, 0.0)
+            wr.pos(x + sin(i * PI / 180.0) * radius, y + cos(i * PI / 180.0) * radius, 0.0)
                 .endVertex()
         }
         tessellator.draw()
