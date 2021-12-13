@@ -4,10 +4,8 @@
   "package": "net.wyvest.redaction.mixin",
   "refmap": "mixins.redaction.refmap.json",
   "mixins": [
-    "GuiIngameMixin"
-  ],
-  "verbose": true,
-  "client": [
+    "GuiIngameMixin",
     "ImageBufferDownloadMixin"
-  ]
+  ],
+  "verbose": true
 }
