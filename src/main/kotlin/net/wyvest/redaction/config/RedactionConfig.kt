@@ -67,6 +67,33 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     var blackbarItemColor: Color = Color.WHITE
 
     @Property(
+        type = PropertyType.SELECTOR,
+        name = "Show Blackbar Item Highlight Second Color",
+        description = "Show blackbar item highlight second color.",
+        category = "Blackbar",
+        options = ["Normal", "Gradient", "Small"]
+    )
+    var blackbarSecondColor : Int = 0
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Blackbar Item Highlight Second Color",
+        description = "Choose the color for the blackbar item highlight second color",
+        category = "Blackbar"
+    )
+    var blackbarItemColor2 : Color = Color.BLACK
+
+    @Property(
+        type = PropertyType.SLIDER,
+        name = "Blackbar Item Highlight Height",
+        description = "Choose height for the blackbar item highlight",
+        category = "Blackbar",
+        min = -22,
+        max = 22
+    )
+    var blackbarItemHeight : Int = 22
+
+    @Property(
         type = PropertyType.SWITCH,
         name = "Add Snow in Inventory",
         description = "Add snow in the inventory.",
@@ -83,22 +110,6 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         max = 1000
     )
     var particles = 100
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Show Blackbar Item Highlight Second Color",
-        description = "Show blackbar item highlight second color.",
-        category = "Blackbar"
-    )
-    var blackbarSecondColor = true
-
-    @Property(
-        type = PropertyType.COLOR,
-        name = "Blackbar Item Highlight Second Color",
-        description = "Choose the color for the blackbar item highlight second color",
-        category = "Blackbar"
-    )
-    var blackbarItemColor2 : Color = Color.BLACK
 
     @Property(
         type = PropertyType.SWITCH,

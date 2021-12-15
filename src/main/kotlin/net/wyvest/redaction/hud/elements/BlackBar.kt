@@ -89,10 +89,11 @@ class BlackBar : Element() {
                 GlUtil.drawRectEnhanced(0, it.y, scaledWidth, 22, RedactionConfig.blackbarColor.rgb)
             }
             if (RedactionConfig.blackbarItemColor.alpha != 0) {
-                GlUtil.drawRectangle(
-                    it.x,
-                    it.y.toFloat(), 22F, 22F, RedactionConfig.blackbarItemColor
-                )
+                when(RedactionConfig.blackbarSecondColor) {
+                    0 -> GlUtil.drawRectangle(it.x, it.y.toFloat(), 22F, 22F, RedactionConfig.blackbarItemColor)
+                    1 -> GlUtil.drawGradientRect(it.x, it.y.toFloat(), 22f, RedactionConfig.blackbarItemHeight.toFloat(), RedactionConfig.blackbarItemColor.rgb, RedactionConfig.blackbarItemColor2.rgb)
+                    2 -> GlUtil.drawRectangle(it.x, it.y.toFloat() + 18f, 22F, 5f, RedactionConfig.blackbarItemColor)
+                }
             }
         }
     }
