@@ -41,6 +41,15 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     var blackbar = false
 
     @Property(
+        type = PropertyType.SELECTOR,
+        name = "Show Blackbar Item Highlight Second Color",
+        description = "Show blackbar item highlight second color.",
+        category = "Blackbar",
+        options = ["Normal", "Gradient", "Small"]
+    )
+    var blackbarSecondColor : Int = 0
+
+    @Property(
         type = PropertyType.SLIDER,
         name = "Blackbar Update Speed",
         description = "Select the speed of the blackbar animation updating. Measured in milliseconds",
@@ -65,15 +74,6 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         category = "Blackbar"
     )
     var blackbarItemColor: Color = Color.WHITE
-
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "Show Blackbar Item Highlight Second Color",
-        description = "Show blackbar item highlight second color.",
-        category = "Blackbar",
-        options = ["Normal", "Gradient", "Small"]
-    )
-    var blackbarSecondColor : Int = 0
 
     @Property(
         type = PropertyType.COLOR,
