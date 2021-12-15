@@ -88,7 +88,7 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         name = "Blackbar Item Highlight Height",
         description = "Choose height for the blackbar item highlight",
         category = "Blackbar",
-        min = -22,
+        min = 1,
         max = 22
     )
     var blackbarItemHeight : Int = 22
