@@ -23,7 +23,7 @@ import java.io.IOException
 
 
 object Updater {
-    var updateUrl: String = ""
+    var updateUrl = ""
     lateinit var latestTag: String
     var shouldUpdate = false
 
@@ -48,7 +48,11 @@ object Updater {
             if (updateUrl.isNotEmpty()) {
                 if (RedactionConfig.showUpdateNotification) {
                     EssentialAPI.getNotifications()
-                        .push("Mod Update", "${Redaction.NAME} $latestTag is available!\nClick here to download it!", 5f) {
+                        .push(
+                            "Mod Update",
+                            "${Redaction.NAME} $latestTag is available!\nClick here to download it!",
+                            5f
+                        ) {
                             EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
                         }
                 }
@@ -98,7 +102,7 @@ object Updater {
                     Desktop.getDesktop().open(Redaction.jarFile.parentFile)
                 }
                 println("Using runtime $runtime")
-                val file = File("config/Wyvest/Deleter-1.2.jar")
+                val file = File("config/Qalcyo/Deleter-1.2.jar")
                 println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Redaction.jarFile.absolutePath}\"")
                 Runtime.getRuntime()
                     .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Redaction.jarFile.absolutePath}\"")

@@ -6,13 +6,30 @@ import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.Redaction.NAME
+import net.wyvest.redaction.Redaction.hasChanged
 import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.gui.DownloadConfirmGui
 import net.wyvest.redaction.utils.Updater
 import java.awt.Color
 import java.io.File
 
-object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml"), NAME) {
+object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml"), NAME) {
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Fix Skin Rendering",
+        description = "Fix a skin rendering bug where transparent skins will not be transparent.",
+        category = "General"
+    )
+    var fixSkinRendering = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Server Preview in Direct Connect",
+        description = "Show a server preview in the direct connect GUI.",
+        category = "General"
+    )
+    var serverPreview = false
 
     @Property(
         type = PropertyType.SWITCH,
@@ -28,7 +45,7 @@ object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml
         description = "Choose the color for the blackbar.",
         category = "Blackbar"
     )
-    var blackbarColor : Color = Color(0, 0, 0, 85)
+    var blackbarColor: Color = Color(0, 0, 0, 85)
 
     @Property(
         type = PropertyType.COLOR,
@@ -36,7 +53,25 @@ object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml
         description = "Choose the color for the blackbar item highlight color",
         category = "Blackbar"
     )
-    var blackbarItemColor : Color = Color.WHITE
+    var blackbarItemColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Add Snow in Inventory",
+        description = "Add snow in the inventory.",
+        category = "Inventory"
+    )
+    var addSnow = false
+
+    @Property(
+        type = PropertyType.SLIDER,
+        name = "Amount of Particles",
+        description = "Modify the amount of snow / particles in the inventory.",
+        category = "Inventory",
+        min = 50,
+        max = 1000
+    )
+    var particles = 100
 
     @Property(
         type = PropertyType.SWITCH,
@@ -70,6 +105,7 @@ object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml
     )
     var showUpdateNotification = true
 
+    @Suppress("unused")
     @Property(
         type = PropertyType.BUTTON,
         name = "Update Now",
@@ -80,5 +116,13 @@ object RedactionConfig : Vigilant(File("config/Wyvest/$NAME/${Redaction.ID}.toml
         if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
             .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
             .push(NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
+    }
+
+    init {
+        initialize()
+        registerListener("particles") { newValue: Int ->
+            particles = newValue
+            hasChanged = true
+        }
     }
 }

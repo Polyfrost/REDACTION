@@ -1,5 +1,6 @@
 package net.wyvest.redaction.utils
 
+import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
@@ -34,5 +35,9 @@ object GlUtil {
         GlStateManager.disableBlend()
         GlStateManager.bindTexture(0)
         GlStateManager.color(1f, 1f, 1f, 1f)
+    }
+
+    fun drawRectEnhanced(x: Int, y: Int, width: Int, height: Int, color: Int) {
+        Gui.drawRect(x, y, width + x, height + y, color)
     }
 }

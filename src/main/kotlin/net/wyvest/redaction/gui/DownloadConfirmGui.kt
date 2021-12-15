@@ -3,7 +3,6 @@ package net.wyvest.redaction.gui
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import net.minecraft.client.gui.GuiButton
-import net.minecraft.client.gui.GuiMainMenu
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
@@ -25,14 +24,14 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
             0 -> {
-                mc.displayGuiScreen(GuiMainMenu())
+                mc.displayGuiScreen(parent)
                 Multithreading.runAsync {
                     if (Updater.download(
                             updateUrl,
                             File("mods/${Redaction.NAME}-${Updater.latestTag.substringAfter("v")}.jar")
                         ) && Updater.download(
                             "https://github.com/Wyvest/Deleter/releases/download/v1.2/Deleter-1.2.jar",
-                            File("config/Wyvest/Deleter-1.2.jar")
+                            File(Redaction.modDir.parentFile, "Deleter-1.2.jar")
                         )
                     ) {
                         EssentialAPI.getNotifications()
@@ -48,11 +47,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
                 }
             }
             1 -> {
-                if (parent == null) {
-                    mc.displayGuiScreen(parent)
-                } else {
-                    EssentialAPI.getGuiUtil().openScreen(parent)
-                }
+                mc.displayGuiScreen(parent)
             }
         }
     }

@@ -1,7 +1,7 @@
 [
   {
     "modid": "redaction",
-    "name": "Redaction",
+    "name": "REDACTION",
     "description": "REDACTION.",
     "version": "${version}",
     "mcversion": "${mcversion}",
