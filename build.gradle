@@ -10,7 +10,7 @@ version = mod_ver
 group = "net.wyvest"
 archivesBaseName = mod_name
 
-sourceCompatibility = targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 compileJava.options.encoding = "UTF-8"
 
 minecraft {
@@ -68,6 +68,7 @@ jar {
             'ForceLoadAsMod': true,
             "MixinConfigs": "mixins.redaction.json",
             'TweakClass': 'gg.essential.loader.stage0.EssentialSetupTweaker',
+            'FMLAT': 'redaction_at.cfg',
             'TweakOrder': '0'
     )
 
@@ -93,6 +94,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 tasks.reobfJar.dependsOn tasks.shadowJar

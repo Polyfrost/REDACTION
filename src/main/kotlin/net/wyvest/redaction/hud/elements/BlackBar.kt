@@ -6,7 +6,7 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
-import net.wyvest.redaction.Redaction
+import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.hud.Element
 import net.wyvest.redaction.utils.GlUtil
@@ -23,7 +23,7 @@ class BlackBar : Element() {
     private var entityplayer: EntityPlayer? = null
 
     private val timer = Timer(25) {
-        if (entityplayer != null && Redaction.mc.thePlayer != null && Redaction.mc.theWorld != null && scaledResolution != null && partialTicks != null) {
+        if (entityplayer != null && mc.thePlayer != null && mc.theWorld != null && scaledResolution != null && partialTicks != null) {
             data?.let {
                 val scaledHeight = scaledResolution!!.scaledHeight
                 val scaledWidth = scaledResolution!!.scaledWidth
@@ -66,9 +66,9 @@ class BlackBar : Element() {
         data?.let {
             scaledResolution = res
             this.partialTicks = partialTicks
-            entityplayer = Redaction.mc.renderViewEntity as EntityPlayer
+            entityplayer = mc.renderViewEntity as EntityPlayer
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-            Redaction.mc.textureManager.bindTexture(texPath)
+            mc.textureManager.bindTexture(texPath)
             val scaledWidth = res.scaledWidth
             val scaledHeight = res.scaledHeight
             if (firstTime) {

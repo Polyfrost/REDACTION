@@ -31,7 +31,7 @@ object Redaction {
     private val particleGenerator = ParticleGenerator()
 
     const val NAME = "REDACTION"
-    const val VERSION = "0.3.0"
+    const val VERSION = "0.4.0"
     const val ID = "redaction"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()

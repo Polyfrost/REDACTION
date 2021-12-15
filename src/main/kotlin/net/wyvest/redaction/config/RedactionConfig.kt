@@ -25,6 +25,14 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Server Preview in Direct Connect",
+        description = "Show a server preview in the direct connect GUI.",
+        category = "General"
+    )
+    var serverPreview = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Blackbar",
         description = "Replace the hotbar with a cleaner blackbar.",
         category = "Blackbar"
@@ -64,10 +72,6 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         max = 1000
     )
     var particles = 100
-    set(value) {
-        hasChanged = true
-        field = value
-    }
 
     @Property(
         type = PropertyType.SWITCH,
@@ -92,5 +96,9 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
 
     init {
         initialize()
+        registerListener("particles") { newValue: Int ->
+            particles = newValue
+            hasChanged = true
+        }
     }
 }
