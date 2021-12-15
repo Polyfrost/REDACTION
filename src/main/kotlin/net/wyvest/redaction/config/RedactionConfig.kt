@@ -113,14 +113,6 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Hide Blackbar",
-        description = "Hide blackbar when chat is open",
-        category = "Blackbar"
-    )
-    var hideBlackbar = true
-
-    @Property(
-        type = PropertyType.SWITCH,
         name = "Show Update Notification",
         description = "Show a notification when you start Minecraft informing you of new updates.",
         category = "Updater"
