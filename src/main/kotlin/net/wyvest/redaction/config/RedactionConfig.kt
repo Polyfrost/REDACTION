@@ -9,6 +9,7 @@ import net.wyvest.redaction.Redaction.NAME
 import net.wyvest.redaction.Redaction.hasChanged
 import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.gui.DownloadConfirmGui
+import net.wyvest.redaction.hud.HudManager
 import net.wyvest.redaction.utils.Updater
 import java.awt.Color
 import java.io.File
@@ -38,6 +39,16 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         category = "Blackbar"
     )
     var blackbar = false
+
+    @Property(
+        type = PropertyType.SLIDER,
+        name = "Blackbar Update Speed",
+        description = "Select the speed of the blackbar animation updating. Measured in milliseconds",
+        category = "Blackbar",
+        min = 10,
+        max = 100
+    )
+    var blackbarSpeed = 10
 
     @Property(
         type = PropertyType.COLOR,
@@ -123,6 +134,10 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         registerListener("particles") { newValue: Int ->
             particles = newValue
             hasChanged = true
+        }
+        registerListener("blackbarSpeed") { newValue: Int ->
+            blackbarSpeed = newValue
+            HudManager.elements[0].setTimer()
         }
     }
 }
