@@ -11,6 +11,7 @@ import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.hud.Element
 import net.wyvest.redaction.utils.GlUtil
 import net.wyvest.redaction.utils.MathUtil
+import java.awt.event.ActionListener
 import javax.swing.Timer
 
 class BlackBar : Element() {
@@ -21,8 +22,9 @@ class BlackBar : Element() {
     private val texPath = ResourceLocation("textures/gui/widgets.png")
     private var firstTime = true
     private var entityplayer: EntityPlayer? = null
+    private var timer: Timer? = null
 
-    private val timer = Timer(25) {
+    private val timerTask: ActionListener = ActionListener {
         if (entityplayer != null && mc.thePlayer != null && mc.theWorld != null && scaledResolution != null && partialTicks != null) {
             data?.let {
                 val scaledHeight = scaledResolution!!.scaledHeight
@@ -53,10 +55,16 @@ class BlackBar : Element() {
 
 
     override fun initialize() {
-        timer.start()
+        setTimer()
         val resolution = ScaledResolution(Minecraft.getMinecraft())
         scaledResolution = resolution
         data = BlackBarData(-1.0F, resolution.scaledHeight - 22)
+    }
+
+    fun setTimer() {
+        timer?.stop()
+        timer = Timer(RedactionConfig.blackbarSpeed, timerTask)
+        timer?.start()
     }
 
     override fun render(
