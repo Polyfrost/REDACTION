@@ -6,10 +6,10 @@ import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.Redaction.NAME
-import net.wyvest.redaction.Redaction.hasChanged
 import net.wyvest.redaction.Redaction.mc
+import net.wyvest.redaction.features.BlackBar
+import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.gui.DownloadConfirmGui
-import net.wyvest.redaction.hud.HudManager
 import net.wyvest.redaction.utils.Updater
 import java.awt.Color
 import java.io.File
@@ -18,19 +18,28 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Fix Skin Rendering",
-        description = "Fix a skin rendering bug where transparent skins will not be transparent.",
-        category = "General"
-    )
-    var fixSkinRendering = true
-
-    @Property(
-        type = PropertyType.SWITCH,
         name = "Server Preview in Direct Connect",
         description = "Show a server preview in the direct connect GUI.",
         category = "General"
     )
     var serverPreview = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Last Server Joined Button",
+        description = "Show a last server joined button in the main menu.",
+        category = "General"
+    )
+    var lastServerJoined = false
+
+    @Property(
+        type = PropertyType.TEXT,
+        name = "Last Server Joined IP",
+        description = "yeah",
+        category = "General",
+        hidden = true
+    )
+    var lastServerIP = ""
 
     @Property(
         type = PropertyType.SWITCH,
@@ -109,11 +118,11 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         initialize()
         registerListener("particles") { newValue: Int ->
             particles = newValue
-            hasChanged = true
+            ParticleManager.hasChanged = true
         }
         registerListener("blackbarSpeed") { newValue: Int ->
             blackbarSpeed = newValue
-            HudManager.elements[0].setTimer()
+            BlackBar.setTimer()
         }
     }
 }

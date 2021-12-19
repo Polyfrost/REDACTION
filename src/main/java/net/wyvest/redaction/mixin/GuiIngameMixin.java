@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.wyvest.redaction.config.RedactionConfig;
-import net.wyvest.redaction.hud.HudManager;
+import net.wyvest.redaction.features.BlackBar;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +25,7 @@ public abstract class GuiIngameMixin {
         if (RedactionConfig.INSTANCE.getBlackbar()) {
             ci.cancel();
             if (Minecraft.getMinecraft().getRenderViewEntity() instanceof EntityPlayer) {
-                HudManager.INSTANCE.getElements().get(0).render(res, partialTicks);
+                BlackBar.INSTANCE.render(res, partialTicks);
                 GlStateManager.enableRescaleNormal();
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);

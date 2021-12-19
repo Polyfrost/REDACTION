@@ -3,6 +3,7 @@ package net.wyvest.redaction.utils.particles
 import net.minecraft.client.Minecraft
 import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.config.RedactionConfig
+import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.utils.RenderUtils
 import java.util.*
 
@@ -18,7 +19,7 @@ class ParticleGenerator {
     private var prevWidth = 0
     private var prevHeight = 0
     fun draw(mouseX: Int, mouseY: Int) {
-        if (particles.isEmpty() || prevWidth != Minecraft.getMinecraft().displayWidth || prevHeight != Minecraft.getMinecraft().displayHeight || Redaction.hasChanged) {
+        if (particles.isEmpty() || prevWidth != Minecraft.getMinecraft().displayWidth || prevHeight != Minecraft.getMinecraft().displayHeight || ParticleManager.hasChanged) {
             particles.clear()
             create()
         }
@@ -56,8 +57,8 @@ class ParticleGenerator {
                 random.nextInt(Minecraft.getMinecraft().displayHeight).toFloat()
             )
         )
-        if (Redaction.hasChanged) {
-            Redaction.hasChanged = false
+        if (ParticleManager.hasChanged) {
+            ParticleManager.hasChanged = false
         }
     }
 }

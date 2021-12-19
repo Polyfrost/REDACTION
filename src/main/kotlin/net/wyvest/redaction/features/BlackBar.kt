@@ -1,5 +1,6 @@
-package net.wyvest.redaction.hud.elements
+package net.wyvest.redaction.features
 
+import gg.essential.api.utils.Multithreading
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.ScaledResolution
@@ -8,13 +9,12 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
 import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.config.RedactionConfig
-import net.wyvest.redaction.hud.Element
 import net.wyvest.redaction.utils.GlUtil
 import net.wyvest.redaction.utils.MathUtil
 import java.awt.event.ActionListener
 import javax.swing.Timer
 
-class BlackBar : Element() {
+object BlackBar {
 
     private var data: BlackBarData? = null
     private var scaledResolution: ScaledResolution? = null
@@ -53,8 +53,7 @@ class BlackBar : Element() {
         }
     }
 
-
-    override fun initialize() {
+    fun initialize() {
         setTimer()
         val resolution = ScaledResolution(Minecraft.getMinecraft())
         scaledResolution = resolution
@@ -62,18 +61,20 @@ class BlackBar : Element() {
     }
 
     fun setTimer() {
-        timer?.stop()
-        timer = Timer(RedactionConfig.blackbarSpeed, timerTask)
-        timer?.start()
+        Multithreading.runAsync {
+            timer?.stop()
+            timer = Timer(RedactionConfig.blackbarSpeed, timerTask)
+            timer?.start()
+        }
     }
 
-    override fun render(
+    fun render(
         res: ScaledResolution,
         partialTicks: Float
     ) {
         data?.let {
             scaledResolution = res
-            this.partialTicks = partialTicks
+            BlackBar.partialTicks = partialTicks
             entityplayer = mc.renderViewEntity as EntityPlayer
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
             mc.textureManager.bindTexture(texPath)
@@ -96,16 +97,13 @@ class BlackBar : Element() {
             }
         }
     }
-
-    override fun actuallyRender(): Boolean {
-        return false
-    }
 }
 
-private class BlackBarData(
+private class BlackBarData @JvmOverloads constructor(
     var x: Float,
-    var y: Int
+    var y: Int,
+    var hiding: Boolean = false,
+    var lastSlot: Int = 10
 ) {
-    var hiding = false
-    var lastSlot = 10
+
 }

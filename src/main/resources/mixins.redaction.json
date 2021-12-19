@@ -5,8 +5,8 @@
   "refmap": "mixins.redaction.refmap.json",
   "mixins": [
     "GuiIngameMixin",
-    "GuiScreenServerListMixin",
-    "ImageBufferDownloadMixin"
+    "GuiMainMenuMixin",
+    "GuiScreenServerListMixin"
   ],
   "verbose": true
 }

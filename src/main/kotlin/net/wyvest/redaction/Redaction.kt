@@ -3,21 +3,19 @@ package net.wyvest.redaction
 import com.google.gson.JsonParser
 import gg.essential.universal.ChatColor
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
-import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.wyvest.redaction.commands.RedactionCommand
 import net.wyvest.redaction.config.RedactionConfig
-import net.wyvest.redaction.hud.HudManager
+import net.wyvest.redaction.features.BlackBar
+import net.wyvest.redaction.features.ParticleManager
+import net.wyvest.redaction.features.ServerManager
 import net.wyvest.redaction.utils.Updater
-import net.wyvest.redaction.utils.particles.ParticleGenerator
 import java.io.File
 
 @Mod(
@@ -28,7 +26,6 @@ import java.io.File
 )
 object Redaction {
 
-    private val particleGenerator = ParticleGenerator()
 
     const val NAME = "REDACTION"
     const val VERSION = "0.4.1"
@@ -39,7 +36,6 @@ object Redaction {
     lateinit var jarFile: File
     val modDir = File(File(mc.mcDataDir, "W-OVERFLOW"), NAME)
     val parser = JsonParser()
-    var hasChanged = false
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
@@ -53,19 +49,13 @@ object Redaction {
         RedactionConfig.initialize()
         RedactionCommand.register()
         Updater.update()
-        EVENT_BUS.register(this)
+        EVENT_BUS.register(ParticleManager)
+        EVENT_BUS.register(ServerManager)
     }
 
     @Mod.EventHandler
     fun onFMLPost(e: FMLLoadCompleteEvent) {
-        HudManager.initialize()
-    }
-
-    @SubscribeEvent
-    fun render(event: DrawScreenEvent.Pre) {
-        if (event.gui is GuiContainer && RedactionConfig.addSnow) {
-            particleGenerator.draw(event.mouseX, event.mouseY)
-        }
+        BlackBar.initialize()
     }
 
 
