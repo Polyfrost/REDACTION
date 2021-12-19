@@ -25,11 +25,11 @@ public abstract class GuiIngameMixin {
         if (RedactionConfig.INSTANCE.getBlackbar()) {
             ci.cancel();
             if (Minecraft.getMinecraft().getRenderViewEntity() instanceof EntityPlayer) {
-                BlackBar.INSTANCE.render(res, partialTicks);
+                BlackBar.INSTANCE.render(res);
                 GlStateManager.enableRescaleNormal();
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-                net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+                RenderHelper.enableGUIStandardItemLighting();
                 for (int j = 0; j < 9; ++j) {
                     int k = res.getScaledWidth() / 2 - 90 + j * 20 + 2;
                     int l = res.getScaledHeight() - 16 - 3;

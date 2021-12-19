@@ -18,29 +18,28 @@ object BlackBar {
 
     private var data: BlackBarData? = null
     private var scaledResolution: ScaledResolution? = null
-    private var partialTicks: Float? = null
     private val texPath = ResourceLocation("textures/gui/widgets.png")
     private var firstTime = true
     private var entityplayer: EntityPlayer? = null
     private var timer: Timer? = null
 
     private val timerTask: ActionListener = ActionListener {
-        if (entityplayer != null && mc.thePlayer != null && mc.theWorld != null && scaledResolution != null && partialTicks != null) {
+        if (entityplayer != null && mc.thePlayer != null && mc.theWorld != null && scaledResolution != null) {
             data?.let {
                 val scaledHeight = scaledResolution!!.scaledHeight
                 val scaledWidth = scaledResolution!!.scaledWidth
                 it.hiding = Minecraft.getMinecraft().currentScreen is GuiChat
                 if (it.hiding) {
-                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, partialTicks!! / 4).toInt()
+                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, mc.timer.renderPartialTicks / 4).toInt()
                 } else if (it.y != scaledHeight - 21) {
-                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, partialTicks!! / 4).toInt()
+                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, mc.timer.renderPartialTicks / 4).toInt()
                 }
                 if (it.lastSlot != entityplayer!!.inventory.currentItem) {
                     if (scaledWidth / 2 - 91F + entityplayer!!.inventory.currentItem * 20 != it.x) {
                         it.x = MathUtil.lerp(
                             it.x,
                             scaledWidth / 2 - 91F + entityplayer!!.inventory.currentItem * 20,
-                            partialTicks!! / 4
+                            mc.timer.renderPartialTicks / 4
                         )
                     } else {
                         it.lastSlot = entityplayer!!.inventory.currentItem
@@ -69,12 +68,10 @@ object BlackBar {
     }
 
     fun render(
-        res: ScaledResolution,
-        partialTicks: Float
+        res: ScaledResolution
     ) {
         data?.let {
             scaledResolution = res
-            BlackBar.partialTicks = partialTicks
             entityplayer = mc.renderViewEntity as EntityPlayer
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
             mc.textureManager.bindTexture(texPath)
@@ -104,6 +101,4 @@ private class BlackBarData @JvmOverloads constructor(
     var y: Int,
     var hiding: Boolean = false,
     var lastSlot: Int = 10
-) {
-
-}
+)
