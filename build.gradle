@@ -54,7 +54,7 @@ repositories {
 
 dependencies {
     /* This defines dependencies required by the mod. */
-    shade ('gg.essential:loader-launchwrapper:1.1.2') {
+    shade ('gg.essential:loader-launchwrapper:1.1.3') {
         transitive = false
     }
     implementation('gg.essential:essential-1.8.9-forge:1520+release-launch')
