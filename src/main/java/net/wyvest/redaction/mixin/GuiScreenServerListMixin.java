@@ -3,6 +3,7 @@ package net.wyvest.redaction.mixin;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.ServerData;
 import net.wyvest.redaction.config.RedactionConfig;
+import net.wyvest.redaction.features.ServerManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,7 +29,7 @@ public class GuiScreenServerListMixin extends GuiScreen {
         if (RedactionConfig.INSTANCE.getServerPreview() && serverPreview != null) {
             if (!serverPreview.getServerData().serverIP.equals(field_146302_g.getText())) {
                 serverPreview.getServerData().serverIP = field_146302_g.getText();
-                serverPreview.getServerData().serverName = field_146302_g.getText();
+                serverPreview.getServerData().serverName = ServerManager.INSTANCE.getNameOfServer(field_146302_g.getText());
                 serverPreview.getServerData().field_78841_f = false;
             }
             serverPreview.drawEntry(0, width / 2 - 100, 30, 200, 35, mouseX, mouseY, false);
