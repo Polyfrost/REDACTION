@@ -51,10 +51,10 @@ object Updater {
                         .push(
                             "Mod Update",
                             "${Redaction.NAME} $latestTag is available!\nClick here to download it!",
-                            5f
-                        ) {
-                            EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
-                        }
+                            5f, action = {
+                                EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
+                            }
+                        )
                 }
                 shouldUpdate = true
             }

@@ -15,6 +15,7 @@ import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.features.BlackBar
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.features.ServerManager
+import net.wyvest.redaction.features.hitbox.Hitboxes
 import net.wyvest.redaction.utils.Updater
 import java.io.File
 
@@ -51,6 +52,8 @@ object Redaction {
         Updater.update()
         EVENT_BUS.register(ParticleManager)
         EVENT_BUS.register(ServerManager)
+        Hitboxes.initialize()
+        ServerManager.initialize()
     }
 
     @Mod.EventHandler

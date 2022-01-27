@@ -3,10 +3,14 @@
   "minVersion": "0.7",
   "package": "net.wyvest.redaction.mixin",
   "refmap": "mixins.redaction.refmap.json",
+  "plugin": "net.wyvest.redaction.plugin.RedactionMixinPlugin",
   "mixins": [
     "GuiIngameMixin",
     "GuiMainMenuMixin",
     "GuiScreenServerListMixin"
   ],
-  "verbose": true
+  "verbose": true,
+  "client": [
+    "RenderManagerMixin"
+  ]
 }

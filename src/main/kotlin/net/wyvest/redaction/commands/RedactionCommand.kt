@@ -6,6 +6,7 @@ import gg.essential.api.commands.DefaultHandler
 import gg.essential.api.commands.SubCommand
 import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.config.RedactionConfig
+import net.wyvest.redaction.gui.HitboxPreviewGUI
 
 @Suppress("unused")
 object RedactionCommand : Command(Redaction.ID, true) {
@@ -18,5 +19,10 @@ object RedactionCommand : Command(Redaction.ID, true) {
     @SubCommand("config", description = "Opens the config GUI for " + Redaction.NAME)
     fun config() {
         EssentialAPI.getGuiUtil().openScreen(RedactionConfig.gui())
+    }
+
+    @SubCommand("hitbox", description = "Opens the hitbox config GUI for " + Redaction.NAME)
+    fun hitboxes() {
+        EssentialAPI.getGuiUtil().openScreen(HitboxPreviewGUI())
     }
 }

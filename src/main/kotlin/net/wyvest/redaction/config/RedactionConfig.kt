@@ -4,12 +4,14 @@ import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
+import net.minecraft.client.Minecraft
 import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.Redaction.NAME
 import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.features.BlackBar
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.gui.DownloadConfirmGui
+import net.wyvest.redaction.gui.HitboxPreviewGUI
 import net.wyvest.redaction.utils.Updater
 import java.awt.Color
 import java.io.File
@@ -92,6 +94,22 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         max = 1000
     )
     var particles = 100
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Hitbox GUI",
+        description = "Show the Hitbox Config GUI.",
+        category = "Hitboxes"
+    )
+    private fun showHitboxGUI() {
+        // gui autoscaling thing screws positioning up somehow lol so do this weird hack
+        Minecraft.getMinecraft().displayGuiScreen(null)
+        Minecraft.getMinecraft().addScheduledTask {
+            Minecraft.getMinecraft().addScheduledTask {
+                EssentialAPI.getGuiUtil().openScreen(HitboxPreviewGUI(true))
+            }
+        }
+    }
 
     @Property(
         type = PropertyType.SWITCH,
