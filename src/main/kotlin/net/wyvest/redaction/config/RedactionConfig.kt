@@ -9,6 +9,7 @@ import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.Redaction.NAME
 import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.features.BlackBar
+import net.wyvest.redaction.features.NameHighlight
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.gui.DownloadConfirmGui
 import net.wyvest.redaction.gui.HitboxPreviewGUI
@@ -113,6 +114,23 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Highlight Name",
+        description = "Highlight your name.",
+        category = "Highlight"
+    )
+    var highlightName = false
+
+    @Property(
+        type = PropertyType.SELECTOR,
+        name = "Text Color",
+        description = "Change the text color for the highlight.",
+        category = "Highlight",
+        options = ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple", "Yellow", "White"]
+    )
+    var textColor = 0
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Show Update Notification",
         description = "Show a notification when you start Minecraft informing you of new updates.",
         category = "Updater"
@@ -141,6 +159,10 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         registerListener("blackbarSpeed") { newValue: Int ->
             blackbarSpeed = newValue
             BlackBar.setTimer()
+        }
+        registerListener("textColor") { color: Int ->
+            textColor = color // update immediately
+            NameHighlight.colorDelegate.invalidate()
         }
     }
 }

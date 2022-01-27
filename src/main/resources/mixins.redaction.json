@@ -7,10 +7,9 @@
   "mixins": [
     "GuiIngameMixin",
     "GuiMainMenuMixin",
-    "GuiScreenServerListMixin"
-  ],
-  "verbose": true,
-  "client": [
+    "GuiScreenServerListMixin",
+    "FontRendererMixin",
     "RenderManagerMixin"
-  ]
+  ],
+  "verbose": true
 }
