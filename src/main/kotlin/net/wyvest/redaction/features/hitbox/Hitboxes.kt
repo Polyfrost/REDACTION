@@ -13,7 +13,7 @@ object Hitboxes {
     private val file = File(Redaction.modDir, "hitboxes.json")
 
     fun initialize() {
-        if (!file.exists()) {
+        if (!file.exists() || file.readText().isBlank()) {
             file.createNewFile()
             file.writeText("{  }")
         }
@@ -30,18 +30,32 @@ object Hitboxes {
         }
         file.writeText(GSON.toJson(readJson))
 
-        val json = PARSER.parse(file.readText()).asJsonObject
-        for (entity in Entity.map) {
-            val entityJson = json[entity.value.name.lowercase(Locale.ENGLISH).replace(" ", "_")].asJsonObject
-            Entity.map[entity.key]?.hitboxEnabled = entityJson["hitbox_enabled"].asBoolean
-            Entity.map[entity.key]?.eyeLineEnabled = entityJson["eyeline_enabled"].asBoolean
-            Entity.map[entity.key]?.lineEnabled = entityJson["line_enabled"].asBoolean
-            Entity.map[entity.key]?.color = entityJson["color"].asInt
-            Entity.map[entity.key]?.eyeColor = entityJson["eye_color"].asInt
-            Entity.map[entity.key]?.lineColor = entityJson["line_color"].asInt
+        try {
+            val json = PARSER.parse(file.readText()).asJsonObject
+            for (entity in Entity.map) {
+                val entityJson = json[entity.value.name.lowercase(Locale.ENGLISH).replace(" ", "_")].asJsonObject
+                Entity.map[entity.key]?.hitboxEnabled = entityJson["hitbox_enabled"].asBoolean
+                Entity.map[entity.key]?.eyeLineEnabled = entityJson["eyeline_enabled"].asBoolean
+                Entity.map[entity.key]?.lineEnabled = entityJson["line_enabled"].asBoolean
+                Entity.map[entity.key]?.color = entityJson["color"].asInt
+                Entity.map[entity.key]?.crosshairColor = entityJson["crosshair_color"].asInt
+                Entity.map[entity.key]?.eyeColor = entityJson["eye_color"].asInt
+                Entity.map[entity.key]?.lineColor = entityJson["line_color"].asInt
+            }
+            val generalJson = json["general"].asJsonObject
+            GeneralConfig.config = GeneralConfig(
+                hitboxWidth = generalJson["hitbox_width"].asInt,
+                forceHitbox = generalJson["force_hitbox"].asBoolean,
+                disableForSelf = generalJson["disable_for_self"].asBoolean,
+                accurateHitbox = generalJson["accurate_hitbox"].asBoolean
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (!file.delete()) {
+                file.writeText("")
+            }
+            initialize()
         }
-        val generalJson = json["general"].asJsonObject
-        GeneralConfig.config = GeneralConfig(hitboxWidth = generalJson["hitbox_width"].asInt, forceHitbox = generalJson["force_hitbox"].asBoolean, disableForSelf = generalJson["disable_for_self"].asBoolean, accurateHitbox = generalJson["accurate_hitbox"].asBoolean)
     }
 
     fun writeConfig() {
@@ -55,6 +69,7 @@ object Hitboxes {
             entityJson.addProperty("color", thing.color)
             entityJson.addProperty("eye_color", thing.eyeColor)
             entityJson.addProperty("line_color", thing.lineColor)
+            entityJson.addProperty("crosshair_color", thing.crosshairColor)
         }
         val generalJson = json["general"].asJsonObject
         generalJson.addProperty("hitbox_width", GeneralConfig.config.hitboxWidth)

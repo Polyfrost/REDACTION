@@ -3,12 +3,11 @@
   "minVersion": "0.7",
   "package": "net.wyvest.redaction.mixin",
   "refmap": "mixins.redaction.refmap.json",
-  "plugin": "net.wyvest.redaction.plugin.RedactionMixinPlugin",
   "mixins": [
+    "FontRendererMixin",
     "GuiIngameMixin",
     "GuiMainMenuMixin",
     "GuiScreenServerListMixin",
-    "FontRendererMixin",
     "RenderManagerMixin"
   ],
   "verbose": true

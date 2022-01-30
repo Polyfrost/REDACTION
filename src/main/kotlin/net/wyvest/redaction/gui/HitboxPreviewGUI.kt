@@ -186,8 +186,10 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
     // this exists because for some reason it shifted sometimes????
     private var eyeLineColorTextX: XConstraint? = null
     private var lineOfSightColorTextX: XConstraint? = null
+    private var crosshairColorTextX: XConstraint? = null
     private var eyeLineColorX: XConstraint? = null
     private var lineOfSightColorX: XConstraint? = null
+    private var crosshairColorX: XConstraint? = null
 
     private fun resetColor(i: Int) {
         colorContainer.children.clear()
@@ -204,8 +206,21 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             Hitboxes.writeConfig()
         }
 
+        val crosshairColorText by UIText("Crosshair Color") constrain {
+            x = crosshairColorTextX ?: run { crosshairColorTextX = (colorText.getRight() + 5).pixels(); crosshairColorTextX!! }
+            y = 0.pixels()
+        } childOf (colorContainer)
+        val crosshairColorPicker by ColorComponent(Color(Entity.map[i]!!.crosshairColor), false) constrain {
+            x = crosshairColorX ?: run { crosshairColorX = (crosshairColorText.getLeft() - 34).pixels(); crosshairColorX!! }
+            y = (CopyConstraintFloat(true) boundTo crosshairColorText) + 10.pixels()
+        } childOf (colorContainer)
+        crosshairColorPicker.onValueChange {
+            Entity.map[i]!!.crosshairColor = (it as Color).rgb
+            Hitboxes.writeConfig()
+        }
+
         val eyelineColorText by UIText("Eyeline Color") constrain {
-            x = eyeLineColorTextX ?: run { eyeLineColorTextX = (colorText.getRight() + 5).pixels(); eyeLineColorTextX!! }
+            x = eyeLineColorTextX ?: run { eyeLineColorTextX = (crosshairColorText.getRight() + 5).pixels(); eyeLineColorTextX!! }
             y = 0.pixels()
         } childOf (colorContainer)
         val eyelineColorPicker by ColorComponent(Color(Entity.map[i]!!.eyeColor), false) constrain {

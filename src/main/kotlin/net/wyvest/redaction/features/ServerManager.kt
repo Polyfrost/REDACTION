@@ -25,7 +25,8 @@ object ServerManager {
         }
     }
 
-    fun getNameOfServer(ip: String): String {
+    fun getNameOfServer(ip: String?): String? {
+        if (ip == null) return null
         for (server in serverList) {
             if (ip.endsWith(server.key, ignoreCase = true)) {
                 return server.value

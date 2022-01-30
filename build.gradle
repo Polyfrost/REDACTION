@@ -58,10 +58,6 @@ dependencies {
         transitive = false
     }
     compileOnly('gg.essential:essential-1.8.9-forge:1788')
-    shade ("com.github.LlamaLad7:MixinExtras:0.0.3") {
-        transitive = false
-    }
-    annotationProcessor("com.github.LlamaLad7:MixinExtras:0.0.3")
     compileOnly annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT")
     annotationProcessor("com.google.code.gson:gson:2.2.4")
     annotationProcessor("com.google.guava:guava:21.0")
