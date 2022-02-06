@@ -1,7 +1,6 @@
 package net.wyvest.redaction.utils.particles
 
 import net.minecraft.client.Minecraft
-import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.utils.RenderUtils
@@ -45,7 +44,7 @@ class ParticleGenerator {
                         )
                     }
             }
-            RenderUtils.drawCircle(particle.x, particle.y, particle.size, -0x1)
+            RenderUtils.drawCircle(particle.x, particle.y, particle.size, RedactionConfig.snowColor.rgb)
         }
     }
 

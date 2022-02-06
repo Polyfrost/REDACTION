@@ -1,22 +1,58 @@
 package net.wyvest.redaction.utils
 
+import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
+import java.awt.Color
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-/**
- * Particle API (kotlinified by Wyvest)
- * This Api is free2use
- * But u have to mention me.
- *
- * @author Vitox
- * @version 3.0
- */
 object RenderUtils {
+
+    /**
+     * Adapted from XanderLib under GPL 3.0 license
+     * https://github.com/isXander/XanderLib/blob/main/LICENSE
+     *
+     * @author isXander
+     */
+    fun drawRectangle(xPosition: Float, yPosition: Float, width: Float, height: Float, colour: Color) {
+        GlStateManager.enableBlend()
+        GlStateManager.disableTexture2D()
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+        val worldrenderer = Tessellator.getInstance().worldRenderer
+        GlStateManager.color(
+            colour.red / 255.0f,
+            colour.green / 255.0f,
+            colour.blue / 255.0f,
+            colour.alpha / 255.0f
+        )
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION)
+        worldrenderer.pos(xPosition.toDouble(), (yPosition + height).toDouble(), 0.0).endVertex()
+        worldrenderer.pos((xPosition + width).toDouble(), (yPosition + height).toDouble(), 0.0).endVertex()
+        worldrenderer.pos((xPosition + width).toDouble(), yPosition.toDouble(), 0.0).endVertex()
+        worldrenderer.pos(xPosition.toDouble(), yPosition.toDouble(), 0.0).endVertex()
+        Tessellator.getInstance().draw()
+        GlStateManager.enableTexture2D()
+        GlStateManager.disableBlend()
+        GlStateManager.bindTexture(0)
+        GlStateManager.color(1f, 1f, 1f, 1f)
+    }
+
+    fun drawRectEnhanced(x: Int, y: Int, width: Int, height: Int, color: Int) {
+        Gui.drawRect(x, y, width + x, height + y, color)
+    }
+
+    /**
+     * Particle API (kotlinified by Wyvest)
+     * This Api is free2use
+     * But u have to mention me.
+     *
+     * @author Vitox
+     * @version 3.0
+     */
     fun connectPoints(xOne: Float, yOne: Float, xTwo: Float, yTwo: Float) {
         GL11.glEnable(GL11.GL_LINE_SMOOTH)
         GlStateManager.color(1.0f, 1.0f, 1.0f, 0.8f)
@@ -35,6 +71,14 @@ object RenderUtils {
         GlStateManager.enableTexture2D()
     }
 
+    /**
+     * Particle API (kotlinified by Wyvest)
+     * This Api is free2use
+     * But u have to mention me.
+     *
+     * @author Vitox
+     * @version 3.0
+     */
     fun drawCircle(x: Float, y: Float, radius: Float, color: Int) {
         val alpha = (color shr 24 and 0xFF) / 255.0f
         val red = (color shr 16 and 0xFF) / 255.0f

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.awt.Color
 import java.util.*
 
-data class Entity(@Transient val name: String, @SerializedName("hitbox_enabled") var hitboxEnabled: Boolean = true, @SerializedName("eyeline_enabled") var eyeLineEnabled: Boolean = true, @SerializedName("line_enabled") var lineEnabled: Boolean = true, var color: Int = Color.WHITE.rgb, @SerializedName("crosshair_color") var crosshairColor: Int = Color.WHITE.rgb, @SerializedName("eye_color") var eyeColor: Int = Color.RED.rgb, @SerializedName("line_color") var lineColor: Int = Color.BLUE.rgb, @Transient val condition: (net.minecraft.entity.Entity) -> Boolean, @Transient private val priority: Int) {
+data class Entity(@Transient val name: String, @SerializedName("hitbox_enabled") var hitboxEnabled: Boolean = true, @SerializedName("eyeline_enabled") var eyeLineEnabled: Boolean = true, @SerializedName("line_enabled") var lineEnabled: Boolean = true, var color: Int = Color.WHITE.rgb, @SerializedName("crosshair_color") var crosshairColor: Int = Color.WHITE.rgb, @SerializedName("eye_color") var eyeColor: Int = Color.BLUE.rgb, @SerializedName("line_color") var lineColor: Int = Color.RED.rgb, @Transient val condition: (net.minecraft.entity.Entity) -> Boolean, @Transient private val priority: Int) {
 
     override fun toString(): String {
         return this.name.lowercase().replaceFirstChar { char: Char ->
@@ -32,14 +32,13 @@ data class Entity(@Transient val name: String, @SerializedName("hitbox_enabled")
         private val xp = Entity("XP", condition = { it is net.minecraft.entity.item.EntityXPOrb }, priority = -600)
 
         @Transient @JvmStatic val map = linkedMapOf(
-            0 to armorStand,
-            1 to fireball,
-            2 to firework,
-            3 to item,
-            4 to itemFrame,
-            5 to living,
-            6 to monster,
-            7 to minecart,
+            1 to armorStand,
+            2 to fireball,
+            3 to firework,
+            4 to item,
+            5 to itemFrame,
+            6 to living,
+            7 to monster,
             8 to minecart,
             9 to player,
             10 to self,

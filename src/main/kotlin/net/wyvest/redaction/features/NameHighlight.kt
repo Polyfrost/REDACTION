@@ -1,5 +1,6 @@
 package net.wyvest.redaction.features
 
+import gg.essential.api.utils.Multithreading
 import gg.essential.lib.caffeine.cache.Cache
 import gg.essential.lib.caffeine.cache.Caffeine
 import gg.essential.universal.ChatColor
@@ -31,7 +32,7 @@ object NameHighlight {
             14 -> ChatColor.YELLOW.toString()
             else -> ChatColor.WHITE.toString()
         }
-    }.also { it.onSet { cache.invalidateAll() } }
+    }
 
     private val highlightColor by colorDelegate
 
@@ -47,14 +48,14 @@ object NameHighlight {
         )
     }
 
-    private val cache: Cache<String, String> = Caffeine.newBuilder().executor(POOL).maximumSize(5000).build()
+    val cache: Cache<String, String> = Caffeine.newBuilder().executor(POOL).maximumSize(10000).build()
 
     @JvmStatic
     fun highlightName(text: String): String {
         val playerName = Minecraft.getMinecraft().session.username
         if (text.contains(playerName)) {
             return if (text.contains("\u00A7")) {
-                cache.getIfPresent(text) ?: replaceAndPut(text)
+                cache.getIfPresent(text) ?: if (RedactionConfig.asyncHighlight) run { Multithreading.runAsync { replaceAndPut(text) }; return@run text } else replaceAndPut(text)
             } else {
                 text.replace(
                     playerName,

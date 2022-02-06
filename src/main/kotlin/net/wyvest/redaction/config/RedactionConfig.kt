@@ -7,13 +7,10 @@ import gg.essential.vigilance.data.PropertyType
 import net.minecraft.client.Minecraft
 import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.Redaction.NAME
-import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.features.BlackBar
 import net.wyvest.redaction.features.NameHighlight
 import net.wyvest.redaction.features.ParticleManager
-import net.wyvest.redaction.gui.DownloadConfirmGui
 import net.wyvest.redaction.gui.HitboxPreviewGUI
-import net.wyvest.redaction.utils.Updater
 import java.awt.Color
 import java.io.File
 
@@ -55,9 +52,9 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     @Property(
         type = PropertyType.SLIDER,
         name = "Blackbar Update Speed",
-        description = "Select the speed of the blackbar animation updating. Measured in milliseconds",
+        description = "Select the speed of the blackbar animation updating. Measured in milliseconds.",
         category = "Blackbar",
-        min = 10,
+        min = 1,
         max = 100
     )
     var blackbarSpeed = 10
@@ -88,13 +85,21 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
 
     @Property(
         type = PropertyType.SLIDER,
-        name = "Amount of Particles",
+        name = "Amount of Snow",
         description = "Modify the amount of snow / particles in the inventory.",
         category = "Inventory",
         min = 50,
         max = 1000
     )
     var particles = 100
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Snow Color",
+        description = "Modify the color of the snow / particles.",
+        category = "Inventory"
+    )
+    var snowColor = Color(-0x1)
 
     @Property(
         type = PropertyType.BUTTON,
@@ -121,6 +126,14 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     var highlightName = false
 
     @Property(
+        type = PropertyType.SWITCH,
+        name = "Highlight Async",
+        description = "Run highlight code async, which results in significantly better performance.",
+        category = "Highlight"
+    )
+    var asyncHighlight = true
+
+    @Property(
         type = PropertyType.SELECTOR,
         name = "Text Color",
         description = "Change the text color for the highlight.",
@@ -128,27 +141,6 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         options = ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple", "Yellow", "White"]
     )
     var textColor = 0
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Show Update Notification",
-        description = "Show a notification when you start Minecraft informing you of new updates.",
-        category = "Updater"
-    )
-    var showUpdateNotification = true
-
-    @Suppress("unused")
-    @Property(
-        type = PropertyType.BUTTON,
-        name = "Update Now",
-        description = "Update $NAME by clicking the button.",
-        category = "Updater"
-    )
-    private fun update() {
-        if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
-            .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
-            .push(NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
-    }
 
     init {
         initialize()
@@ -163,6 +155,7 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         registerListener("textColor") { color: Int ->
             textColor = color // update immediately
             NameHighlight.colorDelegate.invalidate()
+            NameHighlight.cache.invalidateAll()
         }
     }
 }

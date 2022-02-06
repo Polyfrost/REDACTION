@@ -7,13 +7,12 @@ fun <T> invalidateableLazy(initializer: () -> T): InvalidatableLazyImpl<T> = Inv
 private object UNINITIALIZED_VALUE
 
 /**
- * Modified from Levelhead under GPLv3
+ * Taken from Levelhead under GPLv3
  * https://github.com/Sk1erLLC/Levelhead/blob/master/LICENSE
  */
 class InvalidatableLazyImpl<T>(private val initializer: () -> T, lock: Any? = null) : Lazy<T> {
     @Volatile private var _value: Any? = UNINITIALIZED_VALUE
     private val lock = lock ?: this
-    private var onSet: T.() -> Unit = {}
 
     fun invalidate() {
         _value = UNINITIALIZED_VALUE
@@ -46,10 +45,5 @@ class InvalidatableLazyImpl<T>(private val initializer: () -> T, lock: Any? = nu
 
     operator fun setValue(any: Any, property: KProperty<*>, t: T) {
         _value = t
-        onSet.invoke(t)
-    }
-
-    fun onSet(onSet: T.() -> Unit) {
-        this.onSet = onSet
     }
 }

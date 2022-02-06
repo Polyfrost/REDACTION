@@ -3,6 +3,7 @@ package net.wyvest.redaction.gui
 import com.mojang.authlib.GameProfile
 import gg.essential.api.EssentialAPI
 import gg.essential.api.gui.EssentialGUI
+import gg.essential.api.gui.buildConfirmationModal
 import gg.essential.api.gui.buildEmulatedPlayer
 import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.components.UIBlock
@@ -17,6 +18,7 @@ import gg.essential.vigilance.gui.settings.ColorComponent
 import gg.essential.vigilance.gui.settings.DropDown
 import gg.essential.vigilance.gui.settings.NumberComponent
 import gg.essential.vigilance.gui.settings.SwitchComponent
+import net.minecraft.client.Minecraft
 import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.features.hitbox.Entity
 import net.wyvest.redaction.features.hitbox.GeneralConfig
@@ -43,7 +45,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
 
     private val settingsContainer by UIContainer() constrain {
         x = CenterConstraint()
-        y = SiblingConstraint(2f)
+        y = 50.percent()
         width = 100.percent()
         height = 50.percent()
     } childOf content
@@ -62,7 +64,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
         height = FillConstraint()
     } childOf settingsContainer
 
-    private val entityDropdown: DropDown by DropDown(0, Entity.map.values.map { it.name }) constrain {
+    private val entityDropdown: DropDown by DropDown(1, ArrayList(Entity.map.values.map { it.name }).also { it.add(0, "All") }) constrain {
         x = SiblingConstraint(10f)
         y = 15.percent()
     } childOf titleBar
@@ -132,18 +134,33 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
         entityDropdown.onValueChange {
             resetSettings(it)
         }
-        resetSettings(0)
+        resetSettings(1)
     }
 
     private fun resetSettings(i: Int) {
-        entityToEmulate = Entity.map[i] ?: entityToEmulate
-        resetSwitches(i)
-        resetColor(i)
+        if (i == 0) {
+            EssentialAPI.getEssentialComponentFactory().buildConfirmationModal {
+                text = "Are you sure you want to modify all entity hitboxes?"
+                secondaryText = "Changes cannot be reversed!"
+                onConfirm = {
+                    entityToEmulate = Entity("All", condition = {true}, priority = 0)
+                    resetSwitches(i)
+                    resetColor(i)
+                }
+                onDeny = {
+                    entityDropdown.select(1)
+                }
+            } childOf window
+        } else {
+            entityToEmulate = Entity.map[i] ?: entityToEmulate
+            resetSwitches(i)
+            resetColor(i)
+        }
     }
 
     private fun resetSwitches(i: Int) {
         switchContainer.children.clear()
-        val enabledSwitch by SwitchComponent(Entity.map[i]!!.hitboxEnabled) constrain {
+        val enabledSwitch by SwitchComponent(Entity.map[if (i == 0) 1 else i]!!.hitboxEnabled) constrain {
             x = 0.pixels()
             y = CenterConstraint()
         } childOf (switchContainer)
@@ -151,12 +168,18 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             x = SiblingConstraint(5f)
             y = CenterConstraint()
         } childOf (switchContainer)
-        enabledSwitch.onValueChange {
-            Entity.map[i]!!.hitboxEnabled = !Entity.map[i]!!.hitboxEnabled
+        enabledSwitch.onValueChange { value ->
+            if (i == 0) {
+                Entity.map.forEach {
+                    it.value.hitboxEnabled = value as Boolean
+                }
+            } else {
+                Entity.map[i]!!.hitboxEnabled = !Entity.map[i]!!.hitboxEnabled
+            }
             Hitboxes.writeConfig()
         }
 
-        val eyeSwitch by SwitchComponent(Entity.map[i]!!.eyeLineEnabled) constrain {
+        val eyeSwitch by SwitchComponent(Entity.map[if (i == 0) 1 else i]!!.eyeLineEnabled) constrain {
             x = SiblingConstraint(10f)
             y = CenterConstraint()
         } childOf (switchContainer)
@@ -164,12 +187,18 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             x = SiblingConstraint(5f)
             y = CenterConstraint()
         } childOf (switchContainer)
-        eyeSwitch.onValueChange {
-            Entity.map[i]!!.eyeLineEnabled = !Entity.map[i]!!.eyeLineEnabled
+        eyeSwitch.onValueChange { value ->
+            if (i == 0) {
+                Entity.map.forEach {
+                    it.value.eyeLineEnabled = value as Boolean
+                }
+            } else {
+                Entity.map[i]!!.eyeLineEnabled = !Entity.map[i]!!.eyeLineEnabled
+            }
             Hitboxes.writeConfig()
         }
 
-        val lineOfSightSwitch by SwitchComponent(Entity.map[i]!!.lineEnabled) constrain {
+        val lineOfSightSwitch by SwitchComponent(Entity.map[if (i == 0) 1 else i]!!.lineEnabled) constrain {
             x = SiblingConstraint(10f)
             y = CenterConstraint()
         } childOf (switchContainer)
@@ -177,8 +206,14 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             x = SiblingConstraint(5f)
             y = CenterConstraint()
         } childOf (switchContainer)
-        lineOfSightSwitch.onValueChange {
-            Entity.map[i]!!.lineEnabled = !Entity.map[i]!!.lineEnabled
+        lineOfSightSwitch.onValueChange { value ->
+            if (i == 0) {
+                Entity.map.forEach {
+                    it.value.lineEnabled = value as Boolean
+                }
+            } else {
+                Entity.map[i]!!.lineEnabled = !Entity.map[i]!!.lineEnabled
+            }
             Hitboxes.writeConfig()
         }
     }
@@ -197,12 +232,18 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             x = 0.pixels()
             y = 0.pixels()
         } childOf (colorContainer)
-        val colorPicker by ColorComponent(Color(Entity.map[i]!!.color), false) constrain {
+        val colorPicker by ColorComponent(Color(Entity.map[if (i == 0) 1 else i]!!.color), false) constrain {
             x = 0.pixels()
             y = (CopyConstraintFloat(true) boundTo colorText) + 10.pixels()
         } childOf (colorContainer)
-        colorPicker.onValueChange {
-            Entity.map[i]!!.color = (it as Color).rgb
+        colorPicker.onValueChange { value ->
+            if (i == 0) {
+                Entity.map.forEach {
+                    it.value.color = (value as Color).rgb
+                }
+            } else {
+                Entity.map[i]!!.color = (value as Color).rgb
+            }
             Hitboxes.writeConfig()
         }
 
@@ -210,12 +251,18 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             x = crosshairColorTextX ?: run { crosshairColorTextX = (colorText.getRight() + 5).pixels(); crosshairColorTextX!! }
             y = 0.pixels()
         } childOf (colorContainer)
-        val crosshairColorPicker by ColorComponent(Color(Entity.map[i]!!.crosshairColor), false) constrain {
+        val crosshairColorPicker by ColorComponent(Color(Entity.map[if (i == 0) 1 else i]!!.crosshairColor), false) constrain {
             x = crosshairColorX ?: run { crosshairColorX = (crosshairColorText.getLeft() - 34).pixels(); crosshairColorX!! }
             y = (CopyConstraintFloat(true) boundTo crosshairColorText) + 10.pixels()
         } childOf (colorContainer)
-        crosshairColorPicker.onValueChange {
-            Entity.map[i]!!.crosshairColor = (it as Color).rgb
+        crosshairColorPicker.onValueChange { value ->
+            if (i == 0) {
+                Entity.map.forEach {
+                    it.value.crosshairColor = (value as Color).rgb
+                }
+            } else {
+                Entity.map[i]!!.crosshairColor = (value as Color).rgb
+            }
             Hitboxes.writeConfig()
         }
 
@@ -223,12 +270,18 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             x = eyeLineColorTextX ?: run { eyeLineColorTextX = (crosshairColorText.getRight() + 5).pixels(); eyeLineColorTextX!! }
             y = 0.pixels()
         } childOf (colorContainer)
-        val eyelineColorPicker by ColorComponent(Color(Entity.map[i]!!.eyeColor), false) constrain {
+        val eyelineColorPicker by ColorComponent(Color(Entity.map[if (i == 0) 1 else i]!!.eyeColor), false) constrain {
             x = eyeLineColorX ?: run { eyeLineColorX = (eyelineColorText.getLeft() - 34).pixels(); eyeLineColorX!! }
             y = (CopyConstraintFloat(true) boundTo eyelineColorText) + 10.pixels()
         } childOf (colorContainer)
-        eyelineColorPicker.onValueChange {
-            Entity.map[i]!!.eyeColor = (it as Color).rgb
+        eyelineColorPicker.onValueChange { value ->
+            if (i == 0) {
+                Entity.map.forEach {
+                    it.value.eyeColor = (value as Color).rgb
+                }
+            } else {
+                Entity.map[i]!!.eyeColor = (value as Color).rgb
+            }
             Hitboxes.writeConfig()
         }
 
@@ -236,34 +289,36 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             x = lineOfSightColorTextX ?: run { lineOfSightColorTextX = (eyelineColorText.getRight() + 5).pixels(); lineOfSightColorTextX!! }
             y = 0.pixels()
         } childOf (colorContainer)
-        val lineOfSightColorPicker by ColorComponent(Color(Entity.map[i]!!.lineColor), false) constrain {
+        val lineOfSightColorPicker by ColorComponent(Color(Entity.map[if (i == 0) 1 else i]!!.lineColor), false) constrain {
             x = lineOfSightColorX ?: run {
                 lineOfSightColorX = (lineOfSightColorText.getLeft() - 34).pixels(); lineOfSightColorX!!
             }
             y = (CopyConstraintFloat(true) boundTo lineOfSightColorText) + 10.pixels()
         } childOf (colorContainer)
-        lineOfSightColorPicker.onValueChange {
-            Entity.map[i]!!.lineColor = (it as Color).rgb
+        lineOfSightColorPicker.onValueChange { value ->
+            if (i == 0) {
+                Entity.map.forEach {
+                    it.value.lineColor = (value as Color).rgb
+                }
+            } else {
+                Entity.map[i]!!.lineColor = (value as Color).rgb
+            }
             Hitboxes.writeConfig()
         }
     }
 
-    init {
-        bypassHitbox = true
-    }
-
     override fun onScreenClose() {
         super.onScreenClose()
-        bypassHitbox = false
         entityToEmulate = Entity.blank
         if (returnToConfigGUI) {
             EssentialAPI.getGuiUtil().openScreen(RedactionConfig.gui())
         }
+        Hitboxes.writeConfig()
     }
 
     companion object {
-        var bypassHitbox = false
-            private set
+        val bypassHitbox
+        get() = Minecraft.getMinecraft().currentScreen is HitboxPreviewGUI
 
         var entityToEmulate: Entity = Entity.blank
             private set

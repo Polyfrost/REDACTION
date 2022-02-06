@@ -1,7 +1,7 @@
 package net.wyvest.redaction.utils.particles
 
+import gg.essential.universal.UResolution
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.ScaledResolution
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import net.wyvest.redaction.utils.RenderUtils
@@ -52,7 +52,6 @@ class Particle internal constructor(var x: Float, var y: Float) {
 
     fun fall() {
         val mc = Minecraft.getMinecraft()
-        val scaledResolution = ScaledResolution(mc)
         y += ySpeed
         x += xSpeed
         if (y > mc.displayHeight) {
@@ -62,10 +61,10 @@ class Particle internal constructor(var x: Float, var y: Float) {
             x = 1f
         }
         if (x < 1) {
-            x = scaledResolution.scaledWidth.toFloat()
+            x = UResolution.scaledWidth.toFloat()
         }
         if (y < 1) {
-            y = scaledResolution.scaledHeight.toFloat()
+            y = UResolution.scaledHeight.toFloat()
         }
     }
 

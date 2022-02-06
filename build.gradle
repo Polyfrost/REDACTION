@@ -34,48 +34,36 @@ configurations {
 }
 
 repositories {
-    /* Allows us to get dependencies from the central Maven repository. */
-    mavenCentral()
-
-    /* Defines third-party repositories that we have to use for dependencies. */
-    maven {
-        name = 'Sk1er Public'
-        url = 'https://repo.sk1er.club/repository/maven-releases/'
-    }
-    maven {
-        name = 'Jitpack'
-        url = 'https://jitpack.io/'
-    }
-    maven {
-        name = 'Spongepowered Public'
-        url = 'https://repo.spongepowered.org/repository/maven-public/'
-    }
+    maven { url 'https://repo.woverflow.cc/' }
 }
 
 dependencies {
-    /* This defines dependencies required by the mod. */
     shade ('gg.essential:loader-launchwrapper:1.1.3') {
         transitive = false
     }
-    compileOnly('gg.essential:essential-1.8.9-forge:1788')
-    compileOnly annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT")
+    compileOnly 'gg.essential:essential-1.8.9-forge:1788'
+    compileOnly annotationProcessor ('org.spongepowered:mixin:0.8.5-SNAPSHOT')
     annotationProcessor("com.google.code.gson:gson:2.2.4")
     annotationProcessor("com.google.guava:guava:21.0")
     annotationProcessor("org.ow2.asm:asm-tree:6.2")
+    compileOnly 'cc.woverflow:w-core:1.1.3'
+    shade ('cc.woverflow:w-core-tweaker:1.0.2') {
+        transitive = false
+    }
 }
 
 jar {
-    /* Defines qualities for Forge and external mods or libraries to use. */
     manifest.attributes(
-            'ModSide': 'CLIENT',
-            'ForceLoadAsMod': true,
+            "ModSide": "CLIENT",
+            "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
+            "TweakOrder": "0",
             "MixinConfigs": "mixins.redaction.json",
-            'TweakClass': 'gg.essential.loader.stage0.EssentialSetupTweaker',
+            'ForceLoadAsMod': true,
             'FMLAT': 'redaction_at.cfg',
-            'TweakOrder': '0'
+            "FMLCorePlugin": "cc.woverflow.wcore.tweaker.WCoreTweaker",
+            "FMLCorePluginContainsFMLMod": true
     )
 
-    /* Disables the default jar so we can use a custom naming scheme. */
     enabled = false
 }
 

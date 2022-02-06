@@ -25,7 +25,7 @@ public abstract class GuiIngameMixin {
         if (RedactionConfig.INSTANCE.getBlackbar()) {
             ci.cancel();
             if (Minecraft.getMinecraft().getRenderViewEntity() instanceof EntityPlayer) {
-                BlackBar.INSTANCE.render(res);
+                BlackBar.INSTANCE.render();
                 GlStateManager.enableRescaleNormal();
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
