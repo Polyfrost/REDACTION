@@ -1,6 +1,5 @@
 package net.wyvest.redaction.mixin;
 
-import gg.essential.handlers.RenderPlayerBypass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
@@ -22,9 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-@Mixin(value = RenderManager.class, priority = Integer.MAX_VALUE)
+@Mixin(value = RenderManager.class, priority = Integer.MIN_VALUE)
 public class RenderManagerMixin {
-    private boolean didDo = false;
     private boolean box = true;
     private boolean eye = true;
     private boolean line = true;
@@ -52,28 +50,21 @@ public class RenderManagerMixin {
     }
 
     @Inject(method = "renderDebugBoundingBox", at = @At("HEAD"), cancellable = true)
-    private void bypassEmulatedPlayerHitbox(net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (RenderPlayerBypass.bypass && HitboxPreviewGUI.Companion.getBypassHitbox()) {
-            RenderPlayerBypass.bypass = false;
-            didDo = true;
+    private void initHitbox(net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+        if (HitboxPreviewGUI.Companion.getBypassHitbox()) {
+            Entity entity = HitboxPreviewGUI.Companion.getEntityToEmulate();
+            box = entity.getHitboxEnabled();
+            eye = entity.getEyeLineEnabled();
+            line = entity.getLineEnabled();
+            hitboxColor = entity.getColor();
+            crosshairColor = entity.getColor();
+            eyeColor = entity.getEyeColor();
+            lineColor = entity.getLineColor();
+            GL11.glLineWidth(GeneralConfig.getConfig().getHitboxWidth());
             return;
-        } else {
-            didDo = false;
         }
         for (Entity entity : Entity.getSortedList()) {
-            if (entity.getCondition().invoke(entityIn) || HitboxPreviewGUI.Companion.getBypassHitbox()) {
-                if (HitboxPreviewGUI.Companion.getBypassHitbox()) {
-                    entity = HitboxPreviewGUI.Companion.getEntityToEmulate();
-                    box = entity.getHitboxEnabled();
-                    eye = entity.getEyeLineEnabled();
-                    line = entity.getLineEnabled();
-                    hitboxColor = entity.getColor();
-                    crosshairColor = entity.getColor();
-                    eyeColor = entity.getEyeColor();
-                    lineColor = entity.getLineColor();
-                    GL11.glLineWidth(GeneralConfig.getConfig().getHitboxWidth());
-                    return;
-                }
+            if (entity.getCondition().invoke(entityIn)) {
                 if ((!entity.getHitboxEnabled() && !entity.getEyeLineEnabled() && !entity.getLineEnabled()) || (GeneralConfig.getConfig().getDisableForSelf() && "Self".equals(entity.getName()))) {
                     ci.cancel();
                     return;
@@ -125,9 +116,6 @@ public class RenderManagerMixin {
 
     @Inject(method = "renderDebugBoundingBox", at = @At("RETURN"))
     private void resetEmulatedPlayerHitboxBypass(net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (didDo) {
-            RenderPlayerBypass.bypass = true;
-        }
         GL11.glLineWidth(1);
     }
 

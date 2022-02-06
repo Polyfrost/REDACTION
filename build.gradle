@@ -96,8 +96,6 @@ shadowJar {
     configurations = [project.configurations.shade]
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    relocate("com.llamalad7.mixinextras", "mixinextras")
-
     exclude 'LICENSE.md'
     exclude 'pack.mcmeta'
     exclude 'dummyThing'

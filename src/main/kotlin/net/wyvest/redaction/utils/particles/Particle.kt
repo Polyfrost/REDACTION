@@ -69,6 +69,6 @@ class Particle internal constructor(var x: Float, var y: Float) {
     }
 
     private fun genRandom(): Float {
-        return (0.3f + Math.random() * (0.6f - 0.3f + 1.0f)).toFloat()
+        return (0.3f + Math.random() * 1.3f).toFloat()
     }
 }

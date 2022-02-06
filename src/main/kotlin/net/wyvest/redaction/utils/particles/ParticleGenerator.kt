@@ -31,13 +31,11 @@ class ParticleGenerator {
             val mouseOver =
                 mouseX >= particle.x - range && mouseY >= particle.y - range && mouseX <= particle.x + range && mouseY <= particle.y + range
             if (mouseOver) {
-                particles.stream()
-                    .filter { part: Particle ->
+                particles.filter { part: Particle ->
                         (part.x > particle.x && part.x - particle.x < range && particle.x - part.x < range
                                 && (part.y > particle.y && part.y - particle.y < range
                                 || particle.y > part.y && particle.y - part.y < range))
-                    }
-                    .forEach { connectable: Particle ->
+                    }.forEach { connectable: Particle ->
                         particle.connect(
                             connectable.x,
                             connectable.y
