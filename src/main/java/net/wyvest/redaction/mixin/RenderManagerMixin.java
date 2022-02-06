@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.wyvest.redaction.features.hitbox.Entity;
 import net.wyvest.redaction.features.hitbox.GeneralConfig;
 import net.wyvest.redaction.gui.HitboxPreviewGUI;
@@ -57,7 +56,7 @@ public class RenderManagerMixin {
             eye = entity.getEyeLineEnabled();
             line = entity.getLineEnabled();
             hitboxColor = entity.getColor();
-            crosshairColor = entity.getColor();
+            crosshairColor = entity.getCrosshairColor();
             eyeColor = entity.getEyeColor();
             lineColor = entity.getLineColor();
             GL11.glLineWidth(GeneralConfig.getConfig().getHitboxWidth());
@@ -85,7 +84,7 @@ public class RenderManagerMixin {
     @Redirect(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;drawOutlinedBoundingBox(Lnet/minecraft/util/AxisAlignedBB;IIII)V", ordinal = 0))
     private void shouldRenderHitbox(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha, net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
         if (box) {
-            int color = isWithinCrosshair(entityIn) ? crosshairColor : hitboxColor;
+            int color = (Minecraft.getMinecraft().objectMouseOver != null && Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && Minecraft.getMinecraft().objectMouseOver.entityHit.equals(entityIn)) || (HitboxPreviewGUI.Companion.getBypassHitbox() && HitboxPreviewGUI.Companion.getCursorOverEmulatedEntity()) ? crosshairColor : hitboxColor;
             RenderGlobal.drawOutlinedBoundingBox((GeneralConfig.getConfig().getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), ColorUtils.getRed(color), ColorUtils.getGreen(color), ColorUtils.getBlue(color), alpha);
         }
     }
@@ -117,28 +116,5 @@ public class RenderManagerMixin {
     @Inject(method = "renderDebugBoundingBox", at = @At("RETURN"))
     private void resetEmulatedPlayerHitboxBypass(net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         GL11.glLineWidth(1);
-    }
-
-    /**
-     * Adapted from EvergreenHUD under GPLv3
-     * https://github.com/isXander/EvergreenHUD/blob/main/LICENSE
-     *
-     *
-     * Modified to be more compact.
-     */
-    private boolean isWithinCrosshair(net.minecraft.entity.Entity entity) {
-        if (entity == null) return false;
-        Minecraft.getMinecraft().mcProfiler.startSection("Calculating Reach Dist");
-        double maxSize = 3.0;
-        AxisAlignedBB otherBB = entity.getEntityBoundingBox();
-        float collisionBorderSize = entity.getCollisionBorderSize();
-        AxisAlignedBB otherHitbox = otherBB.expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
-        Vec3 eyePos = Minecraft.getMinecraft().thePlayer.getPositionEyes(1.0f);
-        Vec3 lookPos = Minecraft.getMinecraft().thePlayer.getLook(1.0f);
-        Vec3 adjustedPos = eyePos.addVector(lookPos.xCoord * maxSize, lookPos.yCoord * maxSize, lookPos.zCoord * maxSize);
-        MovingObjectPosition movingObjectPosition = otherHitbox.calculateIntercept(eyePos, adjustedPos);
-        if (movingObjectPosition == null) return false;
-        Minecraft.getMinecraft().mcProfiler.endSection();
-        return true;
     }
 }

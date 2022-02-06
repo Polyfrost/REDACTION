@@ -39,7 +39,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
     } constrain {
         x = CenterConstraint()
         y = CenterConstraint()
-        width = 100.percent()
+        width = 14.percent()
         height = 100.percent()
     } childOf block effect ScissorEffect(block)
 
@@ -135,6 +135,13 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             resetSettings(it)
         }
         resetSettings(1)
+        cursorOverEmulatedEntity = false
+        player.onMouseEnter {
+            cursorOverEmulatedEntity = true
+        }
+        player.onMouseLeave {
+            cursorOverEmulatedEntity = false
+        }
     }
 
     private fun resetSettings(i: Int) {
@@ -314,11 +321,15 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             EssentialAPI.getGuiUtil().openScreen(RedactionConfig.gui())
         }
         Hitboxes.writeConfig()
+        cursorOverEmulatedEntity = false
     }
 
     companion object {
         val bypassHitbox
         get() = Minecraft.getMinecraft().currentScreen is HitboxPreviewGUI
+
+        var cursorOverEmulatedEntity = false
+        private set
 
         var entityToEmulate: Entity = Entity.blank
             private set
