@@ -46,7 +46,7 @@ class RedactionMixinPlugin : IMixinConfigPlugin {
         if (!returned) {
             if (targetClass != null && targetClassName == "net.minecraft.client.renderer.entity.RenderManager") {
                 for (method in targetClass.methods) {
-                    if (method.name == "renderDebugBoundingBox") {
+                    if (method.name == "renderDebugBoundingBox" || method.name == "func_85094_b") {
                         for (insn in method.instructions) {
                             if (insn.opcode == Opcodes.INVOKESPECIAL && (insn as MethodInsnNode).name.contains("cancelIfEmulatedPlayer")) {
                                 val fieldinsn = FieldInsnNode(Opcodes.GETSTATIC, "net/wyvest/redaction/gui/HitboxPreviewGUI", "Companion", "Lnet/wyvest/redaction/gui/HitboxPreviewGUI\$Companion;")

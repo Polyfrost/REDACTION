@@ -28,7 +28,7 @@ object Redaction {
 
 
     const val NAME = "REDACTION"
-    const val VERSION = "1.1.0-beta2"
+    const val VERSION = "1.1.0"
     const val ID = "redaction"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()

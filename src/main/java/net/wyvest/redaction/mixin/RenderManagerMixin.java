@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-@Mixin(value = RenderManager.class, priority = Integer.MIN_VALUE)
+@Mixin(value = RenderManager.class)
 public class RenderManagerMixin {
     private boolean box = true;
     private boolean eye = true;
@@ -114,7 +114,7 @@ public class RenderManagerMixin {
     }
 
     @Inject(method = "renderDebugBoundingBox", at = @At("RETURN"))
-    private void resetEmulatedPlayerHitboxBypass(net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    private void resetLineWidth(net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         GL11.glLineWidth(1);
     }
 }
