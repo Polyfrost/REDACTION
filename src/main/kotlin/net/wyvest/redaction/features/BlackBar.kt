@@ -16,6 +16,8 @@ import javax.swing.Timer
 
 object BlackBar {
 
+    private var cachedHeight = 0
+    private var cachedWidth = 0
     private var data: BlackBarData? = null
     private val texPath = ResourceLocation("textures/gui/widgets.png")
     private var firstTime = true
@@ -24,6 +26,11 @@ object BlackBar {
 
     private val timerTask: ActionListener = ActionListener {
         if (entityplayer != null && mc.thePlayer != null && mc.theWorld != null) {
+            if (cachedHeight != UResolution.viewportHeight || cachedWidth != UResolution.viewportWidth) {
+                data = BlackBarData(-1.0F, UResolution.scaledHeight - 22)
+                cachedHeight = UResolution.viewportHeight
+                cachedWidth = UResolution.viewportWidth
+            }
             data?.let {
                 val scaledHeight = UResolution.scaledHeight
                 val scaledWidth = UResolution.scaledWidth
@@ -53,7 +60,6 @@ object BlackBar {
 
     fun initialize() {
         setTimer()
-        data = BlackBarData(-1.0F, UResolution.scaledHeight - 22)
     }
 
     fun setTimer() {
