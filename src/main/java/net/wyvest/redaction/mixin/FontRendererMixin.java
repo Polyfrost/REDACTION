@@ -11,6 +11,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class FontRendererMixin {
     @ModifyVariable(method = "renderString", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private String onStringRendered_modifyText(String original) {
-        return RedactionConfig.INSTANCE.getHighlightName() ? NameHighlight.highlightName(original) : original;
+        return RedactionConfig.INSTANCE.getHighlightName() && original != null ? NameHighlight.highlightName(original) : original;
     }
 }

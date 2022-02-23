@@ -1,9 +1,9 @@
 package net.wyvest.redaction
 
-import cc.woverflow.wcore.utils.Updater
-import cc.woverflow.wcore.utils.command
-import cc.woverflow.wcore.utils.openGUI
-import gg.essential.api.EssentialAPI
+import cc.woverflow.onecore.utils.Updater
+import cc.woverflow.onecore.utils.command
+import cc.woverflow.onecore.utils.openScreen
+import gg.essential.api.utils.WebUtil
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Mod
@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.wyvest.redaction.config.RedactionConfig
+import net.wyvest.redaction.config.VigilanceConfig
 import net.wyvest.redaction.features.BlackBar
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.features.ServerManager
@@ -33,11 +34,13 @@ object Redaction {
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val modDir = File(File(mc.mcDataDir, "W-OVERFLOW"), NAME)
+    var shouldApplyVigilanceMixin = false
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
         if (!modDir.exists())
             modDir.mkdirs()
+        shouldApplyVigilanceMixin = WebUtil.fetchString("https://woverflow.cc/static/data/redaction_vigilance_mixin").toBoolean()
         Updater.addToUpdater(event.sourceFile, NAME, ID, VERSION, "W-OVERFLOW/REDACTION")
     }
 
@@ -46,10 +49,16 @@ object Redaction {
         RedactionConfig.initialize()
         command("redaction") {
             main {
-                RedactionConfig.openGUI()
+                RedactionConfig.openScreen()
             }
             subCommand("hitbox", description = "Opens the hitbox config GUI for REDACTION.") {
-                EssentialAPI.getGuiUtil().openScreen(HitboxPreviewGUI())
+                HitboxPreviewGUI().openScreen()
+            }
+        }
+
+        command("vigilance", aliases = arrayListOf("vigilant")) {
+            main {
+                VigilanceConfig.openScreen()
             }
         }
         EVENT_BUS.register(ParticleManager)

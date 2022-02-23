@@ -1,5 +1,6 @@
 package net.wyvest.redaction.plugin
 
+import net.wyvest.redaction.Redaction
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
@@ -17,7 +18,7 @@ class RedactionMixinPlugin : IMixinConfigPlugin {
     }
 
     override fun shouldApplyMixin(targetClassName: String?, mixinClassName: String?): Boolean {
-        return true
+        return if (mixinClassName == "VigilancePaletteMixin") Redaction.shouldApplyVigilanceMixin else true
     }
 
     override fun acceptTargets(myTargets: MutableSet<String>?, otherTargets: MutableSet<String>?) {

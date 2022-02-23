@@ -4,7 +4,7 @@
     "name": "REDACTION",
     "description": "REDACTION.",
     "version": "${version}",
-    "mcversion": "${mcversion}",
+    "mcversion": "1.8.9",
     "url": "",
     "updateUrl": "",
     "authorList": [

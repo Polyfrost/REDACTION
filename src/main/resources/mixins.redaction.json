@@ -9,7 +9,8 @@
     "GuiIngameMixin",
     "GuiMainMenuMixin",
     "GuiScreenServerListMixin",
-    "RenderManagerMixin"
+    "RenderManagerMixin",
+    "VigilancePaletteMixin"
   ],
   "verbose": true
 }

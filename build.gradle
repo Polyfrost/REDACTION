@@ -1,8 +1,10 @@
+//file:noinspection GroovyAssignabilityCheck
+import dev.architectury.pack200.java.Pack200Adapter
+
 plugins {
-    id "com.github.johnrengelman.shadow" version "6.1.0"
-    id "net.minecraftforge.gradle.forge" version "ddb1eb0"
+    id "dev.architectury.architectury-pack200" version "0.1.3"
     id "org.jetbrains.kotlin.jvm" version "1.6.10"
-    id "org.spongepowered.mixin" version "d75e32e"
+    id "gg.essential.loom" version "0.10.0.1"
     id "java"
 }
 
@@ -13,18 +15,25 @@ archivesBaseName = mod_name
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 compileJava.options.encoding = "UTF-8"
 
-minecraft {
-    /* Define Minecraft properties. */
-    version = "1.8.9-11.15.1.2318-1.8.9"
-    runDir = "run"
-    mappings = "stable_22"
-
-    makeObfSourceJar = false
-
-    clientJvmArgs += '-Delementa.dev=true'
-    clientJvmArgs += '-Delementa.debug=true'
-    clientRunArgs += '--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker'
-    clientRunArgs += "--mixin mixins.redaction.json"
+loom {
+    launchConfigs {
+        client {
+            arg("--tweakClass", "cc.woverflow.onecore.tweaker.OneCoreTweaker")
+            arg("--mixin", "mixins.redaction.json")
+            property("mixin.debug.export", "true")
+        }
+    }
+    runConfigs {
+        client {
+            ideConfigGenerated = true
+        }
+    }
+    forge {
+        pack200Provider = new Pack200Adapter()
+        mixinConfig("mixins.redaction.json")
+        mixin.defaultRefmapName.set("mixins.redaction.refmap.json")
+        accessTransformer(file("src/main/resources/redaction_at.cfg"))
+    }
 }
 
 configurations {
@@ -38,30 +47,38 @@ repositories {
 }
 
 dependencies {
+    minecraft("com.mojang:minecraft:1.8.9")
+    mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
+    forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
     shade ('gg.essential:loader-launchwrapper:1.1.3') {
         transitive = false
     }
     compileOnly 'gg.essential:essential-1.8.9-forge:1788'
-    compileOnly annotationProcessor ('org.spongepowered:mixin:0.8.5-SNAPSHOT')
-    annotationProcessor("com.google.code.gson:gson:2.2.4")
-    annotationProcessor("com.google.guava:guava:21.0")
-    annotationProcessor("org.ow2.asm:asm-tree:6.2")
-    compileOnly 'cc.woverflow:w-core:1.1.3'
-    shade ('cc.woverflow:w-core-tweaker:1.0.2') {
+    compileOnly ('org.spongepowered:mixin:0.8.5-SNAPSHOT')
+    compileOnly 'cc.woverflow:onecore:1.2.2'
+    shade ('cc.woverflow:onecore-tweaker:1.1.1') {
         transitive = false
     }
 }
 
 jar {
+    dependsOn configurations.shade
+    from(configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'gg.essential.vigilance.example.ExampleMod', 'dummyThing'
+        def i = 0
+        filesMatching("META-INF/NOTICE*") { name = "$name.${i++}" }
+        filesMatching("META-INF/LICENSE*") { name = "$name.${i++}" }
+        filesMatching("META-INF/mods.toml") { name = "$name.${i++}" }
+        filesMatching("LICENSE*") { name = "$name.${i++}" }
+    }
+
     manifest.attributes(
             "ModSide": "CLIENT",
-            "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
+            "TweakClass": "cc.woverflow.onecore.tweaker.OneCoreTweaker",
             "TweakOrder": "0",
             "MixinConfigs": "mixins.redaction.json",
             'ForceLoadAsMod': true,
-            'FMLAT': 'redaction_at.cfg',
-            "FMLCorePlugin": "cc.woverflow.wcore.tweaker.WCoreTweaker",
-            "FMLCorePluginContainsFMLMod": true
+            'FMLAT': 'redaction_at.cfg'
     )
 
     enabled = false
@@ -71,51 +88,15 @@ jar {
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-
-        // replace version and mcversion
-        expand "version": project.version, "mcversion": project.minecraft.version
-    }
-
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
+    filesMatching("mcmod.info") {
+        expand(
+                "version" : project.version
+        )
     }
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
-tasks.reobfJar.dependsOn tasks.shadowJar
-
-// This adds support to our "shade" dependency configuration so we can embed our libraries into our jar file.
-shadowJar {
-    archiveClassifier.set("")
-    configurations = [project.configurations.shade]
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    exclude 'LICENSE.md'
-    exclude 'pack.mcmeta'
-    exclude 'dummyThing'
-    exclude '**/module-info.class'
-    exclude '*.so'
-    exclude '*.dylib'
-    exclude '*.dll'
-    exclude '*.jnilib'
-    exclude 'ibxm/**'
-    exclude 'com/jcraft/**'
-    exclude 'org/lwjgl/**'
-    exclude 'net/java/**'
-
-    exclude 'META-INF/proguard/**'
-    exclude 'META-INF/maven/**'
-    exclude 'META-INF/versions/**'
-    exclude 'META-INF/com.android.tools/**'
-
-    exclude 'fabric.mod.json'
-}
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -129,28 +110,10 @@ compileTestKotlin {
     }
 }
 
-mixin {
-    /* Stops mixin from warning us about duplicate refmaps. We don't care. */
-    disableRefMapWarning = true
-
-    /* Sets the mixin obfuscation environment to SEARGE. */
-    defaultObfuscationEnv = searge
-
-    /* Adds our refmap to our main sourceset. */
-    add sourceSets.main, "mixins.redaction.refmap.json"
-}
-
-reobf {
-    shadowJar {
-        classpath = sourceSets.main.compileClasspath
-    }
-}
-
 sourceSets {
     dummy
     main {
         compileClasspath += dummy.output
-        ext.refMap = "mixins.redaction.refmap.json"
-        output.resourcesDir = file("${buildDir}/classes/kotlin/main")
+        output.resourcesDir = java.classesDirectory
     }
 }
