@@ -1,5 +1,7 @@
 package net.wyvest.redaction.config
 
+import cc.woverflow.onecore.utils.browseURL
+import gg.essential.universal.UDesktop
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
@@ -8,6 +10,11 @@ import java.awt.Color
 import java.io.File
 
 object VigilanceConfig : Vigilant(File(Redaction.modDir, "vigilance.toml"), "Vigilance Config (from REDACTION)") {
+    @Property(PropertyType.BUTTON, "Warning", category = "Color Scheme", subcategory = "Info", description = "This feature will NOT work without an internet connection!\nALL ISSUES RELATING TO THIS MUST GO TO https://woverflow.cc/discord\n Click on the button to learn more.")
+    fun internetConnectionWarning() {
+        UDesktop.browseURL("https://github.com/W-OVERFLOW/REDACTION/blob/main/vigilance.md")
+    }
+
     @Property(PropertyType.COLOR, "Bright Divider", category = "Color Scheme", subcategory = "Palette")
     var brightDivider = Color(151, 151, 151)
 

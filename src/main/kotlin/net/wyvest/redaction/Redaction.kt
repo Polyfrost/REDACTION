@@ -3,6 +3,7 @@ package net.wyvest.redaction
 import cc.woverflow.onecore.utils.Updater
 import cc.woverflow.onecore.utils.command
 import cc.woverflow.onecore.utils.openScreen
+import gg.essential.api.utils.Multithreading
 import gg.essential.api.utils.WebUtil
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
@@ -34,13 +35,13 @@ object Redaction {
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val modDir = File(File(mc.mcDataDir, "W-OVERFLOW"), NAME)
-    var shouldApplyVigilanceMixin = false
+    val shouldApplyVigilanceMixin by lazy(LazyThreadSafetyMode.PUBLICATION) { WebUtil.fetchString("https://woverflow.cc/static/data/redaction_vigilance_mixin").toBoolean() }
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
         if (!modDir.exists())
             modDir.mkdirs()
-        shouldApplyVigilanceMixin = WebUtil.fetchString("https://woverflow.cc/static/data/redaction_vigilance_mixin").toBoolean()
+        Multithreading.runAsync { shouldApplyVigilanceMixin }
         Updater.addToUpdater(event.sourceFile, NAME, ID, VERSION, "W-OVERFLOW/REDACTION")
     }
 
