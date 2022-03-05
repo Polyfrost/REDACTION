@@ -1,6 +1,8 @@
 package net.wyvest.redaction.config
 
+import cc.woverflow.onecore.utils.openScreen
 import gg.essential.api.EssentialAPI
+import gg.essential.api.utils.Multithreading
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
@@ -110,9 +112,13 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     private fun showHitboxGUI() {
         // gui autoscaling thing screws positioning up somehow lol so do this weird hack
         Minecraft.getMinecraft().displayGuiScreen(null)
-        Minecraft.getMinecraft().addScheduledTask {
+        Multithreading.runAsync {
             Minecraft.getMinecraft().addScheduledTask {
-                EssentialAPI.getGuiUtil().openScreen(HitboxPreviewGUI(true))
+                Multithreading.runAsync {
+                    Minecraft.getMinecraft().addScheduledTask {
+                        EssentialAPI.getGuiUtil().openScreen(HitboxPreviewGUI(true))
+                    }
+                }
             }
         }
     }
@@ -141,6 +147,14 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         options = ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple", "Yellow", "White"]
     )
     var textColor = 0
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Vigilance Customizer GUI",
+        description = "Show the Vigilance Customizer GUI.",
+        category = "Vigilance Customizer"
+    )
+    fun openVigilanceGUI() = VigilanceConfig.openScreen()
 
     init {
         initialize()

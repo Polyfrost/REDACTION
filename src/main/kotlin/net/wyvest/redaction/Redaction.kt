@@ -4,7 +4,6 @@ import cc.woverflow.onecore.utils.Updater
 import cc.woverflow.onecore.utils.command
 import cc.woverflow.onecore.utils.openScreen
 import gg.essential.api.utils.Multithreading
-import gg.essential.api.utils.WebUtil
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Mod
@@ -18,6 +17,7 @@ import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.features.ServerManager
 import net.wyvest.redaction.features.hitbox.Hitboxes
 import net.wyvest.redaction.gui.HitboxPreviewGUI
+import net.wyvest.redaction.plugin.RedactionMixinPlugin
 import java.io.File
 
 @Mod(
@@ -30,18 +30,17 @@ object Redaction {
 
 
     const val NAME = "REDACTION"
-    const val VERSION = "1.1.0"
+    const val VERSION = "1.2.1"
     const val ID = "redaction"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val modDir = File(File(mc.mcDataDir, "W-OVERFLOW"), NAME)
-    val shouldApplyVigilanceMixin by lazy(LazyThreadSafetyMode.PUBLICATION) { WebUtil.fetchString("https://woverflow.cc/static/data/redaction_vigilance_mixin").toBoolean() }
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
         if (!modDir.exists())
             modDir.mkdirs()
-        Multithreading.runAsync { shouldApplyVigilanceMixin }
+        Multithreading.runAsync { RedactionMixinPlugin.shouldApplyVigilanceMixin }
         Updater.addToUpdater(event.sourceFile, NAME, ID, VERSION, "W-OVERFLOW/REDACTION")
     }
 

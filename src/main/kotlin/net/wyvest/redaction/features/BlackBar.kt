@@ -18,6 +18,7 @@ object BlackBar {
 
     private var cachedHeight = 0
     private var cachedWidth = 0
+    private data class BlackBarData constructor(var x: Float, var y: Int, var hiding: Boolean = false, var lastSlot: Int = 10)
     private var data: BlackBarData? = null
     private val texPath = ResourceLocation("textures/gui/widgets.png")
     private var firstTime = true
@@ -25,12 +26,12 @@ object BlackBar {
     private var timer: Timer? = null
 
     private val timerTask: ActionListener = ActionListener {
+        if (cachedHeight != UResolution.scaledHeight || cachedWidth != UResolution.scaledWidth) {
+            data = BlackBarData(-1.0F, UResolution.scaledHeight - 22)
+            cachedHeight = UResolution.scaledHeight
+            cachedWidth = UResolution.scaledWidth
+        }
         if (entityplayer != null && mc.thePlayer != null && mc.theWorld != null) {
-            if (cachedHeight != UResolution.viewportHeight || cachedWidth != UResolution.viewportWidth) {
-                data = BlackBarData(-1.0F, UResolution.scaledHeight - 22)
-                cachedHeight = UResolution.viewportHeight
-                cachedWidth = UResolution.viewportWidth
-            }
             data?.let {
                 val scaledHeight = UResolution.scaledHeight
                 val scaledWidth = UResolution.scaledWidth
@@ -93,10 +94,3 @@ object BlackBar {
         }
     }
 }
-
-private class BlackBarData @JvmOverloads constructor(
-    var x: Float,
-    var y: Int,
-    var hiding: Boolean = false,
-    var lastSlot: Int = 10
-)

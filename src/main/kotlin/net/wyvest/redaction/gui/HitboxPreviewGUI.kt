@@ -94,22 +94,38 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
         y = CenterConstraint()
     } childOf titleBar
 
-    private val disableForSelfText by UIText("Disable for Self") constrain {
-        x = SiblingConstraint(10f)
-        y = CenterConstraint()
-    } childOf titleBar
-
-    private val disableForSelfSwitch: SwitchComponent by SwitchComponent(GeneralConfig.config.disableForSelf) constrain {
-        x = SiblingConstraint(5f)
-        y = CenterConstraint()
-    } childOf titleBar
-
     private val accurateHitboxText by UIText("Accurate Hitboxes") constrain {
         x = SiblingConstraint(10f)
         y = CenterConstraint()
     } childOf titleBar
 
     private val accurateHitboxSwitch: SwitchComponent by SwitchComponent(GeneralConfig.config.accurateHitbox) constrain {
+        x = SiblingConstraint(5f)
+        y = CenterConstraint()
+    } childOf titleBar
+
+    //a
+    private val dashedText by UIText("Dashed Hitbox") constrain {
+        x = SiblingConstraint(10f)
+        y = CenterConstraint()
+    } childOf titleBar
+
+    private val dashedSwitch: SwitchComponent by SwitchComponent(GeneralConfig.config.dashedHitbox) constrain {
+        x = SiblingConstraint(5f)
+        y = CenterConstraint()
+    } childOf titleBar
+
+    private val dashedFactorText by UIText("Dashed Factor") constrain {
+        x = SiblingConstraint(10f)
+        y = CenterConstraint()
+    } childOf titleBar
+
+    private val dashedFactorNumber: NumberComponent by NumberComponent(
+        GeneralConfig.config.dashedFactor,
+        1,
+        20,
+        1
+    ) constrain {
         x = SiblingConstraint(5f)
         y = CenterConstraint()
     } childOf titleBar
@@ -127,8 +143,12 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             GeneralConfig.config.accurateHitbox = it as Boolean
             Hitboxes.writeConfig()
         }
-        disableForSelfSwitch.onValueChange {
-            GeneralConfig.config.disableForSelf = it as Boolean
+        dashedSwitch.onValueChange {
+            GeneralConfig.config.dashedHitbox = it as Boolean
+            Hitboxes.writeConfig()
+        }
+        dashedFactorNumber.onValueChange {
+            GeneralConfig.config.dashedFactor = it as Int
             Hitboxes.writeConfig()
         }
         entityDropdown.onValueChange {

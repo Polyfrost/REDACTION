@@ -26,7 +26,17 @@ object Hitboxes {
             }
         }
         if (!readJson.has("general")) {
-            readJson.add("general", PARSER.parse(GSON.toJson(GeneralConfig(hitboxWidth = 1, forceHitbox = false, disableForSelf = false, accurateHitbox = true))))
+            readJson.add("general", PARSER.parse(GSON.toJson(GeneralConfig(hitboxWidth = 1, forceHitbox = false, accurateHitbox = true))))
+        }
+        if (readJson["general"].asJsonObject.has("disable_for_self")) {
+            readJson["self"].asJsonObject.addProperty("hitbox_enabled", false)
+            readJson["self"].asJsonObject.addProperty("eyeline_enabled", false)
+            readJson["self"].asJsonObject.addProperty("line_enabled", false)
+            readJson["general"].asJsonObject.remove("disable_for_self")
+        }
+        if (!readJson["general"].asJsonObject.has("dashed_hitbox")) {
+            readJson["general"].asJsonObject.addProperty("dashed_hitbox", false)
+            readJson["general"].asJsonObject.addProperty("dashed_factor", 6)
         }
         file.writeText(GSON.toJson(readJson))
 
@@ -46,8 +56,9 @@ object Hitboxes {
             GeneralConfig.config = GeneralConfig(
                 hitboxWidth = generalJson["hitbox_width"].asInt,
                 forceHitbox = generalJson["force_hitbox"].asBoolean,
-                disableForSelf = generalJson["disable_for_self"].asBoolean,
-                accurateHitbox = generalJson["accurate_hitbox"].asBoolean
+                accurateHitbox = generalJson["accurate_hitbox"].asBoolean,
+                dashedHitbox = generalJson["dashed_hitbox"].asBoolean,
+                dashedFactor = generalJson["dashed_factor"].asInt
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -74,8 +85,9 @@ object Hitboxes {
         val generalJson = json["general"].asJsonObject
         generalJson.addProperty("hitbox_width", GeneralConfig.config.hitboxWidth)
         generalJson.addProperty("force_hitbox", GeneralConfig.config.forceHitbox)
-        generalJson.addProperty("disable_for_self", GeneralConfig.config.disableForSelf)
         generalJson.addProperty("accurate_hitbox", GeneralConfig.config.accurateHitbox)
+        generalJson.addProperty("dashed_hitbox", GeneralConfig.config.dashedHitbox)
+        generalJson.addProperty("dashed_factor", GeneralConfig.config.dashedFactor)
         file.writeText(GSON.toJson(json))
     }
 

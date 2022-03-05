@@ -1,5 +1,6 @@
 package net.wyvest.redaction.mixin;
 
+import cc.woverflow.onecore.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,7 +10,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.wyvest.redaction.features.hitbox.Entity;
 import net.wyvest.redaction.features.hitbox.GeneralConfig;
 import net.wyvest.redaction.gui.HitboxPreviewGUI;
-import net.wyvest.redaction.utils.ColorUtils;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -59,12 +59,16 @@ public class RenderManagerMixin {
             crosshairColor = entity.getCrosshairColor();
             eyeColor = entity.getEyeColor();
             lineColor = entity.getLineColor();
+            if (GeneralConfig.getConfig().getDashedHitbox()) {
+                GL11.glEnable(GL11.GL_LINE_STIPPLE);
+                GL11.glLineStipple(GeneralConfig.getConfig().getDashedFactor(), (short) 0xAAAA);
+            }
             GL11.glLineWidth(GeneralConfig.getConfig().getHitboxWidth());
             return;
         }
         for (Entity entity : Entity.getSortedList()) {
             if (entity.getCondition().invoke(entityIn)) {
-                if ((!entity.getHitboxEnabled() && !entity.getEyeLineEnabled() && !entity.getLineEnabled()) || (GeneralConfig.getConfig().getDisableForSelf() && "Self".equals(entity.getName()))) {
+                if ((!entity.getHitboxEnabled() && !entity.getEyeLineEnabled() && !entity.getLineEnabled())) {
                     ci.cancel();
                     return;
                 }
@@ -75,6 +79,10 @@ public class RenderManagerMixin {
                 crosshairColor = entity.getCrosshairColor();
                 eyeColor = entity.getEyeColor();
                 lineColor = entity.getLineColor();
+                if (GeneralConfig.getConfig().getDashedHitbox()) {
+                    GL11.glEnable(GL11.GL_LINE_STIPPLE);
+                    GL11.glLineStipple(GeneralConfig.getConfig().getDashedFactor(), (short) 0xAAAA);
+                }
                 GL11.glLineWidth(GeneralConfig.getConfig().getHitboxWidth());
                 return;
             }
@@ -116,5 +124,8 @@ public class RenderManagerMixin {
     @Inject(method = "renderDebugBoundingBox", at = @At("RETURN"))
     private void resetLineWidth(net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         GL11.glLineWidth(1);
+        if (GeneralConfig.getConfig().getDashedHitbox()) {
+            GL11.glDisable(GL11.GL_LINE_STIPPLE);
+        }
     }
 }
