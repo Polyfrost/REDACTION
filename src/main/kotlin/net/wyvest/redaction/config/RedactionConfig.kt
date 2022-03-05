@@ -1,6 +1,5 @@
 package net.wyvest.redaction.config
 
-import cc.woverflow.onecore.utils.openScreen
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.vigilance.Vigilant
@@ -147,14 +146,6 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
         options = ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple", "Yellow", "White"]
     )
     var textColor = 0
-
-    @Property(
-        type = PropertyType.BUTTON,
-        name = "Vigilance Customizer GUI",
-        description = "Show the Vigilance Customizer GUI.",
-        category = "Vigilance Customizer"
-    )
-    fun openVigilanceGUI() = VigilanceConfig.openScreen()
 
     init {
         initialize()

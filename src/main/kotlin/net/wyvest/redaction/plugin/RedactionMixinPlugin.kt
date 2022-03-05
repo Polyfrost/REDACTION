@@ -1,6 +1,5 @@
 package net.wyvest.redaction.plugin
 
-import gg.essential.api.utils.WebUtil
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
@@ -18,7 +17,7 @@ class RedactionMixinPlugin : IMixinConfigPlugin {
     }
 
     override fun shouldApplyMixin(targetClassName: String?, mixinClassName: String?): Boolean {
-        return if (mixinClassName == "net.wyvest.redaction.mixin.VigilancePaletteMixin") shouldApplyVigilanceMixin else true
+        return true
     }
 
     override fun acceptTargets(myTargets: MutableSet<String>?, otherTargets: MutableSet<String>?) {
@@ -70,20 +69,6 @@ class RedactionMixinPlugin : IMixinConfigPlugin {
                     }
                 }
             }
-        }
-    }
-
-    companion object {
-        val shouldApplyVigilanceMixin by lazy(LazyThreadSafetyMode.PUBLICATION) {
-            val prev = WebUtil.LOG
-            WebUtil.LOG = true
-            WebUtil.fetchString("https://woverflow.cc/static/data/redaction_vigilance_mixin")?.trim().toBooleanOr(true).also { WebUtil.LOG = prev }
-        }
-
-        private fun String?.toBooleanOr(default: Boolean) = when (this) {
-            "true" -> true
-            "false" -> false
-            else -> default
         }
     }
 }

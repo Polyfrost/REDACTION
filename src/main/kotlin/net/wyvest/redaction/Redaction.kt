@@ -3,7 +3,6 @@ package net.wyvest.redaction
 import cc.woverflow.onecore.utils.Updater
 import cc.woverflow.onecore.utils.command
 import cc.woverflow.onecore.utils.openScreen
-import gg.essential.api.utils.Multithreading
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Mod
@@ -11,13 +10,11 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.wyvest.redaction.config.RedactionConfig
-import net.wyvest.redaction.config.VigilanceConfig
 import net.wyvest.redaction.features.BlackBar
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.features.ServerManager
 import net.wyvest.redaction.features.hitbox.Hitboxes
 import net.wyvest.redaction.gui.HitboxPreviewGUI
-import net.wyvest.redaction.plugin.RedactionMixinPlugin
 import java.io.File
 
 @Mod(
@@ -40,7 +37,6 @@ object Redaction {
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
         if (!modDir.exists())
             modDir.mkdirs()
-        Multithreading.runAsync { RedactionMixinPlugin.shouldApplyVigilanceMixin }
         Updater.addToUpdater(event.sourceFile, NAME, ID, VERSION, "W-OVERFLOW/REDACTION")
     }
 
@@ -53,12 +49,6 @@ object Redaction {
             }
             subCommand("hitbox", description = "Opens the hitbox config GUI for REDACTION.") {
                 HitboxPreviewGUI().openScreen()
-            }
-        }
-
-        command("vigilance", aliases = arrayListOf("vigilant")) {
-            main {
-                VigilanceConfig.openScreen()
             }
         }
         EVENT_BUS.register(ParticleManager)
