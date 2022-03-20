@@ -51,6 +51,15 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
     var blackbar = false
 
     @Property(
+        type = PropertyType.SWITCH,
+        name = "Blackbar Slot Numbers",
+        // Cephetir: Teach me how to make good descriptions
+        description = "Display slot number.",
+        category = "Blackbar"
+    )
+    var blackbarSlotNumbers = false
+
+    @Property(
         type = PropertyType.SLIDER,
         name = "Blackbar Update Speed",
         description = "Select the speed of the blackbar animation updating. Measured in milliseconds.",

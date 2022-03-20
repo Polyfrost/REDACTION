@@ -8,17 +8,24 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.wyvest.redaction.config.RedactionConfig;
 import net.wyvest.redaction.features.BlackBar;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
+
 @Mixin(GuiIngame.class)
 public abstract class GuiIngameMixin {
 
     @Shadow
     protected abstract void renderHotbarItem(int index, int xPos, int yPos, float partialTicks, EntityPlayer player);
+
+    @Shadow
+    @Final
+    protected Minecraft mc;
 
     @Inject(method = "renderTooltip", at = @At("HEAD"), cancellable = true)
     private void cancel(ScaledResolution res, float partialTicks, CallbackInfo ci) {
@@ -34,6 +41,20 @@ public abstract class GuiIngameMixin {
                     int k = res.getScaledWidth() / 2 - 90 + j * 20 + 2;
                     int l = res.getScaledHeight() - 16 - 3;
                     renderHotbarItem(j, k, l, partialTicks, (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity());
+
+                    if (RedactionConfig.INSTANCE.getBlackbarSlotNumbers()){
+                        GlStateManager.disableDepth();
+                        GlStateManager.tryBlendFuncSeparate(775, 769, 1, 0);
+                        mc.fontRendererObj.drawString(
+                                String.valueOf(j + 1),
+                                k,
+                                l,
+                                Color.WHITE.getRGB(),
+                                false
+                        );
+                        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+                        GlStateManager.enableDepth();
+                    }
                 }
                 RenderHelper.disableStandardItemLighting();
                 GlStateManager.disableRescaleNormal();
