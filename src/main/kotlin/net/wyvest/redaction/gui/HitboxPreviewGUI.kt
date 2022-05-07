@@ -274,7 +274,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
             Hitboxes.writeConfig()
         }
 
-        val crosshairColorText by UIText("Crosshair Color") constrain {
+        val crosshairColorText by UIText("Color In Range") constrain {
             x = crosshairColorTextX ?: run { crosshairColorTextX = (colorText.getRight() + 5).pixels(); crosshairColorTextX!! }
             y = 0.pixels()
         } childOf (colorContainer)

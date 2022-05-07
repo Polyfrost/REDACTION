@@ -4,12 +4,20 @@
   "package": "net.wyvest.redaction.mixin",
   "refmap": "mixins.redaction.refmap.json",
   "plugin": "net.wyvest.redaction.plugin.RedactionMixinPlugin",
+  "injectors": {
+    "maxShiftBy": 5
+  },
   "mixins": [
+    "EntityRendererMixin",
     "FontRendererMixin",
     "GuiIngameMixin",
     "GuiMainMenuMixin",
     "GuiScreenServerListMixin",
-    "RenderManagerMixin"
+    "ItemRendererMixin",
+    "PatcherFontRendererMixin",
+    "RenderItemMixin",
+    "RenderManagerMixin",
+    "Sk1erAnimationHandlerMixin"
   ],
   "verbose": true
 }

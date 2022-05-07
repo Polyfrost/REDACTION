@@ -5,12 +5,14 @@ import cc.woverflow.onecore.utils.command
 import cc.woverflow.onecore.utils.openScreen
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.features.BlackBar
+import net.wyvest.redaction.features.NameHighlight
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.features.ServerManager
 import net.wyvest.redaction.features.hitbox.Hitboxes
@@ -27,11 +29,13 @@ object Redaction {
 
 
     const val NAME = "REDACTION"
-    const val VERSION = "1.2.1"
+    const val VERSION = "1.3.0-beta1"
     const val ID = "redaction"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val modDir = File(File(mc.mcDataDir, "W-OVERFLOW"), NAME)
+    var isPatcher = false
+    private set
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
@@ -55,11 +59,13 @@ object Redaction {
         EVENT_BUS.register(ServerManager)
         Hitboxes.initialize()
         ServerManager.initialize()
+        NameHighlight.initialize()
     }
 
     @Mod.EventHandler
     fun onFMLPost(e: FMLLoadCompleteEvent) {
         BlackBar.initialize()
+        isPatcher = Loader.isModLoaded("patcher")
     }
 
 }

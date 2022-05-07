@@ -7,9 +7,15 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 
 class RedactionMixinPlugin : IMixinConfigPlugin {
     private var returned = false
+    private var isPatcher = false
 
     override fun onLoad(mixinPackage: String?) {
-
+        isPatcher = try {
+            Class.forName("club.sk1er.patcher.hooks.FontRendererHook")
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     override fun getRefMapperConfig(): String? {
@@ -17,7 +23,7 @@ class RedactionMixinPlugin : IMixinConfigPlugin {
     }
 
     override fun shouldApplyMixin(targetClassName: String?, mixinClassName: String?): Boolean {
-        return true
+        return if (mixinClassName?.contains("PatcherFontRendererMixin") == true) isPatcher else true
     }
 
     override fun acceptTargets(myTargets: MutableSet<String>?, otherTargets: MutableSet<String>?) {

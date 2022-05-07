@@ -3,8 +3,10 @@ package net.wyvest.redaction.config
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.vigilance.Vigilant
+import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
+import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.Redaction.NAME
@@ -15,7 +17,42 @@ import net.wyvest.redaction.gui.HitboxPreviewGUI
 import java.awt.Color
 import java.io.File
 
-object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml"), NAME) {
+object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml"), NAME, sortingBehavior = object :
+    SortingBehavior() {
+    override fun getCategoryComparator(): Comparator<in Category> = Comparator { o1, o2 ->
+        if (o1.name == "General") return@Comparator -1
+        if (o2.name == "General") return@Comparator 1
+        else compareValuesBy(o1, o2) {
+            it.name
+        }
+    }
+}) {
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Disable Hand Item Lighting",
+        description = "Turn off lighting for the hand item.",
+        category = "General"
+    )
+    var disableHandLighting = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Customize Hand Item FOV",
+        description = "Change the FOV of which the item held will be rendered.",
+        category = "General"
+    )
+    var customHandFOV = false
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Hand Item FOV",
+        description = "Change the FOV of which the item held will be rendered.",
+        category = "General",
+        min = 0,
+        max = 180
+    )
+    var handFOV = 125
 
     @Property(
         type = PropertyType.SWITCH,
@@ -141,20 +178,75 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Bold Name",
+        description = "Make your name bold when highlighted.",
+        category = "Highlight"
+    )
+    var boldName = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Italics Name",
+        description = "Make your name have italics when highlighted.",
+        category = "Highlight"
+    )
+    var italicsName = false
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Text Color",
+        description = "Change the text color for the highlight.",
+        category = "Highlight",
+        allowAlpha = false
+    )
+    var textColor: Color = Color.BLACK
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Highlight Async",
         description = "Run highlight code async, which results in significantly better performance.",
         category = "Highlight"
     )
     var asyncHighlight = true
 
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "Text Color",
-        description = "Change the text color for the highlight.",
-        category = "Highlight",
-        options = ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple", "Yellow", "White"]
-    )
-    var textColor = 0
+    fun getRedText(shadow: Boolean): Int {
+        var red = textColor.red
+        if (Minecraft.getMinecraft().gameSettings.anaglyph) {
+            red = (red * 30 + textColor.green * 59 + textColor.blue * 11) / 100
+        }
+
+        if (shadow) {
+            red /= 4
+        }
+
+        return red
+    }
+
+    fun getGreenText(shadow: Boolean): Int {
+        var green = textColor.green
+        if (Minecraft.getMinecraft().gameSettings.anaglyph) {
+            green = (textColor.red * 30 + textColor.green * 70) / 100
+        }
+
+        if (shadow) {
+            green /= 4
+        }
+
+        return green
+    }
+
+    fun getBlueText(shadow: Boolean): Int {
+        var blue = textColor.blue
+        if (Minecraft.getMinecraft().gameSettings.anaglyph) {
+            blue = (textColor.red * 30 + blue * 70) / 100
+        }
+
+        if (shadow) {
+            blue /= 4
+        }
+
+        return blue
+    }
 
     init {
         initialize()
@@ -166,10 +258,18 @@ object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml")
             blackbarSpeed = newValue
             BlackBar.setTimer()
         }
-        registerListener("textColor") { color: Int ->
-            textColor = color // update immediately
-            NameHighlight.colorDelegate.invalidate()
+        registerListener("textColor") { color: Color ->
+            textColor = color
+        }
+        registerListener("boldName") { newValue: Boolean ->
+            boldName = newValue
             NameHighlight.cache.invalidateAll()
         }
+        registerListener("italicsName") { newValue: Boolean ->
+            italicsName = newValue
+            NameHighlight.cache.invalidateAll()
+        }
+
+        addDependency("handFOV", "customHandFOV")
     }
 }
