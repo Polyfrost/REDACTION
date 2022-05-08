@@ -7,7 +7,6 @@ import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
-import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.utils.MathUtil
 import net.wyvest.redaction.utils.RenderUtils
@@ -31,22 +30,22 @@ object BlackBar {
             cachedHeight = UResolution.scaledHeight
             cachedWidth = UResolution.scaledWidth
         }
-        if (entityplayer != null && mc.thePlayer != null && mc.theWorld != null) {
+        if (entityplayer != null && Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().theWorld != null) {
             data?.let {
                 val scaledHeight = UResolution.scaledHeight
                 val scaledWidth = UResolution.scaledWidth
                 it.hiding = Minecraft.getMinecraft().currentScreen is GuiChat
                 if (it.hiding) {
-                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, mc.timer.renderPartialTicks / 4).toInt()
+                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() + 2, Minecraft.getMinecraft().timer.renderPartialTicks / 4).toInt()
                 } else if (it.y != scaledHeight - 21) {
-                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, mc.timer.renderPartialTicks / 4).toInt()
+                    it.y = MathUtil.lerp(it.y.toFloat(), scaledHeight.toFloat() - 22, Minecraft.getMinecraft().timer.renderPartialTicks / 4).toInt()
                 }
                 if (it.lastSlot != entityplayer!!.inventory.currentItem) {
                     if (scaledWidth / 2 - 91F + entityplayer!!.inventory.currentItem * 20 != it.x) {
                         it.x = MathUtil.lerp(
                             it.x,
                             scaledWidth / 2 - 91F + entityplayer!!.inventory.currentItem * 20,
-                            mc.timer.renderPartialTicks / 4
+                            Minecraft.getMinecraft().timer.renderPartialTicks / 4
                         )
                     } else {
                         it.lastSlot = entityplayer!!.inventory.currentItem
@@ -73,9 +72,9 @@ object BlackBar {
 
     fun render() {
         data?.let {
-            entityplayer = mc.renderViewEntity as EntityPlayer
+            entityplayer = Minecraft.getMinecraft().renderViewEntity as EntityPlayer
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-            mc.textureManager.bindTexture(texPath)
+            Minecraft.getMinecraft().textureManager.bindTexture(texPath)
             if (firstTime) {
                 firstTime = false
                 it.x = 0F

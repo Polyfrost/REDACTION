@@ -3,9 +3,9 @@ package net.wyvest.redaction.features
 import com.google.gson.JsonParser
 import gg.essential.api.utils.Multithreading
 import gg.essential.api.utils.WebUtil
+import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent
-import net.wyvest.redaction.Redaction.mc
 import net.wyvest.redaction.config.RedactionConfig
 
 object ServerManager {
@@ -38,7 +38,7 @@ object ServerManager {
     @SubscribeEvent
     fun onServerJoined(event: ClientConnectedToServerEvent) {
         if (!event.isLocal) {
-            RedactionConfig.lastServerIP = mc.currentServerData?.serverIP ?: ""
+            RedactionConfig.lastServerIP = Minecraft.getMinecraft().currentServerData?.serverIP ?: ""
             RedactionConfig.markDirty()
             RedactionConfig.writeData()
         }

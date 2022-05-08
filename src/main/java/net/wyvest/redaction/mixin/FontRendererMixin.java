@@ -13,12 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FontRenderer.class)
 public abstract class FontRendererMixin {
-    @Shadow protected abstract void setColor(float r, float g, float b, float a);
-
     @Shadow private int textColor;
     @Shadow private float alpha;
+
+    @Shadow(remap = false) protected abstract void setColor(float r, float g, float b, float a);
+
     private Character charCaptured = null;
-    @ModifyVariable(method = "renderStringAtPos", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+
+    @ModifyVariable(method = "renderString", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private String onStringRendered_modifyText(String original) {
         return (RedactionConfig.INSTANCE.getHighlightName() && original != null) ? NameHighlight.highlightName(original) : original;
     }
@@ -30,7 +32,7 @@ public abstract class FontRendererMixin {
         return c;
     }
 
-    @Inject(method = "renderStringAtPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;setColor(FFFF)V", ordinal = 1, shift = At.Shift.BY, by = 2))
+    @Inject(method = "renderStringAtPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;setColor(FFFF)V", ordinal = 1, shift = At.Shift.BY, by = 2, remap = false), remap = true)
     private void onStringRendered_setColor(String text, boolean shadow, CallbackInfo ci) {
         if (charCaptured != null) {
             if (charCaptured == 'w') {

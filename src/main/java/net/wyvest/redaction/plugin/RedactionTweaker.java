@@ -5,7 +5,6 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 
-// NOT USED IN PRODUCTION
 public class RedactionTweaker extends OneCoreTweaker {
     @Override
     public void injectIntoClassLoader(LaunchClassLoader classLoader) {

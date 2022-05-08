@@ -3,9 +3,7 @@ package net.wyvest.redaction
 import cc.woverflow.onecore.utils.Updater
 import cc.woverflow.onecore.utils.command
 import cc.woverflow.onecore.utils.openScreen
-import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
-import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
@@ -31,11 +29,15 @@ object Redaction {
     const val NAME = "REDACTION"
     const val VERSION = "1.3.0-beta1"
     const val ID = "redaction"
-    val mc: Minecraft
-        get() = Minecraft.getMinecraft()
-    val modDir = File(File(mc.mcDataDir, "W-OVERFLOW"), NAME)
-    var isPatcher = false
-    private set
+    val modDir = File(File("./W-OVERFLOW"), NAME)
+    val isPatcher by lazy {
+        try {
+            Class.forName("club.sk1er.patcher.hooks.FontRendererHook")
+            true
+        } catch (ignored: Exception) {
+            false
+        }
+    }
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
@@ -46,7 +48,7 @@ object Redaction {
 
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
-        RedactionConfig.initialize()
+        RedactionConfig.preload()
         command("redaction") {
             main {
                 RedactionConfig.openScreen()
@@ -65,7 +67,6 @@ object Redaction {
     @Mod.EventHandler
     fun onFMLPost(e: FMLLoadCompleteEvent) {
         BlackBar.initialize()
-        isPatcher = Loader.isModLoaded("patcher")
     }
 
 }
