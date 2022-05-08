@@ -8,6 +8,12 @@
     "maxShiftBy": 5
   },
   "mixins": [
+    "EffectRendererMixin",
+    "EntityBreakingFXMixin",
+    "EntityDropParticleFXAccessor",
+    "EntityFXAccessor",
+    "EntityMagicCrit2FXMixin",
+    "EntityMagicCrit2FXMixin$MagicFactoryMixin",
     "EntityRendererMixin",
     "FontRendererMixin",
     "GuiIngameMixin",

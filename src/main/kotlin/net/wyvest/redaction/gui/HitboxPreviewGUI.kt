@@ -21,7 +21,7 @@ import gg.essential.vigilance.gui.settings.SwitchComponent
 import net.minecraft.client.Minecraft
 import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.features.hitbox.Entity
-import net.wyvest.redaction.features.hitbox.GeneralConfig
+import net.wyvest.redaction.features.hitbox.HitboxesConfig
 import net.wyvest.redaction.features.hitbox.Hitboxes
 import java.awt.Color
 
@@ -75,7 +75,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
     } childOf titleBar
 
     private val hitboxWidthNumber: NumberComponent by NumberComponent(
-        GeneralConfig.config.hitboxWidth,
+        HitboxesConfig.config.hitboxWidth,
         1,
         20,
         1
@@ -89,7 +89,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
         y = CenterConstraint()
     } childOf titleBar
 
-    private val forceHitboxSwitch: SwitchComponent by SwitchComponent(GeneralConfig.config.forceHitbox) constrain {
+    private val forceHitboxSwitch: SwitchComponent by SwitchComponent(HitboxesConfig.config.forceHitbox) constrain {
         x = SiblingConstraint(5f)
         y = CenterConstraint()
     } childOf titleBar
@@ -99,7 +99,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
         y = CenterConstraint()
     } childOf titleBar
 
-    private val accurateHitboxSwitch: SwitchComponent by SwitchComponent(GeneralConfig.config.accurateHitbox) constrain {
+    private val accurateHitboxSwitch: SwitchComponent by SwitchComponent(HitboxesConfig.config.accurateHitbox) constrain {
         x = SiblingConstraint(5f)
         y = CenterConstraint()
     } childOf titleBar
@@ -110,7 +110,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
         y = CenterConstraint()
     } childOf titleBar
 
-    private val dashedSwitch: SwitchComponent by SwitchComponent(GeneralConfig.config.dashedHitbox) constrain {
+    private val dashedSwitch: SwitchComponent by SwitchComponent(HitboxesConfig.config.dashedHitbox) constrain {
         x = SiblingConstraint(5f)
         y = CenterConstraint()
     } childOf titleBar
@@ -121,7 +121,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
     } childOf titleBar
 
     private val dashedFactorNumber: NumberComponent by NumberComponent(
-        GeneralConfig.config.dashedFactor,
+        HitboxesConfig.config.dashedFactor,
         1,
         20,
         1
@@ -132,23 +132,23 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
 
     init {
         hitboxWidthNumber.onValueChange {
-            GeneralConfig.config.hitboxWidth = it as Int
+            HitboxesConfig.config.hitboxWidth = it as Int
             Hitboxes.writeConfig()
         }
         forceHitboxSwitch.onValueChange {
-            GeneralConfig.config.forceHitbox = it as Boolean
+            HitboxesConfig.config.forceHitbox = it as Boolean
             Hitboxes.writeConfig()
         }
         accurateHitboxSwitch.onValueChange {
-            GeneralConfig.config.accurateHitbox = it as Boolean
+            HitboxesConfig.config.accurateHitbox = it as Boolean
             Hitboxes.writeConfig()
         }
         dashedSwitch.onValueChange {
-            GeneralConfig.config.dashedHitbox = it as Boolean
+            HitboxesConfig.config.dashedHitbox = it as Boolean
             Hitboxes.writeConfig()
         }
         dashedFactorNumber.onValueChange {
-            GeneralConfig.config.dashedFactor = it as Int
+            HitboxesConfig.config.dashedFactor = it as Int
             Hitboxes.writeConfig()
         }
         entityDropdown.onValueChange {

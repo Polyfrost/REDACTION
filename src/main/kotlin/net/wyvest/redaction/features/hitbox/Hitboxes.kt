@@ -26,7 +26,7 @@ object Hitboxes {
             }
         }
         if (!readJson.has("general")) {
-            readJson.add("general", PARSER.parse(GSON.toJson(GeneralConfig(hitboxWidth = 1, forceHitbox = false, accurateHitbox = true))))
+            readJson.add("general", PARSER.parse(GSON.toJson(HitboxesConfig(hitboxWidth = 1, forceHitbox = false, accurateHitbox = true))))
         }
         if (readJson["general"].asJsonObject.has("disable_for_self")) {
             readJson["self"].asJsonObject.addProperty("hitbox_enabled", false)
@@ -53,7 +53,7 @@ object Hitboxes {
                 Entity.map[entity.key]?.lineColor = entityJson["line_color"].asInt
             }
             val generalJson = json["general"].asJsonObject
-            GeneralConfig.config = GeneralConfig(
+            HitboxesConfig.config = HitboxesConfig(
                 hitboxWidth = generalJson["hitbox_width"].asInt,
                 forceHitbox = generalJson["force_hitbox"].asBoolean,
                 accurateHitbox = generalJson["accurate_hitbox"].asBoolean,
@@ -83,11 +83,11 @@ object Hitboxes {
             entityJson.addProperty("crosshair_color", thing.crosshairColor)
         }
         val generalJson = json["general"].asJsonObject
-        generalJson.addProperty("hitbox_width", GeneralConfig.config.hitboxWidth)
-        generalJson.addProperty("force_hitbox", GeneralConfig.config.forceHitbox)
-        generalJson.addProperty("accurate_hitbox", GeneralConfig.config.accurateHitbox)
-        generalJson.addProperty("dashed_hitbox", GeneralConfig.config.dashedHitbox)
-        generalJson.addProperty("dashed_factor", GeneralConfig.config.dashedFactor)
+        generalJson.addProperty("hitbox_width", HitboxesConfig.config.hitboxWidth)
+        generalJson.addProperty("force_hitbox", HitboxesConfig.config.forceHitbox)
+        generalJson.addProperty("accurate_hitbox", HitboxesConfig.config.accurateHitbox)
+        generalJson.addProperty("dashed_hitbox", HitboxesConfig.config.dashedHitbox)
+        generalJson.addProperty("dashed_factor", HitboxesConfig.config.dashedFactor)
         file.writeText(GSON.toJson(json))
     }
 
