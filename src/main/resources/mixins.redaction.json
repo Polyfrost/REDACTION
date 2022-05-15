@@ -26,5 +26,8 @@
     "RenderManagerMixin",
     "Sk1erAnimationHandlerMixin"
   ],
-  "verbose": true
+  "verbose": true,
+  "client": [
+    "WorldRendererMixin"
+  ]
 }

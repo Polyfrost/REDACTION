@@ -9,6 +9,7 @@ object Particles {
     private val GSON = GsonBuilder().setPrettyPrinting().create()
     private val PARSER = JsonParser()
     private val file = File(Redaction.modDir, "particles.json")
+    var currentRenderingParticle: Particle? = null
 
     fun initialize() {
         if (!file.exists() || file.readText().isBlank()) {
