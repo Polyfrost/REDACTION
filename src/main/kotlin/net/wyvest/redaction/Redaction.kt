@@ -14,7 +14,6 @@ import net.wyvest.redaction.features.NameHighlight
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.features.ServerManager
 import net.wyvest.redaction.features.hitbox.Hitboxes
-import net.wyvest.redaction.features.particles.Particles
 import net.wyvest.redaction.gui.HitboxPreviewGUI
 import java.io.File
 
@@ -61,7 +60,6 @@ object Redaction {
         EVENT_BUS.register(ParticleManager)
         EVENT_BUS.register(ServerManager)
         Hitboxes.initialize()
-        Particles.initialize()
         ServerManager.initialize()
         NameHighlight.initialize()
     }
