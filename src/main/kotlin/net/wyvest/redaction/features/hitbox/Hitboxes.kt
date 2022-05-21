@@ -13,34 +13,34 @@ object Hitboxes {
     private val file = File(Redaction.modDir, "hitboxes.json")
 
     fun initialize() {
-        if (!file.exists() || file.readText().isBlank()) {
-            file.createNewFile()
-            file.writeText("{  }")
-        }
-
-        val readJson = PARSER.parse(file.readText()).asJsonObject
-        for (entity in Entity.map.values) {
-            val entityName = entity.name.lowercase(Locale.ENGLISH).replace(" ", "_")
-            if (!readJson.has(entityName)) {
-                readJson.add(entityName, PARSER.parse(GSON.toJson(entity)))
-            }
-        }
-        if (!readJson.has("general")) {
-            readJson.add("general", PARSER.parse(GSON.toJson(GeneralConfig(hitboxWidth = 1, forceHitbox = false, accurateHitbox = true))))
-        }
-        if (readJson["general"].asJsonObject.has("disable_for_self")) {
-            readJson["self"].asJsonObject.addProperty("hitbox_enabled", false)
-            readJson["self"].asJsonObject.addProperty("eyeline_enabled", false)
-            readJson["self"].asJsonObject.addProperty("line_enabled", false)
-            readJson["general"].asJsonObject.remove("disable_for_self")
-        }
-        if (!readJson["general"].asJsonObject.has("dashed_hitbox")) {
-            readJson["general"].asJsonObject.addProperty("dashed_hitbox", false)
-            readJson["general"].asJsonObject.addProperty("dashed_factor", 6)
-        }
-        file.writeText(GSON.toJson(readJson))
-
         try {
+            if (!file.exists() || file.readText().isBlank()) {
+                file.createNewFile()
+                file.writeText("{  }")
+            }
+
+            val readJson = PARSER.parse(file.readText()).asJsonObject
+            for (entity in Entity.map.values) {
+                val entityName = entity.name.lowercase(Locale.ENGLISH).replace(" ", "_")
+                if (!readJson.has(entityName)) {
+                    readJson.add(entityName, PARSER.parse(GSON.toJson(entity)))
+                }
+            }
+            if (!readJson.has("general")) {
+                readJson.add("general", PARSER.parse(GSON.toJson(GeneralConfig(hitboxWidth = 1, forceHitbox = false, accurateHitbox = true))))
+            }
+            if (readJson["general"].asJsonObject.has("disable_for_self")) {
+                readJson["self"].asJsonObject.addProperty("hitbox_enabled", false)
+                readJson["self"].asJsonObject.addProperty("eyeline_enabled", false)
+                readJson["self"].asJsonObject.addProperty("line_enabled", false)
+                readJson["general"].asJsonObject.remove("disable_for_self")
+            }
+            if (!readJson["general"].asJsonObject.has("dashed_hitbox")) {
+                readJson["general"].asJsonObject.addProperty("dashed_hitbox", false)
+                readJson["general"].asJsonObject.addProperty("dashed_factor", 6)
+            }
+            file.writeText(GSON.toJson(readJson))
+
             val json = PARSER.parse(file.readText()).asJsonObject
             for (entity in Entity.map) {
                 val entityJson = json[entity.value.name.lowercase(Locale.ENGLISH).replace(" ", "_")].asJsonObject
