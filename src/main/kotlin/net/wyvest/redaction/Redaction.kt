@@ -38,6 +38,7 @@ object Redaction {
             false
         }
     }
+    var overrideHand = false
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {

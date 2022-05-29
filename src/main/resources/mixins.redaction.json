@@ -15,6 +15,7 @@
     "GuiScreenServerListMixin",
     "ItemRendererMixin",
     "OverflowGlintHandlerMixin",
+    "PatcherEntityRendererHookMixin",
     "PatcherFontRendererMixin",
     "RenderItemMixin",
     "RenderManagerMixin",

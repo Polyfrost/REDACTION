@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "cc.woverflow.overflowanimations.GlintHandler", remap = false)
 public class OverflowGlintHandlerMixin {
     @Inject(method = "renderGlint", at = @At("RETURN"))
-    private void afterRenderEffect(IBakedModel model, CallbackInfo ci) {
+    private static void afterRenderEffect(IBakedModel model, CallbackInfo ci) {
         if (RedactionConfig.INSTANCE.getDisableHandLighting()) {
             RenderHelper.disableStandardItemLighting();
         }
