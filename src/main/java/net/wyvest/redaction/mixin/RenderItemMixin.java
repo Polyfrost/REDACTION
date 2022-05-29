@@ -1,5 +1,6 @@
 package net.wyvest.redaction.mixin;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.IBakedModel;
@@ -18,7 +19,7 @@ public class RenderItemMixin {
         }
     }
 
-    @Inject(method = "renderEffect", at = @At("RETURN"))
+    @Inject(method = "renderEffect", at = @At("TAIL"))
     private void afterRenderEffect(IBakedModel model, CallbackInfo ci) {
         if (RedactionConfig.INSTANCE.getDisableHandLighting()) {
             RenderHelper.disableStandardItemLighting();
