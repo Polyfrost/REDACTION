@@ -35,20 +35,34 @@ public abstract class EntityRendererMixin {
         Redaction.INSTANCE.setOverrideHand(true);
     }
 
-    @Dynamic("I HATE OPTIFINE")
-    @Redirect(method = {"renderHand*", "func_78476_b"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/EntityRenderer;enableLightmap()V", remap = true), remap = false)
-    private void redirectLightmap(EntityRenderer instance) {
-        if (!RedactionConfig.INSTANCE.getDisableHandLighting()) {
-            instance.enableLightmap();
-        }
+    @Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V"))
+    private void setHookTrue(float partialTicks, int xOffset, CallbackInfo ci) {
+        setHookTrue();
     }
 
     @Dynamic("I HATE OPTIFINE")
-    @Redirect(method = {"renderHand*", "func_78476_b"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/EntityRenderer;disableLightmap()V", remap = true), remap = false)
-    private void redirectLightmap2(EntityRenderer instance) {
-        if (!RedactionConfig.INSTANCE.getDisableHandLighting()) {
-            instance.disableLightmap();
-        }
+    @Inject(method = "renderHand*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", remap = true), remap = false)
+    private void setHookTrue(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
+        setHookTrue();
+    }
+
+    private void setHookTrue() {
+        Redaction.INSTANCE.setRenderingHand(true);
+    }
+
+    @Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", shift = At.Shift.AFTER))
+    private void setHookFalse(float partialTicks, int xOffset, CallbackInfo ci) {
+        setHookFalse();
+    }
+
+    @Dynamic("I HATE OPTIFINE")
+    @Inject(method = "renderHand*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", shift = At.Shift.AFTER, remap = true), remap = false)
+    private void setHookFalse(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
+        setHookFalse();
+    }
+
+    private void setHookFalse() {
+        Redaction.INSTANCE.setRenderingHand(false);
     }
 
     @Inject(method = "renderHand", at = @At(value = "FIELD", target = "Lnet/minecraft/client/settings/GameSettings;thirdPersonView:I", opcode = Opcodes.GETFIELD, ordinal = 1))

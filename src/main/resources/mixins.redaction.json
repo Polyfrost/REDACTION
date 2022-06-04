@@ -13,13 +13,10 @@
     "GuiIngameMixin",
     "GuiMainMenuMixin",
     "GuiScreenServerListMixin",
-    "ItemRendererMixin",
-    "OverflowGlintHandlerMixin",
     "PatcherEntityRendererHookMixin",
     "PatcherFontRendererMixin",
     "RenderItemMixin",
-    "RenderManagerMixin",
-    "Sk1erAnimationHandlerMixin"
+    "RenderManagerMixin"
   ],
   "verbose": true
 }
