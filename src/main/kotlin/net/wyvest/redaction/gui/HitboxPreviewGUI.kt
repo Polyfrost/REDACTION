@@ -1,5 +1,6 @@
 package net.wyvest.redaction.gui
 
+import cc.polyfrost.oneconfig.utils.gui.GuiUtils
 import com.mojang.authlib.GameProfile
 import gg.essential.api.EssentialAPI
 import gg.essential.api.gui.EssentialGUI
@@ -338,7 +339,7 @@ class HitboxPreviewGUI @JvmOverloads constructor(private val returnToConfigGUI: 
         super.onScreenClose()
         entityToEmulate = Entity.blank
         if (returnToConfigGUI) {
-            EssentialAPI.getGuiUtil().openScreen(RedactionConfig.gui())
+            RedactionConfig.openGui()
         }
         Hitboxes.writeConfig()
         cursorOverEmulatedEntity = false

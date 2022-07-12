@@ -1,6 +1,6 @@
 package net.wyvest.redaction.mixin;
 
-import cc.woverflow.onecore.utils.ColorUtils;
+import cc.polyfrost.oneconfig.utils.color.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
