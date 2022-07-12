@@ -19,7 +19,6 @@ import java.awt.*;
 
 @Mixin(GuiIngame.class)
 public abstract class GuiIngameMixin {
-
     @Shadow
     protected abstract void renderHotbarItem(int index, int xPos, int yPos, float partialTicks, EntityPlayer player);
 
@@ -31,7 +30,7 @@ public abstract class GuiIngameMixin {
     private void cancel(ScaledResolution res, float partialTicks, CallbackInfo ci) {
         if (RedactionConfig.INSTANCE.getBlackbar()) {
             ci.cancel();
-            if (Minecraft.getMinecraft().getRenderViewEntity() instanceof EntityPlayer) {
+            if (mc.getRenderViewEntity() instanceof EntityPlayer) {
                 BlackBar.INSTANCE.render();
                 GlStateManager.enableRescaleNormal();
                 GlStateManager.enableBlend();
@@ -62,5 +61,4 @@ public abstract class GuiIngameMixin {
             }
         }
     }
-
 }

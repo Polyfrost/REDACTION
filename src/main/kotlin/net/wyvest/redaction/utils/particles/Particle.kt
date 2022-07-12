@@ -1,6 +1,6 @@
 package net.wyvest.redaction.utils.particles
 
-import gg.essential.universal.UResolution
+import cc.polyfrost.oneconfig.libs.universal.UResolution
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
