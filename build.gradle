@@ -3,9 +3,9 @@
 
 plugins {
     id "dev.architectury.architectury-pack200" version "0.1.3"
-    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.20'
     id "gg.essential.loom" version "0.10.0.3"
-    id "net.kyori.blossom" version "1.3.0"
+    id "net.kyori.blossom" version "1.3.1"
     id "java"
 }
 
@@ -58,11 +58,12 @@ dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
+
     compileOnly ('org.spongepowered:mixin:0.8.5-SNAPSHOT')
-    compileOnly('cc.polyfrost:oneconfig-1.8.9-forge:0.1.0-alpha50')
+    compileOnly('cc.polyfrost:oneconfig-1.8.9-forge:0.1.0-alpha+')
     include('cc.polyfrost:oneconfig-wrapper-1.8.9-forge:1.0.0-alpha6')
-    compileOnly 'gg.essential:essential-1.8.9-forge:1933'
-    include ('gg.essential:loader-launchwrapper:1.1.1') {
+    compileOnly('gg.essential:essential-1.8.9-forge:4246+g8be73312c')
+    include('gg.essential:loader-launchwrapper:1.1.3') {
         transitive = false
     }
     modRuntimeOnly("me.djtheredstoner:DevAuth-forge-legacy:1.1.0")
@@ -95,6 +96,10 @@ sourceSets {
         compileClasspath += dummy.output
         output.resourcesDir = java.classesDirectory
     }
+}
+
+compileKotlin {
+    kotlinOptions.freeCompilerArgs = ["-Xuse-k2"]
 }
 
 jar {

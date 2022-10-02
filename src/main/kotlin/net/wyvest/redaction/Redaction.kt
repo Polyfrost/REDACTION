@@ -27,6 +27,7 @@ object Redaction {
     const val NAME = "REDACTION"
     const val VERSION = "1.3.5"
     const val ID = "redaction"
+
     val modDir = File(File("./W-OVERFLOW"), NAME)
     val isPatcher by lazy {
         try {
