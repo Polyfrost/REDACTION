@@ -33,17 +33,19 @@ public class RenderManagerMixin {
 
     @Inject(method = "doRenderEntity", at = @At(value = "HEAD"))
     private void forceHitbox(net.minecraft.entity.Entity entity, double x, double y, double z, float entityYaw, float partialTicks, boolean hideDebugBox, CallbackInfoReturnable<Boolean> cir) {
+        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+        boolean debugBoundingBox = renderManager.isDebugBoundingBox();
         if (GeneralConfig.getConfig().getForceHitbox()) {
-            if (!Minecraft.getMinecraft().getRenderManager().isDebugBoundingBox())
-                Minecraft.getMinecraft().getRenderManager().setDebugBoundingBox(true);
+            if (!debugBoundingBox)
+                renderManager.setDebugBoundingBox(true);
             return;
         }
         if (HitboxPreviewGUI.Companion.getBypassHitbox()) {
-            awaitingGUI = !Minecraft.getMinecraft().getRenderManager().isDebugBoundingBox();
+            awaitingGUI = !debugBoundingBox;
             if (awaitingGUI)
-                Minecraft.getMinecraft().getRenderManager().setDebugBoundingBox(true);
+                renderManager.setDebugBoundingBox(true);
         } else if (awaitingGUI) {
-            Minecraft.getMinecraft().getRenderManager().setDebugBoundingBox(false);
+            renderManager.setDebugBoundingBox(false);
             awaitingGUI = false;
         }
     }
@@ -52,18 +54,7 @@ public class RenderManagerMixin {
     private void initHitbox(net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (HitboxPreviewGUI.Companion.getBypassHitbox()) {
             Entity entity = HitboxPreviewGUI.Companion.getEntityToEmulate();
-            box = entity.getHitboxEnabled();
-            eye = entity.getEyeLineEnabled();
-            line = entity.getLineEnabled();
-            hitboxColor = entity.getColor();
-            crosshairColor = entity.getCrosshairColor();
-            eyeColor = entity.getEyeColor();
-            lineColor = entity.getLineColor();
-            if (GeneralConfig.getConfig().getDashedHitbox()) {
-                GL11.glEnable(GL11.GL_LINE_STIPPLE);
-                GL11.glLineStipple(GeneralConfig.getConfig().getDashedFactor(), (short) 0xAAAA);
-            }
-            GL11.glLineWidth(GeneralConfig.getConfig().getHitboxWidth());
+            prepareHitboxRendering(entity);
             return;
         }
         for (Entity entity : Entity.getSortedList()) {
@@ -72,21 +63,25 @@ public class RenderManagerMixin {
                     ci.cancel();
                     return;
                 }
-                box = entity.getHitboxEnabled();
-                eye = entity.getEyeLineEnabled();
-                line = entity.getLineEnabled();
-                hitboxColor = entity.getColor();
-                crosshairColor = entity.getCrosshairColor();
-                eyeColor = entity.getEyeColor();
-                lineColor = entity.getLineColor();
-                if (GeneralConfig.getConfig().getDashedHitbox()) {
-                    GL11.glEnable(GL11.GL_LINE_STIPPLE);
-                    GL11.glLineStipple(GeneralConfig.getConfig().getDashedFactor(), (short) 0xAAAA);
-                }
-                GL11.glLineWidth(GeneralConfig.getConfig().getHitboxWidth());
+                prepareHitboxRendering(entity);
                 return;
             }
         }
+    }
+
+    private void prepareHitboxRendering(Entity entity) {
+        box = entity.getHitboxEnabled();
+        eye = entity.getEyeLineEnabled();
+        line = entity.getLineEnabled();
+        hitboxColor = entity.getColor();
+        crosshairColor = entity.getCrosshairColor();
+        eyeColor = entity.getEyeColor();
+        lineColor = entity.getLineColor();
+        if (GeneralConfig.getConfig().getDashedHitbox()) {
+            GL11.glEnable(GL11.GL_LINE_STIPPLE);
+            GL11.glLineStipple(GeneralConfig.getConfig().getDashedFactor(), (short) 0xAAAA);
+        }
+        GL11.glLineWidth(GeneralConfig.getConfig().getHitboxWidth());
     }
 
     @Redirect(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;drawOutlinedBoundingBox(Lnet/minecraft/util/AxisAlignedBB;IIII)V", ordinal = 0))

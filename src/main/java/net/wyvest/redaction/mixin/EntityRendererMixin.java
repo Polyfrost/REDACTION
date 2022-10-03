@@ -13,19 +13,19 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@SuppressWarnings("DefaultAnnotationParam")
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
-    @Shadow protected abstract float getFOVModifier(float partialTicks, boolean useFOVSetting);
-
     @Shadow private Minecraft mc;
     @Shadow private float farPlaneDistance;
+    @Shadow protected abstract float getFOVModifier(float partialTicks, boolean useFOVSetting);
 
     @Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;loadIdentity()V", shift = At.Shift.AFTER, ordinal = 0))
     private void modifyFov(float partialTicks, int xOffset, CallbackInfo ci) {
         setOverrideHand();
     }
 
-    @Dynamic("I HATE OPTIFINE")
+    @Dynamic("OptiFine")
     @Inject(method = {"renderHand*"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;loadIdentity()V", shift = At.Shift.AFTER, ordinal = 0, remap = true), remap = false)
     private void modifyFov(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
         setOverrideHand();
@@ -40,7 +40,7 @@ public abstract class EntityRendererMixin {
         setHookTrue();
     }
 
-    @Dynamic("I HATE OPTIFINE")
+    @Dynamic("OptiFine")
     @Inject(method = "renderHand*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", remap = true), remap = false)
     private void setHookTrue(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
         setHookTrue();
@@ -55,7 +55,7 @@ public abstract class EntityRendererMixin {
         setHookFalse();
     }
 
-    @Dynamic("I HATE OPTIFINE")
+    @Dynamic("OptiFine")
     @Inject(method = "renderHand*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", shift = At.Shift.AFTER, remap = true), remap = false)
     private void setHookFalse(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
         setHookFalse();
@@ -70,7 +70,7 @@ public abstract class EntityRendererMixin {
         resetFOV(partialTicks, xOffset);
     }
 
-    @Dynamic("I HATE OPTIFINE")
+    @Dynamic("OptiFine")
     @Inject(method = "renderHand*", at = @At(value = "FIELD", target = "Lnet/minecraft/client/settings/GameSettings;thirdPersonView:I", opcode = Opcodes.GETFIELD, ordinal = 1, remap = true), remap = false)
     private void resetFOV(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
         resetFOV(f, n);
@@ -79,13 +79,13 @@ public abstract class EntityRendererMixin {
     private void resetFOV(float partialTicks, int xOffset) {
         GlStateManager.matrixMode(5889);
         GlStateManager.loadIdentity();
-        if (this.mc.gameSettings.anaglyph) {
+        if (mc.gameSettings.anaglyph) {
             GlStateManager.translate((float)(-(xOffset * 2 - 1)) * 0.1F, 0.0F, 0.0F);
         }
-        Project.gluPerspective(getFOVModifier(partialTicks, false), (float)this.mc.displayWidth / (float)this.mc.displayHeight, 0.05F, this.farPlaneDistance * 2.0F);
+        Project.gluPerspective(getFOVModifier(partialTicks, false), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
         GlStateManager.matrixMode(5888);
         GlStateManager.loadIdentity();
-        if (this.mc.gameSettings.anaglyph) {
+        if (mc.gameSettings.anaglyph) {
             GlStateManager.translate((float)(xOffset * 2 - 1) * 0.1F, 0.0F, 0.0F);
         }
     }
@@ -95,8 +95,7 @@ public abstract class EntityRendererMixin {
         if (Redaction.INSTANCE.getOverrideHand() && RedactionConfig.INSTANCE.getCustomHandFOV()) {
             Redaction.INSTANCE.setOverrideHand(false);
             return RedactionConfig.INSTANCE.getHandFOV();
-        } else {
-            return constant;
         }
+        return constant;
     }
 }
