@@ -5,6 +5,7 @@ import cc.polyfrost.oneconfig.utils.commands.annotations.SubCommand
 import cc.polyfrost.oneconfig.utils.commands.annotations.Command
 import cc.polyfrost.oneconfig.utils.commands.annotations.Main
 import cc.polyfrost.oneconfig.utils.dsl.openScreen
+import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -21,14 +22,18 @@ import java.io.File
 @Mod(
     name = Redaction.NAME,
     modid = Redaction.ID,
-    version = Redaction.VERSION
+    version = Redaction.VERSION,
+    modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
 )
 object Redaction {
     const val NAME = "REDACTION"
     const val VERSION = "1.3.5"
     const val ID = "redaction"
 
-    val modDir = File(File("./W-OVERFLOW"), NAME)
+    val modDir by lazy {
+        File(File(Minecraft.getMinecraft()?.mcDataDir ?: File("."), "W-OVERFLOW"), NAME)
+            .also { it.mkdirs() }
+    }
     val isPatcher by lazy {
         try {
             Class.forName("club.sk1er.patcher.hooks.FontRendererHook")
