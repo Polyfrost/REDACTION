@@ -1,8 +1,8 @@
 package net.wyvest.redaction.features
 
-import cc.polyfrost.oneconfig.utils.Multithreading
-import cc.polyfrost.oneconfig.utils.NetworkUtils
 import com.google.gson.JsonParser
+import gg.essential.api.utils.Multithreading
+import gg.essential.api.utils.WebUtil
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent
@@ -14,8 +14,7 @@ object ServerManager {
 
     fun initialize() {
         Multithreading.runAsync {
-            val json =
-                JsonParser().parse(NetworkUtils.getString("https://raw.githubusercontent.com/LunarClient/ServerMappings/master/servers.json")).asJsonArray
+            val json = JsonParser().parse(WebUtil.fetchString("https://raw.githubusercontent.com/LunarClient/ServerMappings/master/servers.json")).asJsonArray
             for (element in json) {
                 val serverJson = element.asJsonObject
                 val addresses = serverJson["addresses"].asJsonArray
@@ -40,7 +39,8 @@ object ServerManager {
     fun onServerJoined(event: ClientConnectedToServerEvent) {
         if (!event.isLocal) {
             RedactionConfig.lastServerIP = Minecraft.getMinecraft().currentServerData?.serverIP ?: ""
-            RedactionConfig.save()
+            RedactionConfig.markDirty()
+            RedactionConfig.writeData()
         }
     }
 }

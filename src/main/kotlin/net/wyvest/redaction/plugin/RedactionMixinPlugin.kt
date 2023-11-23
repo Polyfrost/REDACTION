@@ -58,7 +58,7 @@ class RedactionMixinPlugin : IMixinConfigPlugin {
                                         }
                                     }
                                     returned = true // this is set to true so mods like crashpatch can recover from these crashes
-                                    throw RuntimeException("REDACTION ASM Failed, please go to https://polyfrost.cc/discord for support!")
+                                    throw RuntimeException("REDACTION ASM Failed, please go to https://woverflow.cc/discord for support!")
                                 })
                                 method.instructions.insert(insn.next.next.next, fieldinsn)
                                 method.instructions.insert(fieldinsn, methodinsn)

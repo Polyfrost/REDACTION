@@ -1,14 +1,16 @@
 pluginManagement {
     repositories {
+        mavenCentral()
         gradlePluginPortal()
-        maven { url = "https://repo.polyfrost.cc/releases" }
-        maven { url = "https://maven.architectury.dev"}
+        maven { url 'https://repo.woverflow.cc/' }
     }
     resolutionStrategy {
         eachPlugin {
-            if (requested.id.id == "io.github.juuxel.loom-quiltflower-mini") {
-                useModule("com.github.wyvest:loom-quiltflower-mini:${requested.version}")
-            }
+            /* Check for plugin requests and redirect them their corresponding artifact. */
+            if (requested.id.id == "gg.essential.loom")
+                useModule("gg.essential:architectury-loom:${requested.version}")
+            if (requested.id.id == "org.spongepowered.mixin")
+                useModule("com.github.LXGaming:MixinGradle:${requested.version}")
         }
     }
 }

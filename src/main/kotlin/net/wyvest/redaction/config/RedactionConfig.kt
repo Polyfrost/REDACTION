@@ -1,18 +1,15 @@
 package net.wyvest.redaction.config
 
-import cc.polyfrost.oneconfig.config.Config
-import cc.polyfrost.oneconfig.config.annotations.Button
-import cc.polyfrost.oneconfig.config.annotations.Checkbox
-import cc.polyfrost.oneconfig.config.annotations.Slider
-import cc.polyfrost.oneconfig.config.annotations.Switch
-import cc.polyfrost.oneconfig.config.core.OneColor
-import cc.polyfrost.oneconfig.config.data.Mod
-import cc.polyfrost.oneconfig.config.data.ModType
-import cc.polyfrost.oneconfig.config.migration.VigilanceMigrator
-import cc.polyfrost.oneconfig.utils.Multithreading
-import cc.polyfrost.oneconfig.utils.gui.GuiUtils
+import gg.essential.api.EssentialAPI
+import gg.essential.api.utils.Multithreading
+import gg.essential.vigilance.Vigilant
+import gg.essential.vigilance.data.Category
+import gg.essential.vigilance.data.Property
+import gg.essential.vigilance.data.PropertyType
+import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.wyvest.redaction.Redaction
+import net.wyvest.redaction.Redaction.NAME
 import net.wyvest.redaction.features.BlackBar
 import net.wyvest.redaction.features.NameHighlight
 import net.wyvest.redaction.features.ParticleManager
@@ -20,145 +17,194 @@ import net.wyvest.redaction.gui.HitboxPreviewGUI
 import java.awt.Color
 import java.io.File
 
-object RedactionConfig : Config(
-    Mod(
-        Redaction.NAME,
-        ModType.UTIL_QOL,
-        VigilanceMigrator(File(Redaction.modDir, "${Redaction.ID}.toml").path)
-    ), "redaction.json"
-) {
+object RedactionConfig : Vigilant(File(Redaction.modDir, "${Redaction.ID}.toml"), NAME, sortingBehavior = object :
+    SortingBehavior() {
+    override fun getCategoryComparator(): Comparator<in Category> = Comparator { o1, o2 ->
+        if (o1.name == "General") return@Comparator -1
+        if (o2.name == "General") return@Comparator 1
+        else compareValuesBy(o1, o2) {
+            it.name
+        }
+    }
+}) {
 
-    @Switch(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Disable Hand Item Lighting",
+        description = "Turn off lighting for the hand item.",
         category = "General"
     )
     var disableHandLighting = false
 
-    @Switch(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Customize Hand Item FOV",
+        description = "Change the FOV of which the item held will be rendered.",
         category = "General"
     )
     var customHandFOV = false
 
-    @Slider(
+    @Property(
+        type = PropertyType.NUMBER,
         name = "Hand Item FOV",
+        description = "Change the FOV of which the item held will be rendered.",
         category = "General",
-        min = 0F,
-        max = 180F
+        min = 0,
+        max = 180
     )
     var handFOV = 125
 
-    @Switch(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Server Preview in Direct Connect",
+        description = "Show a server preview in the direct connect GUI.",
         category = "General"
     )
     var serverPreview = false
 
-    @Checkbox(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Last Server Joined Button",
+        description = "Show a last server joined button in the main menu.",
         category = "General"
     )
     var lastServerJoined = false
 
-
+    @Property(
+        type = PropertyType.TEXT,
+        name = "Last Server Joined IP",
+        description = "yeah",
+        category = "General",
+        hidden = true
+    )
     var lastServerIP = ""
 
-    @Switch(
-        name = "Replace Hotbar with Blackbar",
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Blackbar",
+        description = "Replace the hotbar with a cleaner blackbar.",
         category = "Blackbar"
     )
     var blackbar = false
 
-    @Checkbox(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Blackbar Slot Numbers",
+        // Cephetir: Teach me how to make good descriptions
+        description = "Display slot number.",
         category = "Blackbar"
     )
     var blackbarSlotNumbers = false
 
-    @Slider(
+    @Property(
+        type = PropertyType.SLIDER,
         name = "Blackbar Update Speed",
+        description = "Select the speed of the blackbar animation updating. Measured in milliseconds.",
         category = "Blackbar",
-        min = 1F,
-        max = 100F
+        min = 1,
+        max = 100
     )
     var blackbarSpeed = 10
 
-    @cc.polyfrost.oneconfig.config.annotations.Color(
+    @Property(
+        type = PropertyType.COLOR,
         name = "Blackbar Color",
+        description = "Choose the color for the blackbar.",
         category = "Blackbar"
     )
-    var blackbarColor: OneColor = OneColor(0, 0, 0, 85)
+    var blackbarColor: Color = Color(0, 0, 0, 85)
 
-    @cc.polyfrost.oneconfig.config.annotations.Color(
+    @Property(
+        type = PropertyType.COLOR,
         name = "Blackbar Item Highlight Color",
+        description = "Choose the color for the blackbar item highlight color",
         category = "Blackbar"
     )
-    var blackbarItemColor: OneColor = OneColor(Color.WHITE)
+    var blackbarItemColor: Color = Color.WHITE
 
-    @Switch(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Add Snow in Inventory",
+        description = "Add snow in the inventory.",
         category = "Inventory"
     )
     var addSnow = false
 
-    @Slider(
-        name = "Snow Amount",
+    @Property(
+        type = PropertyType.SLIDER,
+        name = "Amount of Snow",
+        description = "Modify the amount of snow / particles in the inventory.",
         category = "Inventory",
-        min = 50F,
-        max = 1000F
+        min = 50,
+        max = 1000
     )
     var particles = 100
 
-    @cc.polyfrost.oneconfig.config.annotations.Color(
+    @Property(
+        type = PropertyType.COLOR,
         name = "Snow Color",
+        description = "Modify the color of the snow / particles.",
         category = "Inventory"
     )
-    var snowColor = OneColor(-1)
+    var snowColor = Color(-0x1)
 
-    @Button(
-        name = "Open Hitbox GUI",
-        category = "Hitboxes", text = "Open"
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Hitbox GUI",
+        description = "Show the Hitbox Config GUI.",
+        category = "Hitboxes"
     )
-    var showHitboxGUI = Runnable { // gui autoscaling thing screws positioning up somehow lol so do this weird hack
+    private fun showHitboxGUI() {
+        // gui autoscaling thing screws positioning up somehow lol so do this weird hack
         Minecraft.getMinecraft().displayGuiScreen(null)
         Multithreading.runAsync {
             Minecraft.getMinecraft().addScheduledTask {
                 Multithreading.runAsync {
                     Minecraft.getMinecraft().addScheduledTask {
-                        GuiUtils.displayScreen(HitboxPreviewGUI(true))
+                        EssentialAPI.getGuiUtil().openScreen(HitboxPreviewGUI(true))
                     }
                 }
             }
         }
     }
 
-    @Checkbox(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Highlight Name",
+        description = "Highlight your name.",
         category = "Highlight"
     )
     var highlightName = false
 
-    @Checkbox(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Bold Name",
+        description = "Make your name bold when highlighted.",
         category = "Highlight"
     )
     var boldName = false
 
-    @Checkbox(
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Italics Name",
+        description = "Make your name have italics when highlighted.",
         category = "Highlight"
     )
     var italicsName = false
 
-    @cc.polyfrost.oneconfig.config.annotations.Color(
+    @Property(
+        type = PropertyType.COLOR,
         name = "Text Color",
+        description = "Change the text color for the highlight.",
         category = "Highlight",
         allowAlpha = false
     )
-    var textColor: OneColor = OneColor(Color.BLACK)
+    var textColor: Color = Color.BLACK
 
-    @Switch(
-        name = "Highlight Async (improves performance)",
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Highlight Async",
+        description = "Run highlight code async, which results in significantly better performance.",
         category = "Highlight"
     )
     var asyncHighlight = true
@@ -204,16 +250,23 @@ object RedactionConfig : Config(
 
     init {
         initialize()
-        addListener("particles") {
+        registerListener("particles") { newValue: Int ->
+            particles = newValue
             ParticleManager.hasChanged = true
         }
-        addListener("blackbarSpeed") {
+        registerListener("blackbarSpeed") { newValue: Int ->
+            blackbarSpeed = newValue
             BlackBar.setTimer()
         }
-        addListener("boldName") {
+        registerListener("textColor") { color: Color ->
+            textColor = color
+        }
+        registerListener("boldName") { newValue: Boolean ->
+            boldName = newValue
             NameHighlight.cache.invalidateAll()
         }
-        addListener("italicsName") {
+        registerListener("italicsName") { newValue: Boolean ->
+            italicsName = newValue
             NameHighlight.cache.invalidateAll()
         }
 

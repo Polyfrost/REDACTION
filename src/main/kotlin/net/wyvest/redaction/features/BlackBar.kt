@@ -1,7 +1,7 @@
 package net.wyvest.redaction.features
 
-import cc.polyfrost.oneconfig.libs.universal.UResolution
-import cc.polyfrost.oneconfig.utils.Multithreading
+import gg.essential.api.utils.Multithreading
+import gg.essential.universal.UResolution
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.renderer.GlStateManager
@@ -87,7 +87,7 @@ object BlackBar {
             if (RedactionConfig.blackbarItemColor.alpha != 0) {
                 RenderUtils.drawRectangle(
                     it.x,
-                    it.y.toFloat(), 22F, 22F, RedactionConfig.blackbarItemColor.toJavaColor()
+                    it.y.toFloat(), 22F, 22F, RedactionConfig.blackbarItemColor
                 )
             }
         }

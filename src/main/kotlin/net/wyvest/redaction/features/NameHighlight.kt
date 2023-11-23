@@ -1,13 +1,12 @@
 package net.wyvest.redaction.features
 
-import cc.polyfrost.oneconfig.config.core.OneColor
-import cc.polyfrost.oneconfig.libs.caffeine.cache.Cache
-import cc.polyfrost.oneconfig.libs.caffeine.cache.Caffeine
-import cc.polyfrost.oneconfig.libs.universal.ChatColor
-import cc.polyfrost.oneconfig.utils.Multithreading
 import club.sk1er.patcher.config.PatcherConfig
 import club.sk1er.patcher.hooks.FontRendererHook
 import club.sk1er.patcher.util.enhancement.text.EnhancedFontRenderer
+import gg.essential.api.utils.Multithreading
+import gg.essential.lib.caffeine.cache.Cache
+import gg.essential.lib.caffeine.cache.Caffeine
+import gg.essential.universal.ChatColor
 import gg.essential.vigilance.gui.SettingsGui
 import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.GuiOpenEvent
@@ -16,6 +15,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.wyvest.redaction.Redaction
 import net.wyvest.redaction.config.RedactionConfig
+import java.awt.Color
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -36,7 +36,7 @@ object NameHighlight {
         )
     }
     private var check = false
-    private var previous: OneColor? = null
+    private var previous: Color? = null
 
     val cache: Cache<String, String> = Caffeine.newBuilder().executor(POOL).maximumSize(10000).build()
 
