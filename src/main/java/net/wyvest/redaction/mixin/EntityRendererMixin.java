@@ -7,7 +7,6 @@ import net.wyvest.redaction.Redaction;
 import net.wyvest.redaction.config.RedactionConfig;
 import org.lwjgl.util.glu.Project;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -22,58 +21,22 @@ public abstract class EntityRendererMixin {
 
     @Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;loadIdentity()V", shift = At.Shift.AFTER, ordinal = 0))
     private void modifyFov(float partialTicks, int xOffset, CallbackInfo ci) {
-        setOverrideHand();
-    }
-
-    @Dynamic("I HATE OPTIFINE")
-    @Inject(method = {"renderHand*"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;loadIdentity()V", shift = At.Shift.AFTER, ordinal = 0, remap = true), remap = false)
-    private void modifyFov(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
-        setOverrideHand();
-    }
-
-    private void setOverrideHand() {
         Redaction.INSTANCE.setOverrideHand(true);
     }
 
     @Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V"))
     private void setHookTrue(float partialTicks, int xOffset, CallbackInfo ci) {
-        setHookTrue();
-    }
-
-    @Dynamic("I HATE OPTIFINE")
-    @Inject(method = "renderHand*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", remap = true), remap = false)
-    private void setHookTrue(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
-        setHookTrue();
-    }
-
-    private void setHookTrue() {
         Redaction.INSTANCE.setRenderingHand(true);
     }
 
     @Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", shift = At.Shift.AFTER))
     private void setHookFalse(float partialTicks, int xOffset, CallbackInfo ci) {
-        setHookFalse();
-    }
-
-    @Dynamic("I HATE OPTIFINE")
-    @Inject(method = "renderHand*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V", shift = At.Shift.AFTER, remap = true), remap = false)
-    private void setHookFalse(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
-        setHookFalse();
-    }
-
-    private void setHookFalse() {
         Redaction.INSTANCE.setRenderingHand(false);
     }
 
     @Inject(method = "renderHand", at = @At(value = "FIELD", target = "Lnet/minecraft/client/settings/GameSettings;thirdPersonView:I", opcode = Opcodes.GETFIELD, ordinal = 1))
     private void resetFOV(float partialTicks, int xOffset, CallbackInfo ci) {
         resetFOV(partialTicks, xOffset);
-    }
-
-    @Dynamic("I HATE OPTIFINE")
-    @Inject(method = "renderHand*", at = @At(value = "FIELD", target = "Lnet/minecraft/client/settings/GameSettings;thirdPersonView:I", opcode = Opcodes.GETFIELD, ordinal = 1, remap = true), remap = false)
-    private void resetFOV(float f, int n, boolean bl, boolean bl2, boolean bl3, CallbackInfo ci) {
-        resetFOV(f, n);
     }
 
     private void resetFOV(float partialTicks, int xOffset) {

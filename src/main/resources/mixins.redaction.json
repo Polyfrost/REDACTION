@@ -7,8 +7,9 @@
   "injectors": {
     "maxShiftBy": 5
   },
-  "mixins": [
+  "client": [
     "EntityRendererMixin",
+    "EntityRendererMixin_OptiFine",
     "FontRendererMixin",
     "GuiIngameMixin",
     "GuiMainMenuMixin",

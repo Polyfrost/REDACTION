@@ -1,20 +1,18 @@
 package net.wyvest.redaction
 
-import cc.woverflow.onecore.utils.Updater
-import cc.woverflow.onecore.utils.command
-import cc.woverflow.onecore.utils.openScreen
+import gg.essential.api.EssentialAPI
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.wyvest.redaction.command.RedactionCommand
 import net.wyvest.redaction.config.RedactionConfig
 import net.wyvest.redaction.features.BlackBar
 import net.wyvest.redaction.features.NameHighlight
 import net.wyvest.redaction.features.ParticleManager
 import net.wyvest.redaction.features.ServerManager
 import net.wyvest.redaction.features.hitbox.Hitboxes
-import net.wyvest.redaction.gui.HitboxPreviewGUI
 import java.io.File
 
 @Mod(
@@ -45,20 +43,12 @@ object Redaction {
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
         if (!modDir.exists())
             modDir.mkdirs()
-        Updater.addToUpdater(event.sourceFile, NAME, ID, VERSION, "W-OVERFLOW/REDACTION")
     }
 
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
         RedactionConfig.preload()
-        command("redaction") {
-            main {
-                RedactionConfig.openScreen()
-            }
-            subCommand("hitbox", description = "Opens the hitbox config GUI for REDACTION.") {
-                HitboxPreviewGUI().openScreen()
-            }
-        }
+        EssentialAPI.getCommandRegistry().registerCommand(RedactionCommand())
         EVENT_BUS.register(ParticleManager)
         EVENT_BUS.register(ServerManager)
         Hitboxes.initialize()

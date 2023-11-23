@@ -8,8 +8,14 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 
 class RedactionMixinPlugin : IMixinConfigPlugin {
     private var returned = false
+    private var optifine = false
     override fun onLoad(mixinPackage: String?) {
-
+        optifine = try {
+            Class.forName("Config")
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
     }
 
     override fun getRefMapperConfig(): String? {
@@ -17,6 +23,7 @@ class RedactionMixinPlugin : IMixinConfigPlugin {
     }
 
     override fun shouldApplyMixin(targetClassName: String?, mixinClassName: String?): Boolean {
+        if (mixinClassName?.endsWith("_OptiFine") == true) return optifine
         return if (mixinClassName?.contains("PatcherFontRendererMixin") == true) Redaction.isPatcher else true
     }
 

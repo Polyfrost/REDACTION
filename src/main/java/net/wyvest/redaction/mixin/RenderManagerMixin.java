@@ -1,6 +1,5 @@
 package net.wyvest.redaction.mixin;
 
-import cc.woverflow.onecore.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
@@ -10,6 +9,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.wyvest.redaction.features.hitbox.Entity;
 import net.wyvest.redaction.features.hitbox.GeneralConfig;
 import net.wyvest.redaction.gui.HitboxPreviewGUI;
+import net.wyvest.redaction.utils.MathUtil;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -93,14 +93,14 @@ public class RenderManagerMixin {
     private void shouldRenderHitbox(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha, net.minecraft.entity.Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
         if (box) {
             int color = (Minecraft.getMinecraft().objectMouseOver != null && Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && Minecraft.getMinecraft().objectMouseOver.entityHit.equals(entityIn)) || (HitboxPreviewGUI.Companion.getBypassHitbox() && HitboxPreviewGUI.Companion.getCursorOverEmulatedEntity()) ? crosshairColor : hitboxColor;
-            RenderGlobal.drawOutlinedBoundingBox((GeneralConfig.getConfig().getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), ColorUtils.getRed(color), ColorUtils.getGreen(color), ColorUtils.getBlue(color), alpha);
+            RenderGlobal.drawOutlinedBoundingBox((GeneralConfig.getConfig().getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), MathUtil.INSTANCE.getRed(color), MathUtil.INSTANCE.getGreen(color), MathUtil.INSTANCE.getBlue(color), alpha);
         }
     }
 
     @Redirect(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;drawOutlinedBoundingBox(Lnet/minecraft/util/AxisAlignedBB;IIII)V", ordinal = 1))
     private void shouldRenderLineOfSight(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha) {
         if (line) {
-            RenderGlobal.drawOutlinedBoundingBox(boundingBox, ColorUtils.getRed(lineColor), ColorUtils.getGreen(lineColor), ColorUtils.getBlue(lineColor), alpha);
+            RenderGlobal.drawOutlinedBoundingBox(boundingBox, MathUtil.INSTANCE.getRed(lineColor), MathUtil.INSTANCE.getGreen(lineColor), MathUtil.INSTANCE.getBlue(lineColor), alpha);
         }
     }
 
@@ -116,9 +116,9 @@ public class RenderManagerMixin {
 
     @ModifyArgs(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;color(IIII)Lnet/minecraft/client/renderer/WorldRenderer;"))
     private void modifyEyeLineColor(Args args) {
-        args.set(0, ColorUtils.getRed(eyeColor));
-        args.set(1, ColorUtils.getGreen(eyeColor));
-        args.set(2, ColorUtils.getBlue(eyeColor));
+        args.set(0, MathUtil.INSTANCE.getRed(eyeColor));
+        args.set(1, MathUtil.INSTANCE.getGreen(eyeColor));
+        args.set(2, MathUtil.INSTANCE.getBlue(eyeColor));
     }
 
     @Inject(method = "renderDebugBoundingBox", at = @At("RETURN"))
