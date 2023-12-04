@@ -152,6 +152,8 @@ tasks {
                 )
             )
         }
+
+        rename("(.+_at.cfg)", "META-INF/$1")
     }
 
     // Configures the resources to include if we are building for forge or fabric.
