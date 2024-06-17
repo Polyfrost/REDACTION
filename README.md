@@ -1,6 +1,6 @@
 # REDACTION
 
-![Dev Workflow Status](https://img.shields.io/github/v/release/Polyfrost/PolySprint.svg?style=for-the-badge&color=1452cc&label=release)
+![Dev Workflow Status](https://img.shields.io/github/v/release/Polyfrost/REDACTION.svg?style=for-the-badge&color=1452cc&label=release)
 
 ## About
 Redaction adds HUDs to your game that are normally classified as "cheat-client" modules.
@@ -38,23 +38,6 @@ Includes following customization:
 
 - Amount of snow
 - Snow color
-
-### Hitboxes
-
-Allows customization of hitboxes.
-
-<img width="1512" alt="image" src="https://user-images.githubusercontent.com/45589059/226082521-ae65a134-4633-4de5-a6df-6789b8df9582.png">
-
-- Hitbox Width - Allows changing the width of the hitbox lines
-- Force Hitbox - Force the hitbox to render for all entities
-- Accurate Hitboxes - Enlarge hitboxes (VISUALLY) to reflect actual hitbox size
-- Dashed Hitbox - Makes hitbox lines dashed.
-
-Includes following customization per entity:
-- Hitbox
-- Eyeline
-- Line of sight
-- Color for each option
 
 ### Highlight
 
