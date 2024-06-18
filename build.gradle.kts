@@ -99,10 +99,6 @@ repositories {
 
 // Configures the libraries/dependencies for your mod.
 dependencies {
-    runtimeOnlyShade ("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
-        isTransitive = false
-    } // i hate minecraft
-
     // Adds the OneConfig library, so we can develop with it.
     modCompileOnly("cc.polyfrost:oneconfig-$platform:0.2.2-alpha+")
 
