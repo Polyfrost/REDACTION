@@ -1,23 +1,21 @@
 {
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
-  "package": "net.wyvest.redaction.mixin",
+  "package": "org.polyfrost.redaction.mixin",
   "refmap": "mixins.redaction.refmap.json",
-  "plugin": "net.wyvest.redaction.plugin.RedactionMixinPlugin",
+  "plugin": "org.polyfrost.redaction.plugin.RedactionMixinPlugin",
   "injectors": {
     "maxShiftBy": 5
   },
   "client": [
     "EntityRendererMixin",
     "EntityRendererMixin_OptiFine",
-    "FontRendererMixin",
     "GuiIngameMixin",
     "GuiMainMenuMixin",
     "GuiScreenServerListMixin",
+    "MinecraftAccessor",
     "PatcherEntityRendererHookMixin",
-    "PatcherFontRendererMixin",
-    "RenderItemMixin",
-    "RenderManagerMixin"
+    "RenderItemMixin"
   ],
   "verbose": true
 }
