@@ -8,7 +8,7 @@ class RedactionMixinPlugin : IMixinConfigPlugin {
     private var optifine = false
     override fun onLoad(mixinPackage: String?) {
         optifine = try {
-            Class.forName("Config")
+            Class.forName("Config", false, javaClass.classLoader)
             true
         } catch (e: ClassNotFoundException) {
             false
