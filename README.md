@@ -38,14 +38,3 @@ Includes following customization:
 
 - Amount of snow
 - Snow color
-
-### Highlight
-
-Allows changing the rendering of the user's name ingame.
-
-<img width="699" alt="image" src="https://user-images.githubusercontent.com/45589059/226082842-305999e3-c7a5-443a-b387-80c06f204068.png">
-
-Includes following customization:
-- Bold / Italics
-- Text color
-- Async highlighting
