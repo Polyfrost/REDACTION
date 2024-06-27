@@ -23,12 +23,7 @@ object RenderUtils {
         GlStateManager.disableTexture2D()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         val worldrenderer = Tessellator.getInstance().worldRenderer
-        GlStateManager.color(
-            colour.red / 255.0f,
-            colour.green / 255.0f,
-            colour.blue / 255.0f,
-            colour.alpha / 255.0f
-        )
+        GlStateManager.color(colour.red / 255.0f, colour.green / 255.0f, colour.blue / 255.0f, colour.alpha / 255.0f)
         worldrenderer.begin(7, DefaultVertexFormats.POSITION)
         worldrenderer.pos(xPosition.toDouble(), (yPosition + height).toDouble(), 0.0).endVertex()
         worldrenderer.pos((xPosition + width).toDouble(), (yPosition + height).toDouble(), 0.0).endVertex()
@@ -53,13 +48,17 @@ object RenderUtils {
      * @author Vitox
      * @version 3.0
      */
-    fun connectPoints(xOne: Float, yOne: Float, xTwo: Float, yTwo: Float) {
+    fun connectPoints(xOne: Float, yOne: Float, xTwo: Float, yTwo: Float, color: Int, width: Float) {
+        val alpha = (color shr 24 and 0xFF) / 255.0f
+        val red = (color shr 16 and 0xFF) / 255.0f
+        val green = (color shr 8 and 0xFF) / 255.0f
+        val blue = (color and 0xFF) / 255.0f
         GL11.glEnable(GL11.GL_LINE_SMOOTH)
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 0.8f)
+        GlStateManager.color(red, green, blue, alpha)
         GlStateManager.disableTexture2D()
         GlStateManager.enableBlend()
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
-        GL11.glLineWidth(0.5f)
+        GL11.glLineWidth(width)
         val tessellator = Tessellator.getInstance()
         val wr = tessellator.worldRenderer
         wr.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION)
@@ -93,13 +92,14 @@ object RenderUtils {
         val tessellator = Tessellator.getInstance()
         val wr = tessellator.worldRenderer
         wr.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION)
-        for (i in 0..360) {
-            wr.pos(x + sin(i * PI / 180.0) * radius, y + cos(i * PI / 180.0) * radius, 0.0)
-                .endVertex()
+        for (i in 0..360 step 60) {  // Akrz: Choose between divisors of 360 for better performance
+            val angle = i * PI / 180.0
+            wr.pos(x + sin(angle) * radius, y + cos(angle) * radius, 0.0).endVertex()
         }
         tessellator.draw()
         GlStateManager.enableTexture2D()
         GL11.glDisable(GL11.GL_LINE_SMOOTH)
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
     }
+
 }

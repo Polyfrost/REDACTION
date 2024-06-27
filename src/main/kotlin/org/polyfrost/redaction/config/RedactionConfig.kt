@@ -2,9 +2,11 @@ package org.polyfrost.redaction.config
 
 import cc.polyfrost.oneconfig.config.Config
 import cc.polyfrost.oneconfig.config.annotations.Checkbox
+import cc.polyfrost.oneconfig.config.annotations.Info
 import cc.polyfrost.oneconfig.config.annotations.Slider
 import cc.polyfrost.oneconfig.config.annotations.Switch
 import cc.polyfrost.oneconfig.config.core.OneColor
+import cc.polyfrost.oneconfig.config.data.InfoType
 import cc.polyfrost.oneconfig.config.data.Mod
 import cc.polyfrost.oneconfig.config.data.ModType
 import cc.polyfrost.oneconfig.config.migration.VigilanceMigrator
@@ -91,13 +93,24 @@ object RedactionConfig : Config(
 
     @Switch(
         name = "Add Snow in Inventory",
-        category = "Inventory"
+        category = "Inventory",
+        subcategory = "Snow"
     )
     var addSnow = false
+
+    @Info(
+        text = "Higher snow amounts may result in reduced performance!",
+        size = 2,
+        category = "Inventory",
+        subcategory = "Snow",
+        type = InfoType.WARNING
+    )
+    var ignored = false
 
     @Slider(
         name = "Snow Amount",
         category = "Inventory",
+        subcategory = "Snow",
         min = 50F,
         max = 1000F
     )
@@ -105,9 +118,34 @@ object RedactionConfig : Config(
 
     @cc.polyfrost.oneconfig.config.annotations.Color(
         name = "Snow Color",
-        category = "Inventory"
+        category = "Inventory",
+        subcategory = "Snow"
     )
     var snowColor = OneColor(-1)
+
+    @Switch(
+        name = "Draw Lines between Snowflakes",
+        category = "Inventory",
+        subcategory = "Lines"
+    )
+    var connectSnow = false
+
+    @Slider(
+        name = "Line Width",
+        category = "Inventory",
+        subcategory = "Lines",
+        min = 1f,
+        max = 5f,
+        step = 1
+    )
+    var lineWidth = 1f
+
+    @cc.polyfrost.oneconfig.config.annotations.Color(
+        name = "Line Color",
+        category = "Inventory",
+        subcategory = "Lines"
+    )
+    var lineColor = OneColor(Color.WHITE)
 
     init {
         initialize()
@@ -119,5 +157,16 @@ object RedactionConfig : Config(
         }
 
         addDependency("handFOV", "customHandFOV")
+
+        addDependency("particles", "addSnow")
+        addDependency("snowColor", "addSnow")
+
+        addDependency("connectSnow", "addSnow")
+        addDependency("lineWidth", "addSnow")
+        addDependency("lineWidth", "connectSnow")
+        addDependency("lineColor", "addSnow")
+        addDependency("lineColor", "connectSnow")
+
     }
+
 }
