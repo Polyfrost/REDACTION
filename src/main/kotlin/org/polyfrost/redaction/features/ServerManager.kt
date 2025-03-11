@@ -8,12 +8,12 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToSe
 //$$ import net.legacyfabric.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 //#endif
 
+import dev.deftu.omnicore.client.OmniClientMultiplayer
 import org.polyfrost.oneconfig.api.ui.v1.Notifications
 import org.polyfrost.oneconfig.utils.v1.JsonUtils
 import org.polyfrost.oneconfig.utils.v1.Multithreading
 import org.polyfrost.redaction.Redaction
 import org.polyfrost.redaction.config.RedactionConfig
-import org.polyfrost.universal.UMinecraft
 
 object ServerManager {
 
@@ -56,8 +56,8 @@ object ServerManager {
     //#endif
 
     private fun saveLastServerIp() {
-        if (!UMinecraft.getMinecraft().isIntegratedServerRunning) { // Don't save the IP if we're connected/connecting to a singleplayer world
-            RedactionConfig.lastServerIP = UMinecraft.getMinecraft().currentServerData?.serverIP ?: ""
+        if (OmniClientMultiplayer.isInSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
+            RedactionConfig.lastServerIP = OmniClientMultiplayer.currentServerAddress ?: ""
             RedactionConfig.save()
         }
     }

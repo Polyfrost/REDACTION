@@ -1,8 +1,8 @@
 package org.polyfrost.redaction.features.particles
 
+import dev.deftu.omnicore.client.render.OmniResolution
 import net.minecraft.client.Minecraft
 import org.polyfrost.redaction.utils.RenderUtils
-import org.polyfrost.universal.UResolution
 import kotlin.random.Random
 
 /**
@@ -30,8 +30,8 @@ class Particle internal constructor(var x: Float, var y: Float) {
         val mc = Minecraft.getMinecraft()
         if (y > mc.displayHeight) y = 1f
         if (x > mc.displayWidth) x = 1f
-        if (x < 1) x = UResolution.scaledWidth.toFloat()
-        if (y < 1) y = UResolution.scaledHeight.toFloat()
+        if (x < 1) x = OmniResolution.scaledWidth.toFloat()
+        if (y < 1) y = OmniResolution.scaledHeight.toFloat()
     }
 
     companion object {

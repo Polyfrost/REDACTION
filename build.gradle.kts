@@ -1,7 +1,6 @@
 @file:Suppress("UnstableApiUsage", "PropertyName")
 
 import dev.deftu.gradle.utils.GameSide
-import dev.deftu.gradle.utils.MinecraftVersion
 
 plugins {
     java
@@ -17,7 +16,7 @@ plugins {
 
 toolkitLoomHelper {
     useOneConfig {
-        version = "1.0.0-alpha.62"
+        version = "1.0.0-alpha.70"
         loaderVersion = "1.1.0-alpha.44"
 
         usePolyMixin = true

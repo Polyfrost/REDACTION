@@ -33,7 +33,7 @@ object Redaction
 
     private fun initialize() {
         RedactionConfig.preload()
-        CommandManager.registerCommand(RedactionCommand())
+        CommandManager.register(RedactionCommand())
         ServerManager.initialize()
     }
 
