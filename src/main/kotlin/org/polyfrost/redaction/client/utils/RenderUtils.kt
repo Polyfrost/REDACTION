@@ -1,4 +1,4 @@
-package org.polyfrost.redaction.utils
+package org.polyfrost.redaction.client.utils
 
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager

@@ -2,7 +2,7 @@ package org.polyfrost.redaction.features.particles
 
 import dev.deftu.omnicore.client.render.OmniResolution
 import net.minecraft.client.Minecraft
-import org.polyfrost.redaction.utils.RenderUtils
+import org.polyfrost.redaction.client.utils.RenderUtils
 import kotlin.random.Random
 
 /**

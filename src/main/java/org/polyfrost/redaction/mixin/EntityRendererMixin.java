@@ -4,7 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import org.polyfrost.redaction.Redaction;
-import org.polyfrost.redaction.config.RedactionConfig;
+import org.polyfrost.redaction.client.RedactionClient;
+import org.polyfrost.redaction.client.RedactionConfig;
 import org.lwjgl.util.glu.Project;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +22,7 @@ public abstract class EntityRendererMixin {
 
     @Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;loadIdentity()V", shift = At.Shift.AFTER, ordinal = 0))
     private void modifyFov(float partialTicks, int xOffset, CallbackInfo ci) {
-        Redaction.INSTANCE.setOverrideHand(true);
+        RedactionClient.INSTANCE.setOverrideHand(true);
     }
 
     @Inject(method = "renderHand", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemRenderer;renderItemInFirstPerson(F)V"))

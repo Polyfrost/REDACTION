@@ -11,8 +11,8 @@ import net.minecraft.client.gui.*;
 //#endif
 
 import net.minecraft.client.multiplayer.ServerData;
-import org.polyfrost.redaction.config.RedactionConfig;
-import org.polyfrost.redaction.features.ServerManager;
+import org.polyfrost.redaction.client.RedactionConfig;
+import org.polyfrost.redaction.client.features.ServerManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

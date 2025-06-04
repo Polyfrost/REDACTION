@@ -1,8 +1,9 @@
 package org.polyfrost.redaction.features.particles
 
 import net.minecraft.client.Minecraft
-import org.polyfrost.redaction.config.RedactionConfig
-import org.polyfrost.redaction.utils.RenderUtils
+import org.polyfrost.redaction.client.RedactionConfig
+import org.polyfrost.redaction.client.features.particles.ParticleManager
+import org.polyfrost.redaction.client.utils.RenderUtils
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -20,7 +21,6 @@ class ParticleGenerator {
     private var prevHeight = 0
 
     fun draw(mouseX: Int, mouseY: Int) {
-
         val mc = Minecraft.getMinecraft()
         val displayWidth = mc.displayWidth
         val displayHeight = mc.displayHeight
@@ -57,7 +57,6 @@ class ParticleGenerator {
     }
 
     private fun createParticles(displayWidth: Int, displayHeight: Int) {
-
         val random = Random.Default
         particles = Array(RedactionConfig.particles * 4) {  // Akrz: Introduced a multiplier here to emulate the original functionality
             Particle(random.nextInt(displayWidth).toFloat(), random.nextInt(displayHeight).toFloat())

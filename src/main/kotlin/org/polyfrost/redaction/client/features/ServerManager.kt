@@ -1,19 +1,13 @@
-package org.polyfrost.redaction.features
-
-//#if FORGE
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent
-//#else
-//$$ import net.legacyfabric.fabric.api.client.networking.v1.ClientPlayConnectionEvents
-//#endif
+package org.polyfrost.redaction.client.features
 
 import dev.deftu.omnicore.client.OmniClientMultiplayer
+import org.polyfrost.oneconfig.api.event.v1.EventManager
+import org.polyfrost.oneconfig.api.event.v1.events.ServerJoinEvent
 import org.polyfrost.oneconfig.api.ui.v1.Notifications
 import org.polyfrost.oneconfig.utils.v1.JsonUtils
 import org.polyfrost.oneconfig.utils.v1.Multithreading
-import org.polyfrost.redaction.Redaction
-import org.polyfrost.redaction.config.RedactionConfig
+import org.polyfrost.redaction.RedactionConstants
+import org.polyfrost.redaction.client.RedactionConfig
 
 object ServerManager {
 
@@ -21,13 +15,9 @@ object ServerManager {
     private val serverList = hashMapOf<String, String>()
 
     fun initialize() {
-        //#if FORGE
-        MinecraftForge.EVENT_BUS.register(this)
-        //#else
-        //$$ ClientPlayConnectionEvents.JOIN.register(ClientPlayConnectionEvents.Join { _, _, _ ->
-        //$$     saveLastServerIp()
-        //$$ })
-        //#endif
+        EventManager.register(ServerJoinEvent::class) { _ ->
+            saveLastServerIp()
+        }
 
         if (RedactionConfig.serverPreview) {
             Multithreading.submit {
@@ -48,15 +38,8 @@ object ServerManager {
         return serverList.entries.find { entry -> ip.endsWith(entry.key, ignoreCase = true) }?.value ?: ip
     }
 
-    //#if FORGE
-    @SubscribeEvent
-    fun onServerJoined(event: ClientConnectedToServerEvent) {
-        saveLastServerIp()
-    }
-    //#endif
-
     private fun saveLastServerIp() {
-        if (OmniClientMultiplayer.isInSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
+        if (!OmniClientMultiplayer.isInSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
             RedactionConfig.lastServerIP = OmniClientMultiplayer.currentServerAddress ?: ""
             RedactionConfig.save()
         }
@@ -65,12 +48,12 @@ object ServerManager {
     private fun cacheServerNames() {
         val json = JsonUtils.parseFromUrl("https://servermappings.lunarclientcdn.com/servers.json")
         if (json == null) {
-            Notifications.enqueue(Notifications.Type.Warning, Redaction.NAME, "Failed to cache server names for direct connect preview: Could not fetch/parse")
+            Notifications.enqueue(Notifications.Type.Warning, RedactionConstants.NAME, "Failed to cache server names for direct connect preview: Could not fetch/parse")
             return
         }
 
         if (!json.isJsonArray) {
-            Notifications.enqueue(Notifications.Type.Warning, Redaction.NAME, "Failed to cache server names for direct connect preview: Unexpected JSON format")
+            Notifications.enqueue(Notifications.Type.Warning, RedactionConstants.NAME, "Failed to cache server names for direct connect preview: Unexpected JSON format")
             return
         }
 

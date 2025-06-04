@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import org.polyfrost.redaction.Redaction;
-import org.polyfrost.redaction.config.RedactionConfig;
+import org.polyfrost.redaction.client.RedactionConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

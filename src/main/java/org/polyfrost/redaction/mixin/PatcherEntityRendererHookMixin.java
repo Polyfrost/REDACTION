@@ -1,7 +1,7 @@
 package org.polyfrost.redaction.mixin;
 
 import org.polyfrost.redaction.Redaction;
-import org.polyfrost.redaction.config.RedactionConfig;
+import org.polyfrost.redaction.client.RedactionConfig;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

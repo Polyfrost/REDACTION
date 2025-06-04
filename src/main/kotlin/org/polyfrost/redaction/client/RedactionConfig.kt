@@ -1,4 +1,4 @@
-package org.polyfrost.redaction.config
+package org.polyfrost.redaction.client
 
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.Checkbox
@@ -6,12 +6,12 @@ import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
 import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
 import org.polyfrost.polyui.color.PolyColor
 import org.polyfrost.polyui.color.argb
-import org.polyfrost.redaction.Redaction
-import org.polyfrost.redaction.features.particles.ParticleManager
+import org.polyfrost.redaction.RedactionConstants
+import org.polyfrost.redaction.client.features.particles.ParticleManager
 
 object RedactionConfig : Config(
-    "${Redaction.ID}.json",
-    Redaction.NAME,
+    "${RedactionConstants.ID}.json",
+    RedactionConstants.NAME,
         Category.QOL,
 
 ) {

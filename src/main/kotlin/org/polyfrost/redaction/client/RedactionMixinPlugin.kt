@@ -1,4 +1,4 @@
-package org.polyfrost.redaction.plugin
+package org.polyfrost.redaction.client
 
 import org.objectweb.asm.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
