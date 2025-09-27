@@ -14,6 +14,10 @@ plugins {
     id("dev.deftu.gradle.tools.minecraft.releases") // Applies the Minecraft auto-releasing plugin, which allows you to automatically release your mod to CurseForge and Modrinth.
 }
 
+toolkitMultiversion {
+    moveBuildsToRootProject = true
+}
+
 toolkitLoomHelper {
     useOneConfig {
         version = "1.0.0-alpha.153"
