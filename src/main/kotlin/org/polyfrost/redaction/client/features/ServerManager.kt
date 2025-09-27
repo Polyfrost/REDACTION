@@ -1,7 +1,8 @@
 package org.polyfrost.redaction.client.features
 
-import dev.deftu.omnicore.client.OmniClientMultiplayer
-import org.polyfrost.oneconfig.api.event.v1.EventManager
+import dev.deftu.omnicore.api.client.network.currentServerAddress
+import dev.deftu.omnicore.api.client.network.isInSingleplayer
+import org.polyfrost.oneconfig.api.event.v1.eventHandler
 import org.polyfrost.oneconfig.api.event.v1.events.ServerJoinEvent
 import org.polyfrost.oneconfig.api.ui.v1.Notifications
 import org.polyfrost.oneconfig.utils.v1.JsonUtils
@@ -10,12 +11,11 @@ import org.polyfrost.redaction.RedactionConstants
 import org.polyfrost.redaction.client.RedactionConfig
 
 object ServerManager {
-
     private var lastCacheAttempt = 0L
     private val serverList = hashMapOf<String, String>()
 
     fun initialize() {
-        EventManager.register(ServerJoinEvent::class) { _ ->
+        eventHandler<ServerJoinEvent> { _ ->
             saveLastServerIp()
         }
 
@@ -26,6 +26,7 @@ object ServerManager {
         }
     }
 
+    @JvmStatic
     fun getServerName(ip: String): String {
         if (serverList.isEmpty() && System.currentTimeMillis() - lastCacheAttempt > 10_000) {
             lastCacheAttempt = System.currentTimeMillis()
@@ -39,8 +40,8 @@ object ServerManager {
     }
 
     private fun saveLastServerIp() {
-        if (!OmniClientMultiplayer.isInSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
-            RedactionConfig.lastServerIP = OmniClientMultiplayer.currentServerAddress ?: ""
+        if (!isInSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
+            RedactionConfig.lastServerIP = currentServerAddress ?: ""
             RedactionConfig.save()
         }
     }
@@ -82,5 +83,4 @@ object ServerManager {
             }
         }
     }
-
 }

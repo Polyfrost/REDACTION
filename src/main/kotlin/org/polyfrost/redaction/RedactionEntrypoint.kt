@@ -31,7 +31,7 @@ import org.polyfrost.redaction.client.RedactionClient
 //#endif
 class RedactionEntrypoint
 //#if FABRIC
-//$$     : ModInitializer, ClientModInitializer, DedicatedServerModInitializer
+//$$     : ClientModInitializer
 //#endif
 {
 
@@ -59,7 +59,7 @@ class RedactionEntrypoint
         //#endif
         //#endif
     ) {
-        //#if MC <= 1.12.2
+        //#if FORGE && MC <= 1.12.2
         if (!event.side.isClient) {
             return
         }

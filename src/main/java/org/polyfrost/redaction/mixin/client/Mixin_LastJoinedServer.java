@@ -1,5 +1,6 @@
-package org.polyfrost.redaction.mixin;
+package org.polyfrost.redaction.mixin.client;
 
+//#if MC <= 1.12.2
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -12,8 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiMainMenu.class)
-public class GuiMainMenuMixin extends GuiScreen {
-
+public class Mixin_LastJoinedServer extends GuiScreen {
     @Inject(method = "addSingleplayerMultiplayerButtons", at = @At("TAIL"))
     protected void onGuiInit(int p_73969_1_, int p_73969_2_, CallbackInfo ci) {
         String ip = RedactionConfig.INSTANCE.getLastServerIP();
@@ -30,5 +30,5 @@ public class GuiMainMenuMixin extends GuiScreen {
             this.mc.displayGuiScreen(new GuiConnecting(this, this.mc, new ServerData(ip, ip, false)));
         }
     }
-
 }
+//#endif

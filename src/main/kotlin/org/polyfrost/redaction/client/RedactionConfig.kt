@@ -13,7 +13,6 @@ object RedactionConfig : Config(
     "${RedactionConstants.ID}.json",
     RedactionConstants.NAME,
         Category.QOL,
-
 ) {
 
     @Switch(
@@ -48,14 +47,7 @@ object RedactionConfig : Config(
     )
     var lastServerJoined = false
 
-
     var lastServerIP = ""
-
-    @Switch(
-        title = "Replace Hotbar with Blackbar",
-        category = "Blackbar"
-    )
-    var blackbar = false
 
     @Switch(
         title = "Add Snow in Inventory",
@@ -63,15 +55,6 @@ object RedactionConfig : Config(
         subcategory = "Snow"
     )
     var addSnow = false
-
-//    @Info(
-//        text = "Higher snow amounts may result in reduced performance!",
-//        size = 2,
-//        category = "Inventory",
-//        subcategory = "Snow",
-//        type = InfoType.WARNING
-//    )
-//    var ignored = false
 
     @Slider(
         title = "Snow Amount",
@@ -115,7 +98,7 @@ object RedactionConfig : Config(
 
     init {
         addCallback("particles") {
-            ParticleManager.hasChanged = true
+            ParticleManager.updateParticles()
         }
 
         addDependency("handFOV", "customHandFOV")

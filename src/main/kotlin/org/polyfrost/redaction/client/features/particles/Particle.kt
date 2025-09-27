@@ -1,41 +1,43 @@
-package org.polyfrost.redaction.features.particles
+package org.polyfrost.redaction.client.features.particles
 
-import dev.deftu.omnicore.client.render.OmniResolution
-import net.minecraft.client.Minecraft
-import org.polyfrost.redaction.client.utils.RenderUtils
+import dev.deftu.omnicore.api.client.render.OmniResolution
 import kotlin.random.Random
 
-/**
- * Particle API
- * This Api is free2use
- * But u have to mention me.
- *
- * @author Vitox
- * @version 3.0
- */
-class Particle internal constructor(var x: Float, var y: Float) {
-
-    val size: Float = 0.3f + RANDOM.nextFloat() * 1.3f
-    private val ySpeed = RANDOM.nextFloat() * 0.5f
-    private val xSpeed = RANDOM.nextFloat() * 0.5f
-
-    fun connect(x: Float, y: Float, color: Int, width: Float) {
-        RenderUtils.connectPoints(this.x, this.y, x, y, color, width)
+class Particle(
+    random: Random,
+    initialX: Float,
+    initialY: Float
+) {
+    companion object {
+        // Akrz: 1/2 side length of square area around the cursor to connect particles in
+        const val CONNECT_RANGE = 50
     }
+
+    var x: Float = initialX
+        private set
+    var y: Float = initialY
+        private set
+
+    private val ySpeed = random.nextFloat() * 0.5f
+    private val xSpeed = random.nextFloat() * 0.5f
+
+    val size: Float = 0.3f + random.nextFloat() * 1.3f
 
     fun update() {
         y += ySpeed
         x += xSpeed
 
-        val mc = Minecraft.getMinecraft()
-        if (y > mc.displayHeight) y = 1f
-        if (x > mc.displayWidth) x = 1f
-        if (x < 1) x = OmniResolution.scaledWidth.toFloat()
-        if (y < 1) y = OmniResolution.scaledHeight.toFloat()
+        when {
+            x > OmniResolution.scaledWidth -> x = 1f
+            x < 1 -> x = OmniResolution.scaledWidth.toFloat()
+
+            y > OmniResolution.scaledHeight -> y = 1f
+            y < 1 -> y = OmniResolution.scaledHeight.toFloat()
+        }
     }
 
-    companion object {
-        private val RANDOM = Random.Default
+    fun isMouseOver(mouseX: Int, mouseY: Int): Boolean {
+        return mouseX in (x - CONNECT_RANGE).toInt()..(x + CONNECT_RANGE).toInt() &&
+                mouseY in (y - CONNECT_RANGE).toInt()..(y + CONNECT_RANGE).toInt()
     }
-
 }
