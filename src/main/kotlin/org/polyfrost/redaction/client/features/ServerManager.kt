@@ -41,6 +41,7 @@ object ServerManager {
 
     private fun saveLastServerIp() {
         if (!isInSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
+            // FIXME: broken
             RedactionConfig.lastServerIP = currentServerAddress ?: ""
             RedactionConfig.save()
         }
