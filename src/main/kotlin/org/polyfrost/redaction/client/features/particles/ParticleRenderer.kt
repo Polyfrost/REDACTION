@@ -7,8 +7,7 @@ import dev.deftu.omnicore.api.client.render.OmniResolution
 import dev.deftu.omnicore.api.client.render.pipeline.OmniRenderPipelines
 import dev.deftu.omnicore.api.client.render.state.OmniBlendState
 import dev.deftu.omnicore.api.client.render.vertex.OmniBufferBuilders
-import dev.deftu.omnicore.api.identifierOrThrow
-import dev.deftu.omnicore.api.math.OmniVector3f
+import dev.deftu.omnicore.api.locationOrThrow
 import org.polyfrost.redaction.RedactionConstants
 import org.polyfrost.redaction.client.RedactionConfig
 import kotlin.math.PI
@@ -19,7 +18,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 private val PARTICLE_PIPELINE = OmniRenderPipelines.builderWithDefaultShader(
-    location = identifierOrThrow(RedactionConstants.ID, "particles"),
+    location = locationOrThrow(RedactionConstants.ID, "particles"),
     vertexFormat = DefaultVertexFormats.POSITION_COLOR,
     drawMode = DrawMode.TRIANGLES,
 ).setBlendState(OmniBlendState.ALPHA).build()
@@ -77,19 +76,19 @@ fun connectParticles(
             val offsetY = -nx * halfWidth
 
             buffer
-                .vertex(context.matrices, (particle.x + offsetX).toDouble(), (particle.y + offsetY).toDouble(), 0.0)
+                .vertex(context.pose, (particle.x + offsetX).toDouble(), (particle.y + offsetY).toDouble(), 0.0)
                 .color(color)
                 .next()
             buffer
-                .vertex(context.matrices, (other.x + offsetX).toDouble(), (other.y + offsetY).toDouble(), 0.0)
+                .vertex(context.pose, (other.x + offsetX).toDouble(), (other.y + offsetY).toDouble(), 0.0)
                 .color(color)
                 .next()
             buffer
-                .vertex(context.matrices, (other.x - offsetX).toDouble(), (other.y - offsetY).toDouble(), 0.0)
+                .vertex(context.pose, (other.x - offsetX).toDouble(), (other.y - offsetY).toDouble(), 0.0)
                 .color(color)
                 .next()
             buffer
-                .vertex(context.matrices, (particle.x - offsetX).toDouble(), (particle.y - offsetY).toDouble(), 0.0)
+                .vertex(context.pose, (particle.x - offsetX).toDouble(), (particle.y - offsetY).toDouble(), 0.0)
                 .color(color)
                 .next()
         }
@@ -117,9 +116,9 @@ fun drawParticles(context: OmniRenderingContext, particles: Collection<Particle>
             val nextX = cx + sin(nextAngle) * particle.size
             val nextY = cy + cos(nextAngle) * particle.size
 
-            buffer.vertex(context.matrices, cx, cy, 0.0).color(color).next()
-            buffer.vertex(context.matrices, currentX, currentY, 0.0).color(color).next()
-            buffer.vertex(context.matrices, nextX, nextY, 0.0).color(color).next()
+            buffer.vertex(context.pose, cx, cy, 0.0).color(color).next()
+            buffer.vertex(context.pose, currentX, currentY, 0.0).color(color).next()
+            buffer.vertex(context.pose, nextX, nextY, 0.0).color(color).next()
 
             currentAngle = nextAngle
             currentX = nextX

@@ -7,8 +7,8 @@ import dev.deftu.omnicore.api.client.render.ImmediateScreenRenderer
 import dev.deftu.omnicore.api.client.render.OmniRenderingContext
 import dev.deftu.omnicore.api.client.render.OmniResolution
 import dev.deftu.omnicore.api.eventBus
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.client.gui.inventory.GuiContainer
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import org.polyfrost.redaction.client.RedactionConfig
 import kotlin.random.Random
 
@@ -46,15 +46,8 @@ object ParticleManager {
         lastHeight = height
     }
 
-    private fun renderParticles(context: OmniRenderingContext, screen: GuiScreen) {
-        if (
-            !RedactionConfig.addSnow ||
-            //#if MC >= 1.16.5
-            //$$ screen !is AbstractContainerScreen<*>
-            //#else
-            screen !is GuiContainer
-            //#endif
-        ) {
+    private fun renderParticles(context: OmniRenderingContext, screen: Screen) {
+        if (!RedactionConfig.addSnow || screen !is AbstractContainerScreen<*>) {
             return
         }
 
