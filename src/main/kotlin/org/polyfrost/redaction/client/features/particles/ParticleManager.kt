@@ -1,12 +1,10 @@
 package org.polyfrost.redaction.client.features.particles
 
-import dev.deftu.eventbus.on
-import dev.deftu.omnicore.api.client.events.ScreenEvent
 import dev.deftu.omnicore.api.client.input.OmniMouse
 import dev.deftu.omnicore.api.client.render.ImmediateScreenRenderer
 import dev.deftu.omnicore.api.client.render.OmniRenderingContext
 import dev.deftu.omnicore.api.client.render.OmniResolution
-import dev.deftu.omnicore.api.eventBus
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import org.polyfrost.redaction.client.RedactionConfig
@@ -20,9 +18,12 @@ object ParticleManager {
     private var lastHeight = -1
 
     fun initialize() {
-        eventBus.on<ScreenEvent.Render.Post> {
-            ImmediateScreenRenderer.render(context) {
-                renderParticles(context, screen)
+        ScreenEvents.BEFORE_INIT.register { _, screen, _, _ ->
+            ScreenEvents.beforeRender(screen).register { _, guiGraphics, _, _, _ ->
+                val ctx = OmniRenderingContext.from(guiGraphics)
+                ImmediateScreenRenderer.render(ctx) {
+                    renderParticles(ctx, screen)
+                }
             }
         }
     }
