@@ -12,6 +12,12 @@ val modname = property("mod.name")
 val modversion = property("mod.version")
 val mcversion = property("minecraft_version")
 
+val minecraft = stonecutter.current.version
+val accesswidener = when {
+    stonecutter.eval(minecraft, ">=1.21.10") -> "1.21.10.accesswidener"
+    else -> "1.21.1.accesswidener"
+}
+
 base {
     archivesName.set(property("mod.id") as String)
 }
@@ -24,7 +30,7 @@ repositories {
 }
 
 loom {
-    accessWidenerPath = rootProject.file("src/main/resources/$modid.accesswidener")
+    accessWidenerPath = rootProject.file("src/main/resources/accesswideners/$accesswidener")
 
     runConfigs.all {
         ideConfigGenerated(stonecutter.current.isActive)
@@ -70,7 +76,8 @@ tasks.processResources {
         "mod_name" to modname,
         "mod_version" to modversion,
         "mc_version" to mcversion,
-        "loader_version" to providers.gradleProperty("loader_version").get()
+        "loader_version" to providers.gradleProperty("loader_version").get(),
+        "aw_file" to accesswidener
     )
 
     inputs.properties(props)

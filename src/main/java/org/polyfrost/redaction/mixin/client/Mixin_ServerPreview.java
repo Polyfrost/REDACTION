@@ -55,6 +55,7 @@ public class Mixin_ServerPreview extends Screen {
                     .new OnlineServerEntry((JoinMultiplayerScreen) this.lastScreen, this.redaction$serverPreview);
         }
 
+        //? if >=1.21.10 {
         redaction$serverEntry.setX(guiGraphics.guiWidth() / 2 - 100);
         redaction$serverEntry.setY(30);
         redaction$serverEntry.setWidth(200);
@@ -67,5 +68,19 @@ public class Mixin_ServerPreview extends Screen {
                 false,
                 f
         );
+        //?} else {
+        /*redaction$serverEntry.render(
+                guiGraphics,
+                0,
+                30,
+                guiGraphics.guiWidth() / 2 - 100,
+                200,
+                35,
+                i,
+                j,
+                false,
+                f
+        );
+        *///?}
     }
 }
