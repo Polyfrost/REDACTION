@@ -23,7 +23,6 @@
     "mixins": [
         "mixins.${mod_id}.json"
     ],
-	"accessWidener": "accesswideners/${aw_file}",
     "depends": {
         "fabricloader": ">=0.15.11",
         "fabric-language-kotlin": "*"

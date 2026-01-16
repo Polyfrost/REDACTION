@@ -35,8 +35,10 @@ public class Mixin_ServerPreview extends Screen {
         if (RedactionConfig.INSTANCE.getServerPreview()) {
             this.redaction$serverPreview = new ServerData("", "", ServerData.Type.OTHER);
             if (this.lastScreen instanceof JoinMultiplayerScreen joinMultiplayerScreen) {
-                this.redaction$serverEntry = joinMultiplayerScreen.serverSelectionList
-                        .new OnlineServerEntry(joinMultiplayerScreen, redaction$serverPreview);
+                this.redaction$serverEntry = Mixin_OnlineServerEntryAccessor.create(
+                        ((Mixin_JoinMultiplayerScreenAccessor) joinMultiplayerScreen).getServerSelectionList(),
+                        joinMultiplayerScreen,
+                        this.redaction$serverPreview);
             }
         }
     }
@@ -51,8 +53,12 @@ public class Mixin_ServerPreview extends Screen {
             this.redaction$serverPreview = new ServerData(
                     ServerManager.getServerName(this.ipEdit.getValue()), this.ipEdit.getValue(), ServerData.Type.OTHER
             );
-            this.redaction$serverEntry = ((JoinMultiplayerScreen) this.lastScreen).serverSelectionList
-                    .new OnlineServerEntry((JoinMultiplayerScreen) this.lastScreen, this.redaction$serverPreview);
+
+            JoinMultiplayerScreen joinMultiplayerScreen = (JoinMultiplayerScreen) this.lastScreen;
+            this.redaction$serverEntry = Mixin_OnlineServerEntryAccessor.create(
+                    ((Mixin_JoinMultiplayerScreenAccessor) joinMultiplayerScreen).getServerSelectionList(),
+                    joinMultiplayerScreen,
+                    this.redaction$serverPreview);
         }
 
         //? if >=1.21.10 {

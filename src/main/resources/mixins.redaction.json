@@ -8,9 +8,11 @@
 		"maxShiftBy": 5
 	},
 	"client": [
+		"client.Mixin_ConnectedToServerEvent",
 		"client.Mixin_LastJoinedServer",
 		"client.Mixin_ServerPreview",
-		"client.Mixin_ConnectedToServerEvent"
+		"client.Mixin_JoinMultiplayerScreenAccessor",
+		"client.Mixin_OnlineServerEntryAccessor"
 	],
 	"verbose": true
 }
