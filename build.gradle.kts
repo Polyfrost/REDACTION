@@ -24,6 +24,8 @@ repositories {
 }
 
 loom {
+    accessWidenerPath = rootProject.file("src/main/resources/$modid.accesswidener")
+
     runConfigs.all {
         ideConfigGenerated(stonecutter.current.isActive)
         runDir = "../../run" // This sets the run folder for all mc versions to the same folder. Remove this line if you want individual run folders.
