@@ -3,19 +3,19 @@ package org.polyfrost.redaction.client.features
 import dev.deftu.omnicore.api.client.network.currentServerAddress
 import dev.deftu.omnicore.api.client.network.isInSingleplayer
 import org.polyfrost.oneconfig.api.event.v1.eventHandler
-import org.polyfrost.oneconfig.api.event.v1.events.ServerJoinEvent
 import org.polyfrost.oneconfig.api.ui.v1.Notifications
 import org.polyfrost.oneconfig.utils.v1.JsonUtils
 import org.polyfrost.oneconfig.utils.v1.Multithreading
 import org.polyfrost.redaction.RedactionConstants
 import org.polyfrost.redaction.client.RedactionConfig
+import org.polyfrost.redaction.client.events.ConnectedToServerEvent
 
 object ServerManager {
     private var lastCacheAttempt = 0L
     private val serverList = hashMapOf<String, String>()
 
     fun initialize() {
-        eventHandler<ServerJoinEvent> { _ ->
+        eventHandler<ConnectedToServerEvent> { _ ->
             saveLastServerIp()
         }
 
@@ -41,7 +41,6 @@ object ServerManager {
 
     private fun saveLastServerIp() {
         if (!isInSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
-            // FIXME: broken
             RedactionConfig.lastServerIP = currentServerAddress ?: ""
             RedactionConfig.save()
         }

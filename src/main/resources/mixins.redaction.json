@@ -1,15 +1,16 @@
 {
-    "compatibilityLevel": "JAVA_8",
-    "minVersion": "0.7",
-    "package": "org.polyfrost.redaction.mixin",
-    "refmap": "mixins.redaction.refmap.json",
-    "plugin": "org.polyfrost.redaction.plugin.RedactionMixinPlugin",
-    "injectors": {
-        "maxShiftBy": 5
-    },
-    "client": [
-        "client.Mixin_LastJoinedServer",
-        "client.Mixin_ServerPreview"
-    ],
-    "verbose": true
+	"compatibilityLevel": "JAVA_8",
+	"minVersion": "0.7",
+	"package": "org.polyfrost.redaction.mixin",
+	"refmap": "mixins.redaction.refmap.json",
+	"plugin": "org.polyfrost.redaction.plugin.RedactionMixinPlugin",
+	"injectors": {
+		"maxShiftBy": 5
+	},
+	"client": [
+		"client.Mixin_LastJoinedServer",
+		"client.Mixin_ServerPreview",
+		"client.Mixin_ConnectedToServerEvent"
+	],
+	"verbose": true
 }
