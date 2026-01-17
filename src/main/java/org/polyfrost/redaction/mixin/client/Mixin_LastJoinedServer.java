@@ -1,5 +1,6 @@
 package org.polyfrost.redaction.mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConnectScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,7 +27,9 @@ public class Mixin_LastJoinedServer extends Screen {
     }
 
     @ModifyArg(method = "createNormalMenuOptions", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/Button$Builder;bounds(IIII)Lnet/minecraft/client/gui/components/Button$Builder;", ordinal = 1), index = 2)
-    private int modifyMultiplayerWidth(int i) {
+    private int modifyMultiplayerWidth(int i, @Local Component multiplayerDisabledReason) {
+        if (multiplayerDisabledReason != null) return i;
+
         String ip = RedactionConfig.INSTANCE.getLastServerIP();
         if (RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
             return 98;
@@ -36,7 +39,9 @@ public class Mixin_LastJoinedServer extends Screen {
     }
 
     @Inject(method = "createNormalMenuOptions", at = @At(value = "RETURN"))
-    private void addLastServerButton(int i, int j, /*? if >=1.21.4 {*/ CallbackInfoReturnable<Integer> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/) {
+    private void addLastServerButton(int i, int j, /*? if >=1.21.4 {*/ CallbackInfoReturnable<Integer> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/, @Local Component multiplayerDisabledReason) {
+        if (multiplayerDisabledReason != null) return;
+
         String ip = RedactionConfig.INSTANCE.getLastServerIP();
         if (RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
             this.addRenderableWidget(Button.builder(Component.literal(ip), (button) -> {
