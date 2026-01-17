@@ -1,92 +1,104 @@
-@file:Suppress("UnstableApiUsage", "PropertyName")
-
-import dev.deftu.gradle.utils.GameSide
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    java
-    kotlin("jvm")
-    id("dev.deftu.gradle.multiversion") // Applies preprocessing for multiple versions of Minecraft and/or multiple mod loaders.
-    id("dev.deftu.gradle.tools") // Applies several configurations to things such as the Java version, project name/version, etc.
-    id("dev.deftu.gradle.tools.resources") // Applies resource processing so that we can replace tokens, such as our mod name/version, in our resources.
-    id("dev.deftu.gradle.tools.bloom") // Applies the Bloom plugin, which allows us to replace tokens in our source files, such as being able to use `@MOD_VERSION` in our source files.
-    id("dev.deftu.gradle.tools.shadow") // Applies the Shadow plugin, which allows us to shade our dependencies into our mod JAR. This is NOT recommended for Fabric mods, but we have an *additional* configuration for those!
-    id("dev.deftu.gradle.tools.minecraft.loom") // Applies the Loom plugin, which automagically configures Essential's Architectury Loom plugin for you.
-    id("dev.deftu.gradle.tools.minecraft.releases") // Applies the Minecraft auto-releasing plugin, which allows you to automatically release your mod to CurseForge and Modrinth.
+    id("net.fabricmc.fabric-loom-remap") version "1.14-SNAPSHOT"
+    id("org.jetbrains.kotlin.jvm") version "2.3.0"
+    id("dev.deftu.gradle.bloom") version "0.2.0"
 }
 
-toolkitMultiversion {
-    moveBuildsToRootProject = true
+val modid = property("mod.id")
+val modname = property("mod.name")
+val modversion = property("mod.version")
+val mcversion = property("minecraft_version")
+
+base {
+    archivesName.set(property("mod.id") as String)
 }
 
-toolkitLoomHelper {
-    useOneConfig {
-        version = "1.0.0-alpha.153"
-        loaderVersion = "1.1.0-alpha.49"
-
-        usePolyMixin = true
-        polyMixinVersion = "0.8.4+build.2"
-
-        applyLoaderTweaker = true
-
-        for (module in arrayOf("commands", "config", "config-impl", "events", "internal", "ui", "utils")) {
-            +module
-        }
-    }
-
-    useDevAuth("1.2.1")
-    useMixinExtras("0.4.1")
-
-    // Turns off the server-side run configs, as we're building a client-sided mod.
-    disableRunConfigs(GameSide.SERVER)
-
-    // Defines the name of the Mixin refmap, which is used to map the Mixin classes to the obfuscated Minecraft classes.
-    if (!mcData.isNeoForge) {
-        useMixinRefMap(modData.id)
-    }
-
-    if (mcData.isForge) {
-        // Configures the Mixin tweaker if we are building for Forge.
-        useForgeMixin(modData.id)
-    }
+repositories {
+    maven("https://maven.parchmentmc.org")
+    maven("https://repo.polyfrost.org/releases")
+    maven("https://repo.polyfrost.org/snapshots")
+    maven("https://maven.gegy.dev/releases")
 }
 
 loom {
-    if (mcData.isLegacyForge) {
-        forge {
-            accessTransformer(rootProject.file("src/main/resources/redaction_at.cfg"))
-        }
-    } else if (mcData.isLegacyFabric) {
-        accessWidenerPath.set(rootProject.file("src/main/resources/redaction_aw.accesswidener"))
+    runConfigs.all {
+        ideConfigGenerated(stonecutter.current.isActive)
+        runDir = "../../run" // This sets the run folder for all mc versions to the same folder. Remove this line if you want individual run folders.
     }
+
+    runConfigs.remove(runConfigs["server"]) // Removes server run configs
 }
 
 dependencies {
-    // Add Fabric Language Kotlin and (Legacy) Fabric API as dependencies (these are both optional but are particularly useful).
-    if (mcData.isFabric) {
-        if (mcData.isLegacyFabric) {
-            // 1.8.9 - 1.13
-            modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${mcData.dependencies.legacyFabric.legacyFabricApiVersion}")
-        } else {
-            // 1.16.5+
-            modImplementation("net.fabricmc.fabric-api:fabric-api:${mcData.dependencies.fabric.fabricApiVersion}")
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    @Suppress("UnstableApiUsage")
+    mappings(loom.layered {
+        officialMojangMappings()
+        optionalProp("${property("parchment_version")}") {
+            parchment("org.parchmentmc.data:parchment-${property("minecraft_version")}:$it@zip")
         }
+        optionalProp("${property("yalmm_version")}") {
+            mappings("dev.lambdaurora:yalmm-mojbackward:${property("minecraft_version")}+build.$it")
+        }
+    })
+    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    modImplementation("org.polyfrost.oneconfig:${property("minecraft_version")}-fabric:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:commands:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:config:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:config-impl:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:events:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:internal:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:ui:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:utils:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:hud:1.0.0-alpha.181")
+}
+
+bloom {
+    replacement("@MOD_ID@", modid!!)
+    replacement("@MOD_NAME@", modname!!)
+    replacement("@MOD_VERSION@", modversion!!)
+}
+
+tasks.processResources {
+    val props = mapOf(
+        "mod_id" to modid,
+        "mod_name" to modname,
+        "mod_version" to modversion,
+        "mc_version" to mcversion,
+        "loader_version" to providers.gradleProperty("loader_version").get()
+    )
+
+    inputs.properties(props)
+
+    filesMatching("fabric.mod.json") {
+        expand(props)
     }
 }
 
-tasks {
-    // Processes the `src/resources/mcmod.info`, `fabric.mod.json`, or `mixins.${mod_id}.json` and replaces
-    // the mod id, name and version with the ones in `gradle.properties`
-    processResources {
-        rename("(.+_at.cfg)", "META-INF/$1")
-    }
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(21)
+}
 
-    jar {
-        // Sets the jar manifest attributes.
-        if (mcData.isLegacyForge) {
-            manifest.attributes += mapOf(
-                "FMLAT" to "redaction_at.cfg"
-            )
-        }
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.jar {
+    inputs.property("archivesName", base.archivesName)
+
+    from("LICENSE") {
+        rename { "${it}_${inputs.properties["archivesName"]}" }
     }
 }
+
+fun <T> optionalProp(property: String, block: (String) -> T?): T? =
+    findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)

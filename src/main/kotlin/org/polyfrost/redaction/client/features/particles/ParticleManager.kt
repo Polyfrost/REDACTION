@@ -1,14 +1,12 @@
 package org.polyfrost.redaction.client.features.particles
 
-import dev.deftu.eventbus.on
-import dev.deftu.omnicore.api.client.events.ScreenEvent
 import dev.deftu.omnicore.api.client.input.OmniMouse
 import dev.deftu.omnicore.api.client.render.ImmediateScreenRenderer
 import dev.deftu.omnicore.api.client.render.OmniRenderingContext
 import dev.deftu.omnicore.api.client.render.OmniResolution
-import dev.deftu.omnicore.api.eventBus
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.client.gui.inventory.GuiContainer
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import org.polyfrost.redaction.client.RedactionConfig
 import kotlin.random.Random
 
@@ -20,9 +18,12 @@ object ParticleManager {
     private var lastHeight = -1
 
     fun initialize() {
-        eventBus.on<ScreenEvent.Render.Post> {
-            ImmediateScreenRenderer.render(context) {
-                renderParticles(context, screen)
+        ScreenEvents.BEFORE_INIT.register { _, screen, _, _ ->
+            ScreenEvents.beforeRender(screen).register { _, guiGraphics, _, _, _ ->
+                val ctx = OmniRenderingContext.from(guiGraphics)
+                ImmediateScreenRenderer.render(ctx) {
+                    renderParticles(ctx, screen)
+                }
             }
         }
     }
@@ -46,15 +47,8 @@ object ParticleManager {
         lastHeight = height
     }
 
-    private fun renderParticles(context: OmniRenderingContext, screen: GuiScreen) {
-        if (
-            !RedactionConfig.addSnow ||
-            //#if MC >= 1.16.5
-            //$$ screen !is AbstractContainerScreen<*>
-            //#else
-            screen !is GuiContainer
-            //#endif
-        ) {
+    private fun renderParticles(context: OmniRenderingContext, screen: Screen) {
+        if (!RedactionConfig.addSnow || screen !is AbstractContainerScreen<*>) {
             return
         }
 

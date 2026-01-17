@@ -1,18 +1,13 @@
 package org.polyfrost.redaction.mixin.client;
 
-//#if MC <= 1.12.2
-
-//#if FORGE
-import net.minecraft.client.gui.*;
-//#else
-//$$ import net.minecraft.client.gui.screen.DirectConnectScreen;
-//$$ import net.minecraft.client.gui.screen.Screen;
-//$$ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-//$$ import net.minecraft.client.gui.widget.ServerEntry;
-//$$ import net.minecraft.client.gui.widget.TextFieldWidget;
-//#endif
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.DirectJoinServerScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.network.chat.Component;
 import org.polyfrost.redaction.client.RedactionConfig;
 import org.polyfrost.redaction.client.features.ServerManager;
 import org.spongepowered.asm.mixin.Final;
@@ -23,48 +18,77 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GuiScreenServerList.class)
-public class Mixin_ServerPreview extends GuiScreen {
+@Mixin(DirectJoinServerScreen.class)
+public class Mixin_ServerPreview extends Screen {
+    @Shadow @Final private Screen lastScreen;
+    @Shadow private EditBox ipEdit;
 
-    @Shadow @Final private GuiScreen field_146303_a;
-    @Shadow private GuiTextField field_146302_g;
+    @Unique private ServerData redaction$serverPreview;
+    @Unique private ServerSelectionList.OnlineServerEntry redaction$serverEntry;
 
-    @Unique private ServerListEntryNormal redaction$serverPreview;
+    protected Mixin_ServerPreview(Component component) {
+        super(component);
+    }
 
-    @Inject(method = "initGui", at = @At("TAIL"))
-    private void redaction$initServerPreview(CallbackInfo ci) {
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void initServerPreview(CallbackInfo ci) {
         if (RedactionConfig.INSTANCE.getServerPreview()) {
-            this.redaction$serverPreview = new ServerListEntryNormal(((GuiMultiplayer) this.field_146303_a), new ServerData("", "", false));
+            this.redaction$serverPreview = new ServerData("", "", ServerData.Type.OTHER);
+            if (this.lastScreen instanceof JoinMultiplayerScreen joinMultiplayerScreen) {
+                this.redaction$serverEntry = Mixin_OnlineServerEntryAccessor.create(
+                        ((Mixin_JoinMultiplayerScreenAccessor) joinMultiplayerScreen).getServerSelectionList(),
+                        joinMultiplayerScreen,
+                        this.redaction$serverPreview
+                );
+            }
         }
     }
 
-    @Inject(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiTextField;drawTextBox()V"))
-    private void redaction$drawServerPreview(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        if (!RedactionConfig.INSTANCE.getServerPreview() || redaction$serverPreview == null) {
+    @Inject(method = "render", at = @At("TAIL"))
+    private void drawServerPreview(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) {
+        if (!RedactionConfig.INSTANCE.getServerPreview() || redaction$serverPreview == null || redaction$serverEntry == null) {
             return;
         }
 
-        ServerData previewData = this.redaction$serverPreview.getServerData();
-        if (!previewData.serverIP.equals(this.field_146302_g.getText())) {
-            previewData.serverIP = this.field_146302_g.getText();
-            previewData.serverName = ServerManager.getServerName(this.field_146302_g.getText());
-            previewData.field_78841_f = false;
+        if (!this.redaction$serverPreview.ip.equals(this.ipEdit.getValue())) {
+            this.redaction$serverPreview = new ServerData(
+                    ServerManager.getServerName(this.ipEdit.getValue()), this.ipEdit.getValue(), ServerData.Type.OTHER
+            );
+
+            JoinMultiplayerScreen joinMultiplayerScreen = (JoinMultiplayerScreen) this.lastScreen;
+            this.redaction$serverEntry = Mixin_OnlineServerEntryAccessor.create(
+                    ((Mixin_JoinMultiplayerScreenAccessor) joinMultiplayerScreen).getServerSelectionList(),
+                    joinMultiplayerScreen,
+                    this.redaction$serverPreview
+            );
         }
 
-        this.redaction$serverPreview.drawEntry(
+        //? if >=1.21.10 {
+        redaction$serverEntry.setX(guiGraphics.guiWidth() / 2 - 100);
+        redaction$serverEntry.setY(30);
+        redaction$serverEntry.setWidth(200);
+        redaction$serverEntry.setHeight(35);
+
+        redaction$serverEntry.renderContent(
+                guiGraphics,
+                i,
+                j,
+                false,
+                f
+        );
+        //?} else {
+        /*redaction$serverEntry.render(
+                guiGraphics,
                 0,
-                this.width / 2 - 100,
                 30,
+                guiGraphics.guiWidth() / 2 - 100,
                 200,
                 35,
-                mouseX,
-                mouseY,
-                false
-                //#if MC >= 1.12.2
-                //$$ , partialTicks
-                //#endif
+                i,
+                j,
+                false,
+                f
         );
+        *///?}
     }
-
 }
-//#endif

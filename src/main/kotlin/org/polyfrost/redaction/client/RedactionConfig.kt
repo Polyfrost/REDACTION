@@ -2,6 +2,7 @@ package org.polyfrost.redaction.client
 
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.Checkbox
+import org.polyfrost.oneconfig.api.config.v1.annotations.Include
 import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
 import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
 import org.polyfrost.polyui.color.PolyColor
@@ -47,7 +48,7 @@ object RedactionConfig : Config(
     )
     var lastServerJoined = false
 
-    var lastServerIP = ""
+    @Include var lastServerIP = ""
 
     @Switch(
         title = "Add Snow in Inventory",
