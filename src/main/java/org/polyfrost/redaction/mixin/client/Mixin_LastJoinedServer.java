@@ -38,7 +38,7 @@ public class Mixin_LastJoinedServer extends Screen {
         return i;
     }
 
-    @Inject(method = "createNormalMenuOptions", at = @At(value = "RETURN"))
+    @Inject(method = "createNormalMenuOptions", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/TitleScreen;addRenderableWidget(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;", ordinal = 1, shift = At.Shift.AFTER))
     private void addLastServerButton(int i, int j, /*? if >=1.21.4 {*/ CallbackInfoReturnable<Integer> cir /*?} else {*/ /*CallbackInfo ci *//*?}*/, @Local Component multiplayerDisabledReason) {
         if (multiplayerDisabledReason != null) return;
 
