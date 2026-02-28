@@ -10,7 +10,8 @@ plugins {
 val modid = property("mod.id")
 val modname = property("mod.name")
 val modversion = property("mod.version")
-val mcversion = property("minecraft_version")
+val mcversion = stonecutter.current.version
+val oneconfigversion = property("oneconfig_version")
 
 base {
     archivesName.set(property("mod.id") as String)
@@ -33,27 +34,22 @@ loom {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    minecraft("com.mojang:minecraft:$mcversion")
     @Suppress("UnstableApiUsage")
     mappings(loom.layered {
         officialMojangMappings()
         optionalProp("${property("parchment_version")}") {
-            parchment("org.parchmentmc.data:parchment-${property("minecraft_version")}:$it@zip")
+            parchment("org.parchmentmc.data:parchment-$mcversion:$it@zip")
         }
         optionalProp("${property("yalmm_version")}") {
-            mappings("dev.lambdaurora:yalmm-mojbackward:${property("minecraft_version")}+build.$it")
+            mappings("dev.lambdaurora:yalmm-mojbackward:$mcversion+build.$it")
         }
     })
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-    modImplementation("org.polyfrost.oneconfig:${property("minecraft_version")}-fabric:1.0.0-alpha.181")
-    modImplementation("org.polyfrost.oneconfig:commands:1.0.0-alpha.181")
-    modImplementation("org.polyfrost.oneconfig:config:1.0.0-alpha.181")
-    modImplementation("org.polyfrost.oneconfig:config-impl:1.0.0-alpha.181")
-    modImplementation("org.polyfrost.oneconfig:events:1.0.0-alpha.181")
-    modImplementation("org.polyfrost.oneconfig:internal:1.0.0-alpha.181")
-    modImplementation("org.polyfrost.oneconfig:ui:1.0.0-alpha.181")
-    modImplementation("org.polyfrost.oneconfig:utils:1.0.0-alpha.181")
-    modImplementation("org.polyfrost.oneconfig:hud:1.0.0-alpha.181")
+    modImplementation("org.polyfrost.oneconfig:$mcversion-fabric:$oneconfigversion")
+    for (module in arrayOf("config", "config-impl", "internal", "ui")) {
+        implementation("org.polyfrost.oneconfig:$module:$oneconfigversion")
+    }
 }
 
 bloom {
