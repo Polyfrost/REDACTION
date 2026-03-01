@@ -5,6 +5,7 @@ plugins {
     id("net.fabricmc.fabric-loom-remap") version "1.14-SNAPSHOT"
     id("org.jetbrains.kotlin.jvm") version "2.3.0"
     id("dev.deftu.gradle.bloom") version "0.2.0"
+    id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
 val modid = property("mod.id")
@@ -13,9 +14,8 @@ val modversion = property("mod.version")
 val mcversion = stonecutter.current.version
 val oneconfigversion = property("oneconfig_version")
 
-base {
-    archivesName.set(property("mod.id") as String)
-}
+version = "$modversion+$mcversion"
+base.archivesName = modname.toString()
 
 repositories {
     maven("https://maven.parchmentmc.org")
@@ -98,3 +98,30 @@ tasks.jar {
 
 fun <T> optionalProp(property: String, block: (String) -> T?): T? =
     findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)
+
+val modrinthId = findProperty("publish.modrinth")?.toString()?.takeIf { it.isNotBlank() }
+
+// make sure modrinth.token is set in your user gradle properties
+publishMods {
+    file = project.tasks.remapJar.get().archiveFile
+
+    displayName = modversion.toString()
+    version = "v$modversion"
+    changelog = project.rootProject.file("CHANGELOG.md").takeIf { it.exists() }?.readText() ?: "No changelog provided."
+    type = ALPHA
+
+    modLoaders.add("fabric")
+
+    dryRun = modrinthId == null
+
+    if (modrinthId != null) {
+        modrinth {
+            projectId = property("publish.modrinth").toString()
+            accessToken = findProperty("modrinth.token").toString()
+
+            minecraftVersions.add(mcversion)
+
+            requires("oneconfig")
+        }
+    }
+}
