@@ -4,8 +4,7 @@ import net.fabricmc.api.ClientModInitializer
 import org.polyfrost.redaction.client.RedactionClient
 
 class RedactionEntrypoint : ClientModInitializer {
-    override
-    fun onInitializeClient() {
+    override fun onInitializeClient() {
         RedactionClient.initialize()
     }
 }

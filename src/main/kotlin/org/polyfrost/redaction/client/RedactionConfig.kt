@@ -1,19 +1,19 @@
 package org.polyfrost.redaction.client
 
+import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.Checkbox
+import org.polyfrost.oneconfig.api.config.v1.annotations.Color
 import org.polyfrost.oneconfig.api.config.v1.annotations.Include
 import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
 import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
-import org.polyfrost.polyui.color.PolyColor
-import org.polyfrost.polyui.color.argb
 import org.polyfrost.redaction.RedactionConstants
 import org.polyfrost.redaction.client.features.particles.ParticleManager
 
 object RedactionConfig : Config(
     "${RedactionConstants.ID}.json",
     RedactionConstants.NAME,
-        Category.QOL,
+    Category.QOL,
 ) {
 
     @Switch(
@@ -66,12 +66,12 @@ object RedactionConfig : Config(
     )
     var particles = 100
 
-    @org.polyfrost.oneconfig.api.config.v1.annotations.Color(
+    @Color(
         title = "Snow Color",
         category = "Inventory",
         subcategory = "Snow"
     )
-    var snowColor = argb(-1)
+    var snowColor = PolyColor.WHITE
 
     @Switch(
         title = "Draw Lines between Snowflakes",
@@ -90,7 +90,7 @@ object RedactionConfig : Config(
     )
     var lineWidth = 1f
 
-    @org.polyfrost.oneconfig.api.config.v1.annotations.Color(
+    @Color(
         title = "Line Color",
         category = "Inventory",
         subcategory = "Lines"
@@ -114,5 +114,4 @@ object RedactionConfig : Config(
         addDependency("lineColor", "connectSnow")
 
     }
-
 }

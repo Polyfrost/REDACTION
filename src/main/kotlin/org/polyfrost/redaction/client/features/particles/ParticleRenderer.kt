@@ -1,14 +1,6 @@
 package org.polyfrost.redaction.client.features.particles
 
-import dev.deftu.omnicore.api.client.render.DefaultVertexFormats
-import dev.deftu.omnicore.api.client.render.DrawMode
-import dev.deftu.omnicore.api.client.render.OmniRenderingContext
-import dev.deftu.omnicore.api.client.render.OmniResolution
-import dev.deftu.omnicore.api.client.render.pipeline.OmniRenderPipelines
-import dev.deftu.omnicore.api.client.render.state.OmniBlendState
-import dev.deftu.omnicore.api.client.render.vertex.OmniBufferBuilders
-import dev.deftu.omnicore.api.locationOrThrow
-import org.polyfrost.redaction.RedactionConstants
+import net.minecraft.client.gui.GuiGraphics
 import org.polyfrost.redaction.client.RedactionConfig
 import kotlin.math.PI
 import kotlin.math.abs
@@ -17,23 +9,25 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-private val PARTICLE_PIPELINE = OmniRenderPipelines.builderWithDefaultShader(
-    location = locationOrThrow(RedactionConstants.ID, "particles"),
-    vertexFormat = DefaultVertexFormats.POSITION_COLOR,
-    drawMode = DrawMode.TRIANGLES,
-).setBlendState(OmniBlendState.ALPHA).build()
+// TODO: don't use omnicore
+
+//private val PARTICLE_PIPELINE = OmniRenderPipelines.builderWithDefaultShader(
+//    location = locationOrThrow(RedactionConstants.ID, "particles"),
+//    vertexFormat = DefaultVertexFormats.POSITION_COLOR,
+//    drawMode = DrawMode.TRIANGLES,
+//).setBlendState(OmniBlendState.ALPHA).build()
 
 private val fastStorage = FastIntArrayList()
 private var grid: ParticleGrid? = null
 
 fun connectParticles(
-    context: OmniRenderingContext,
+    graphics: GuiGraphics,
     particles: Collection<Particle>,
     mouseX: Int,
     mouseY: Int
 ) {
-    val width = OmniResolution.scaledWidth
-    val height = OmniResolution.scaledHeight
+    val width = graphics.guiWidth()
+    val height = graphics.guiHeight()
 
     if (grid == null || width != grid!!.width || height != grid!!.height) {
         grid = ParticleGrid(width, height, Particle.CONNECT_RANGE)
@@ -42,9 +36,9 @@ fun connectParticles(
     val grid = grid ?: return println("Grid is null")
     grid.rebuild(particles)
 
-    val pipeline = OmniRenderPipelines.POSITION_COLOR
-    val buffer = pipeline.createBufferBuilder()
-    val color = RedactionConfig.lineColor.rgba.ensureFullAlpha()
+//    val pipeline = OmniRenderPipelines.POSITION_COLOR
+//    val buffer = pipeline.createBufferBuilder()
+    val color = RedactionConfig.lineColor.argb.ensureFullAlpha()
     val halfWidth = RedactionConfig.lineWidth / 2f
     val range = Particle.CONNECT_RANGE
 
@@ -75,35 +69,35 @@ fun connectParticles(
             val offsetX = ny * halfWidth
             val offsetY = -nx * halfWidth
 
-            buffer
-                .vertex(context.pose, (particle.x + offsetX).toDouble(), (particle.y + offsetY).toDouble(), 0.0)
-                .color(color)
-                .next()
-            buffer
-                .vertex(context.pose, (other.x + offsetX).toDouble(), (other.y + offsetY).toDouble(), 0.0)
-                .color(color)
-                .next()
-            buffer
-                .vertex(context.pose, (other.x - offsetX).toDouble(), (other.y - offsetY).toDouble(), 0.0)
-                .color(color)
-                .next()
-            buffer
-                .vertex(context.pose, (particle.x - offsetX).toDouble(), (particle.y - offsetY).toDouble(), 0.0)
-                .color(color)
-                .next()
+//            buffer
+//                .vertex(graphics.pose, (particle.x + offsetX).toDouble(), (particle.y + offsetY).toDouble(), 0.0)
+//                .color(color)
+//                .next()
+//            buffer
+//                .vertex(graphics.pose, (other.x + offsetX).toDouble(), (other.y + offsetY).toDouble(), 0.0)
+//                .color(color)
+//                .next()
+//            buffer
+//                .vertex(graphics.pose, (other.x - offsetX).toDouble(), (other.y - offsetY).toDouble(), 0.0)
+//                .color(color)
+//                .next()
+//            buffer
+//                .vertex(graphics.pose, (particle.x - offsetX).toDouble(), (particle.y - offsetY).toDouble(), 0.0)
+//                .color(color)
+//                .next()
         }
     }
 
-    buffer.buildOrNull()?.drawAndClose(pipeline)
+//    buffer.buildOrNull()?.drawAndClose(pipeline)
 }
 
-fun drawParticles(context: OmniRenderingContext, particles: Collection<Particle>) {
-    val color = RedactionConfig.snowColor.rgba.ensureFullAlpha()
+fun drawParticles(graphics: GuiGraphics, particles: Collection<Particle>) {
+    val color = RedactionConfig.snowColor.argb.ensureFullAlpha()
     val twoPi = PI * 2.0
     val segments = 12
     val step = twoPi / segments
 
-    val buffer = OmniBufferBuilders.create(DrawMode.TRIANGLES, DefaultVertexFormats.POSITION_COLOR)
+//    val buffer = OmniBufferBuilders.create(DrawMode.TRIANGLES, DefaultVertexFormats.POSITION_COLOR)
     for (particle in particles) {
         val cx = particle.x.toDouble()
         val cy = particle.y.toDouble()
@@ -116,9 +110,9 @@ fun drawParticles(context: OmniRenderingContext, particles: Collection<Particle>
             val nextX = cx + sin(nextAngle) * particle.size
             val nextY = cy + cos(nextAngle) * particle.size
 
-            buffer.vertex(context.pose, cx, cy, 0.0).color(color).next()
-            buffer.vertex(context.pose, currentX, currentY, 0.0).color(color).next()
-            buffer.vertex(context.pose, nextX, nextY, 0.0).color(color).next()
+//            buffer.vertex(graphics.pose, cx, cy, 0.0).color(color).next()
+//            buffer.vertex(graphics.pose, currentX, currentY, 0.0).color(color).next()
+//            buffer.vertex(graphics.pose, nextX, nextY, 0.0).color(color).next()
 
             currentAngle = nextAngle
             currentX = nextX
@@ -126,7 +120,7 @@ fun drawParticles(context: OmniRenderingContext, particles: Collection<Particle>
         }
     }
 
-    buffer.buildOrNull()?.drawAndClose(PARTICLE_PIPELINE)
+//    buffer.buildOrNull()?.drawAndClose(PARTICLE_PIPELINE)
 }
 
 private fun Int.ensureFullAlpha(): Int {

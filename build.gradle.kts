@@ -47,8 +47,12 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 
     modImplementation("org.polyfrost.oneconfig:$mcVersion-fabric:${property("deps.oneconfig")}")
-    for (module in listOf("config", "config-impl", "events", "internal", "ui")) {
+    for (module in listOf("config", "config-impl", "events", "utils")) {
         implementation("org.polyfrost.oneconfig:$module:${property("deps.oneconfig")}")
+    }
+
+    for (module in listOf("fabric-command-api-v2", "fabric-screen-api-v1")) {
+        modImplementation(fabricApi.module(module, sc.properties["deps.fabric_api"]))
     }
 }
 
