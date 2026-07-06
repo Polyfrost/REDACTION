@@ -22,6 +22,7 @@ repositories {
     maven("https://repo.polyfrost.org/releases")
     maven("https://repo.polyfrost.org/snapshots")
     maven("https://central.sonatype.com/repository/maven-snapshots")
+    maven("https://maven.terraformersmc.com/")
     maven("https://maven.parchmentmc.org")
     maven("https://maven.gegy.dev/releases")
     google()
@@ -51,7 +52,7 @@ dependencies {
         implementation("org.polyfrost.oneconfig:$module:${property("deps.oneconfig")}")
     }
 
-    for (module in listOf("fabric-command-api-v2", "fabric-screen-api-v1")) {
+    for (module in listOf("fabric-command-api-v2", "fabric-screen-api-v1", "fabric-resource-loader-v0")) {
         modImplementation(fabricApi.module(module, sc.properties["deps.fabric_api"]))
     }
 }

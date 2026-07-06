@@ -28,7 +28,9 @@
         "minecraft": "${mc_compat}",
         "fabricloader": ">=0.17",
         "oneconfigv1": ">=${oneconfig_version}",
-        "fabric-api": "*",
+        "fabric-command-api-v2": "*",
+        "fabric-screen-api-v1": "*",
+        "fabric-resource-loader-v0": "*",
         "fabric-language-kotlin": "*"
     }
 }

@@ -7,10 +7,10 @@
 		"maxShiftBy": 5
 	},
 	"client": [
-		"client.Mixin_LastJoinedServer",
-		"client.Mixin_ServerPreview",
-		"client.Mixin_JoinMultiplayerScreenAccessor",
-		"client.Mixin_OnlineServerEntryAccessor"
+		"client.accessor.JoinMultiplayerScreenAccessor",
+		"client.accessor.OnlineServerEntryAccessor",
+		"client.DirectJoinServerScreenMixin_ServerPreview",
+		"client.TitleScreenMixin_LastJoinedServer"
 	],
 	"verbose": true
 }

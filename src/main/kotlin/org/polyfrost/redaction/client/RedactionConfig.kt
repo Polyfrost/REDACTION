@@ -15,26 +15,26 @@ object RedactionConfig : Config(
     RedactionConstants.NAME,
     Category.QOL,
 ) {
-
-    @Switch(
-        title = "Disable Hand Item Lighting",
-        category = "General"
-    )
-    var disableHandLighting = false
-
-    @Switch(
-        title = "Customize Hand Item FOV",
-        category = "General"
-    )
-    var customHandFOV = false
-
-    @Slider(
-        title = "Hand Item FOV",
-        category = "General",
-        min = 0F,
-        max = 180F
-    )
-    var handFOV = 125
+    // TODO
+//    @Switch(
+//        title = "Disable Hand Item Lighting",
+//        category = "General"
+//    )
+//    var disableHandLighting = false
+//
+//    @Switch(
+//        title = "Customize Hand Item FOV",
+//        category = "General"
+//    )
+//    var customHandFOV = false
+//
+//    @Slider(
+//        title = "Hand Item FOV",
+//        category = "General",
+//        min = 0F,
+//        max = 180F
+//    )
+//    var handFOV = 125
 
     @Switch(
         title = "Server Preview in Direct Connect",
@@ -102,7 +102,7 @@ object RedactionConfig : Config(
             ParticleManager.updateParticles()
         }
 
-        addDependency("handFOV", "customHandFOV")
+//        addDependency("handFOV", "customHandFOV")
 
         addDependency("particles", "addSnow")
         addDependency("snowColor", "addSnow")
@@ -112,6 +112,5 @@ object RedactionConfig : Config(
         addDependency("lineWidth", "connectSnow")
         addDependency("lineColor", "addSnow")
         addDependency("lineColor", "connectSnow")
-
     }
 }

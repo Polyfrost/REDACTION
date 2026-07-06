@@ -1,6 +1,6 @@
 package org.polyfrost.redaction.client.features.particles
 
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import org.polyfrost.redaction.client.RedactionConfig
 import kotlin.math.PI
 import kotlin.math.abs
@@ -21,7 +21,7 @@ private val fastStorage = FastIntArrayList()
 private var grid: ParticleGrid? = null
 
 fun connectParticles(
-    graphics: GuiGraphics,
+    graphics: GuiGraphicsExtractor,
     particles: Collection<Particle>,
     mouseX: Int,
     mouseY: Int
@@ -91,7 +91,7 @@ fun connectParticles(
 //    buffer.buildOrNull()?.drawAndClose(pipeline)
 }
 
-fun drawParticles(graphics: GuiGraphics, particles: Collection<Particle>) {
+fun drawParticles(graphics: GuiGraphicsExtractor, particles: Collection<Particle>) {
     val color = RedactionConfig.snowColor.argb.ensureFullAlpha()
     val twoPi = PI * 2.0
     val segments = 12

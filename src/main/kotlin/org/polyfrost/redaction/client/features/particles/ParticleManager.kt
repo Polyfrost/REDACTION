@@ -1,7 +1,7 @@
 package org.polyfrost.redaction.client.features.particles
 
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import org.polyfrost.oneconfig.utils.v1.dsl.mc
@@ -18,7 +18,8 @@ object ParticleManager {
 
     fun initialize() {
         ScreenEvents.BEFORE_INIT.register { _, screen, _, _ ->
-            ScreenEvents.beforeRender(screen).register { _, guiGraphics, _, _, _ ->
+            //~ if <26.1 'beforeExtract' -> 'beforeRender'
+            ScreenEvents.beforeExtract(screen).register { _, guiGraphics, _, _, _ ->
 //                val ctx = OmniRenderingContext.from(guiGraphics)
 //                ImmediateScreenRenderer.render(ctx) {
 //                    renderParticles(ctx, screen)
@@ -46,7 +47,7 @@ object ParticleManager {
         lastHeight = height
     }
 
-    private fun renderParticles(graphics: GuiGraphics, screen: Screen) {
+    private fun renderParticles(graphics: GuiGraphicsExtractor, screen: Screen) {
         if (!RedactionConfig.addSnow || screen !is AbstractContainerScreen<*>) {
             return
         }

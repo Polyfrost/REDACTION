@@ -46,3 +46,14 @@ deps.parchment = "2025.12.20"
 deps.yalmm = "3"
 
 deps.fabric_api = "0.141.4+1.21.11"
+
+["26.1"]
+mod.mc_compat = "~26.1"
+mod.mc_releases = ["26.1", "26.1.1", "26.1.2"]
+
+deps.fabric_api = "0.145.1+26.1"
+
+["26.2"]
+mod.mc_compat = "~26.2"
+
+deps.fabric_api = "0.153.0+26.2"

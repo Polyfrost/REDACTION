@@ -39,7 +39,7 @@ object ServerManager {
     }
 
     private fun saveLastServerIp() {
-        if (!mc.isSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
+        if (mc.singleplayerServer == null || mc.singleplayerServer!!.isPublished) { // Don't save the IP if we're connected/connecting to a singleplayer world
             RedactionConfig.lastServerIP = mc.currentServer?.ip ?: ""
             RedactionConfig.save()
         }
