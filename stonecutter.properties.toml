@@ -1,0 +1,31 @@
+mod.name = "REDACTION"
+mod.id = "redaction"
+mod.group = "org.polyfrost"
+mod.version = "2.0.0-alpha.1"
+
+publish.modrinth.id = "Gapz72zt"
+
+deps.fabric_loader = "0.19.3"
+loomx.loom_version = "1.17-SNAPSHOT"
+
+deps.oneconfig = "1.0.0-alpha.182"
+
+["1.21.1"]
+deps.parchment = "2024.11.17"
+deps.yalmm = "3"
+
+["1.21.4"]
+deps.parchment = "2025.03.23"
+deps.yalmm = "3"
+
+["1.21.8"]
+deps.parchment = "2025.09.14"
+deps.yalmm = "3"
+
+["1.21.10"]
+deps.parchment = "2025.10.12"
+deps.yalmm = "3"
+
+["1.21.11"]
+deps.parchment = "2025.12.20"
+deps.yalmm = "3"
