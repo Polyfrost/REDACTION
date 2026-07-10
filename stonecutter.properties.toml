@@ -43,7 +43,6 @@ deps.fabric_api = "0.138.4+1.21.10"
 
 ["1.21.11"]
 deps.parchment = "2025.12.20"
-deps.yalmm = "3"
 
 deps.fabric_api = "0.141.4+1.21.11"
 

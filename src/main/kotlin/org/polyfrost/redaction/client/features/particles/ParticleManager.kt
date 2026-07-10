@@ -9,7 +9,7 @@ import com.mojang.blaze3d.PrimitiveTopology
 import org.polyfrost.redaction.client.features.particles.render.ParticleConnectionRenderState
 import org.polyfrost.redaction.client.features.particles.render.ParticleRenderState
 //?} else
-//import net.minecraft.client.renderer.RenderType
+//import net.minecraft.client.renderer.rendertype.RenderType
 
 //? if >=1.21.5 {
 import com.mojang.blaze3d.pipeline.RenderPipeline

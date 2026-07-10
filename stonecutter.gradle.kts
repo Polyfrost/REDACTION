@@ -10,10 +10,6 @@ stonecutter {
             string(current.parsed < "26.1") {
                 replace("GuiGraphicsExtractor", "GuiGraphics")
             }
-
-            string(current.parsed < "1.21.11") {
-                replace("Identifier", "ResourceLocation")
-            }
         }
     }
 

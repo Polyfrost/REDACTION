@@ -37,10 +37,10 @@ dependencies {
         @Suppress("UnstableApiUsage")
         mappings(loom.layered {
             officialMojangMappings()
-            optionalProp("${property("deps.parchment")}") {
+            optionalProp("deps.parchment") {
                 parchment("org.parchmentmc.data:parchment-$mcVersion:$it@zip")
             }
-            optionalProp("${property("deps.yalmm")}") {
+            optionalProp("deps.yalmm") {
                 mappings("dev.lambdaurora:yalmm-mojbackward:$mcVersion+build.$it")
             }
         })
