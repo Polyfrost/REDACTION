@@ -21,20 +21,20 @@ object RedactionConfig : Config(
 //        category = "General"
 //    )
 //    var disableHandLighting = false
-//
-//    @Switch(
-//        title = "Customize Hand Item FOV",
-//        category = "General"
-//    )
-//    var customHandFOV = false
-//
-//    @Slider(
-//        title = "Hand Item FOV",
-//        category = "General",
-//        min = 0F,
-//        max = 180F
-//    )
-//    var handFOV = 125
+
+    @Switch(
+        title = "Customize Hand Item FOV",
+        category = "General"
+    )
+    var customHandFOV = false
+
+    @Slider(
+        title = "Hand Item FOV",
+        category = "General",
+        min = 0F,
+        max = 180F
+    )
+    var handFOV = 125
 
     @Switch(
         title = "Server Preview in Direct Connect",

@@ -7,10 +7,11 @@
 		"maxShiftBy": 5
 	},
 	"client": [
-		"client.accessor.JoinMultiplayerScreenAccessor",
-		"client.accessor.OnlineServerEntryAccessor",
+		"client.CameraMixin_CustomHandFOV",
 		"client.DirectJoinServerScreenMixin_ServerPreview",
-		"client.TitleScreenMixin_LastJoinedServer"
+		"client.TitleScreenMixin_LastJoinedServer",
+		"client.accessor.JoinMultiplayerScreenAccessor",
+		"client.accessor.OnlineServerEntryAccessor"
 	],
 	"verbose": true
 }
