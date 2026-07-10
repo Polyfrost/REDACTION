@@ -4,7 +4,6 @@ import org.polyfrost.oneconfig.utils.v1.dsl.mc
 import kotlin.random.Random
 
 class Particle(
-    random: Random,
     initialX: Float,
     initialY: Float
 ) {
@@ -18,10 +17,10 @@ class Particle(
     var y: Float = initialY
         private set
 
-    private val ySpeed = random.nextFloat() * 0.5f
-    private val xSpeed = random.nextFloat() * 0.5f
+    private val ySpeed = Random.nextFloat() * 0.5f
+    private val xSpeed = Random.nextFloat() * 0.5f
 
-    val size: Float = 0.3f + random.nextFloat() * 1.3f
+    val size: Float = 0.3f + Random.nextFloat() * 1.3f
 
     fun update() {
         y += ySpeed

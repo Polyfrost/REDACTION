@@ -52,7 +52,7 @@ dependencies {
         implementation("org.polyfrost.oneconfig:$module:${property("deps.oneconfig")}")
     }
 
-    for (module in listOf("fabric-command-api-v2", "fabric-screen-api-v1", "fabric-resource-loader-v0")) {
+    for (module in listOf("fabric-command-api-v2", "fabric-screen-api-v1", "fabric-resource-loader-v0", "fabric-transitive-access-wideners-v1")) {
         modImplementation(fabricApi.module(module, sc.properties["deps.fabric_api"]))
     }
 }

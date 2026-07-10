@@ -69,7 +69,8 @@ object RedactionConfig : Config(
     @Color(
         title = "Snow Color",
         category = "Inventory",
-        subcategory = "Snow"
+        subcategory = "Snow",
+        alpha = false
     )
     var snowColor = PolyColor.WHITE
 
@@ -93,7 +94,8 @@ object RedactionConfig : Config(
     @Color(
         title = "Line Color",
         category = "Inventory",
-        subcategory = "Lines"
+        subcategory = "Lines",
+        alpha = false
     )
     var lineColor = PolyColor.WHITE
 
