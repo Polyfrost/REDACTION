@@ -9,7 +9,9 @@
 	"client": [
 		"client.CameraMixin_CustomHandFOV",
 		"client.DirectJoinServerScreenMixin_ServerPreview",
+		"client.HudMixin_RenderBlackBar",
 		"client.TitleScreenMixin_LastJoinedServer",
+		"client.accessor.HudAccessor",
 		"client.accessor.JoinMultiplayerScreenAccessor",
 		"client.accessor.OnlineServerEntryAccessor"
 	],

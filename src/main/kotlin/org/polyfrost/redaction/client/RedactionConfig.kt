@@ -51,6 +51,30 @@ object RedactionConfig : Config(
     @Include var lastServerIP = ""
 
     @Switch(
+        title = "Replace Hotbar with Blackbar",
+        category = "Blackbar"
+    )
+    var blackbar = false
+
+    @Checkbox(
+        title = "Blackbar Slot Numbers",
+        category = "Blackbar"
+    )
+    var blackbarSlotNumbers = false
+
+    @Color(
+        title = "Blackbar Color",
+        category = "Blackbar"
+    )
+    var blackbarColor = PolyColor.BLACK.withAlpha(85)
+
+    @Color(
+        title = "Blackbar Item Highlight Color",
+        category = "Blackbar"
+    )
+    var blackbarItemColor = PolyColor.WHITE
+
+    @Switch(
         title = "Add Snow in Inventory",
         category = "Inventory",
         subcategory = "Snow"
@@ -104,15 +128,18 @@ object RedactionConfig : Config(
             ParticleManager.updateParticles()
         }
 
-//        addDependency("handFOV", "customHandFOV")
+        addDependency("handFOV", "customHandFOV")
 
-        addDependency("particles", "addSnow")
-        addDependency("snowColor", "addSnow")
+        listOf(
+            "blackbarSlotNumbers", "blackbarColor", "blackbarItemColor"
+        ).forEach { addDependency(it, "blackbar") }
 
-        addDependency("connectSnow", "addSnow")
-        addDependency("lineWidth", "addSnow")
-        addDependency("lineWidth", "connectSnow")
-        addDependency("lineColor", "addSnow")
-        addDependency("lineColor", "connectSnow")
+        listOf(
+            "particles", "snowColor", "connectSnow", "lineWidth", "lineColor"
+        ).forEach { addDependency(it, "addSnow") }
+
+        listOf(
+            "lineWidth", "lineColor"
+        ).forEach { addDependency(it, "connectSnow") }
     }
 }
