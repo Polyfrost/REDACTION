@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.Nullable;
 import org.polyfrost.redaction.client.RedactionConfig;
 import org.polyfrost.redaction.client.features.BlackBar;
+import org.polyfrost.redaction.mixin.client.accessor.HudAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +32,8 @@ abstract class HudMixin_RenderBlackBar {
         if (RedactionConfig.INSTANCE.getBlackbar()) {
             Player player = this.getCameraPlayer();
             if (player == null) return;
-            BlackBar.renderBlackBar(graphics, deltaTracker, player);
+            //~ if <26.2 'HudAccessor' -> 'HudAccessor'
+            BlackBar.renderBlackBar(graphics, (HudAccessor) this, deltaTracker, player);
         } else {
             original.call(instance, graphics, deltaTracker);
         }

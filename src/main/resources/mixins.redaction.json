@@ -10,10 +10,12 @@
 		"client.CameraMixin_CustomHandFOV",
 		"client.DirectJoinServerScreenMixin_ServerPreview",
 		"client.HudMixin_RenderBlackBar",
+		"client.SpectatorGuiMixin_RenderBlackBar",
 		"client.TitleScreenMixin_LastJoinedServer",
 		"client.accessor.HudAccessor",
 		"client.accessor.JoinMultiplayerScreenAccessor",
-		"client.accessor.OnlineServerEntryAccessor"
+		"client.accessor.OnlineServerEntryAccessor",
+		"client.accessor.SpectatorGuiAccessor"
 	],
 	"verbose": true
 }
