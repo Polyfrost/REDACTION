@@ -25,8 +25,10 @@ abstract class DirectJoinServerScreenMixin_ServerPreview extends Screen {
     @Shadow @Final private Screen lastScreen;
     @Shadow private EditBox ipEdit;
 
-    @Unique private ServerData redaction$serverPreview;
-    @Unique private ServerSelectionList.OnlineServerEntry redaction$serverEntry;
+    @Unique private ServerData redaction$serverData;
+    @Unique private ServerSelectionList.OnlineServerEntry redaction$serverPreview;
+    @Unique private boolean redaction$initialized = false;
+    @Unique private long redaction$lastInputTime;
 
     protected DirectJoinServerScreenMixin_ServerPreview(Component title) {
         super(title);
@@ -34,24 +36,29 @@ abstract class DirectJoinServerScreenMixin_ServerPreview extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void initServerPreview(CallbackInfo ci) {
-        if (RedactionConfig.INSTANCE.getServerPreview()) {
-            createServerPreview("", "");
+        if (!RedactionConfig.INSTANCE.getServerPreview()) return;
+
+        if (!redaction$initialized) {
+            createServerPreview();
+            redaction$initialized = true;
         }
+
+        setServerPreviewDimensions();
     }
 
     //~ if <26.1 'extractRenderState' -> 'render'
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void drawServerPreview(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
-        if (!RedactionConfig.INSTANCE.getServerPreview() || redaction$serverPreview == null || redaction$serverEntry == null) {
+        if (!RedactionConfig.INSTANCE.getServerPreview() || redaction$serverData == null || redaction$serverPreview == null) {
             return;
         }
 
-        if (!redaction$serverPreview.ip.equals(this.ipEdit.getValue())) {
-            createServerPreview(ServerManager.getServerName(this.ipEdit.getValue()), this.ipEdit.getValue());
+        if (System.currentTimeMillis() - redaction$lastInputTime > 300 && !redaction$serverData.ip.equals(this.ipEdit.getValue())) {
+            createServerPreview();
         }
 
         //? if >=26.1 {
-        redaction$serverEntry.extractContent(
+        redaction$serverPreview.extractContent(
         //?} elif >=1.21.10 {
         /*redaction$serverEntry.renderContent(
         *///?} else
@@ -59,9 +66,9 @@ abstract class DirectJoinServerScreenMixin_ServerPreview extends Screen {
                 graphics,
                 //? if <1.21.10 {
                 /*0,
-                30,
-                graphics.guiWidth() / 2 - 100,
-                200,
+                50,
+                graphics.guiWidth() / 2 - 305 / 2,
+                305,
                 35,
                 *///?}
                 mouseX,
@@ -71,22 +78,43 @@ abstract class DirectJoinServerScreenMixin_ServerPreview extends Screen {
         );
     }
 
-    @Unique
-    private void createServerPreview(String name, String ip) {
-        redaction$serverPreview = new ServerData(name, ip, ServerData.Type.OTHER);
+    @Inject(method = "updateSelectButtonStatus", at = @At("TAIL"))
+    private void updateServerPreview(CallbackInfo ci) {
+        redaction$lastInputTime = System.currentTimeMillis();
+    }
 
-        if (this.lastScreen instanceof JoinMultiplayerScreen joinMultiplayerScreen) {
-            redaction$serverEntry = OnlineServerEntryAccessor.create(
-                    ((JoinMultiplayerScreenAccessor) joinMultiplayerScreen).getServerSelectionList(),
-                    joinMultiplayerScreen,
-                    redaction$serverPreview
-            );
-            //? if >=1.21.10 {
-            redaction$serverEntry.setX(this.width / 2 - 100);
-            redaction$serverEntry.setY(30);
-            redaction$serverEntry.setWidth(200);
-            redaction$serverEntry.setHeight(35);
-            //?}
+    @Unique
+    private void createServerPreview() {
+        String ip = this.ipEdit.getValue();
+        String name = !ip.isEmpty() ? ServerManager.getServerName(ip) : "Server Preview";
+        redaction$serverData = new ServerData(
+                name,
+                ip,
+                ServerData.Type.OTHER
+        );
+
+        JoinMultiplayerScreen screen;
+        if (this.lastScreen instanceof JoinMultiplayerScreen) {
+            screen = (JoinMultiplayerScreen) this.lastScreen;
+        } else {
+            screen = new JoinMultiplayerScreen(this.lastScreen);
         }
+
+        redaction$serverPreview = OnlineServerEntryAccessor.create(
+                ((JoinMultiplayerScreenAccessor) screen).getServerSelectionList(),
+                screen,
+                redaction$serverData
+        );
+        setServerPreviewDimensions();
+    }
+
+    @Unique
+    private void setServerPreviewDimensions() {
+        //? if >=1.21.10 {
+        redaction$serverPreview.setWidth(305);
+        redaction$serverPreview.setHeight(35);
+        redaction$serverPreview.setX(this.width / 2 - 305 / 2);
+        redaction$serverPreview.setY(50);
+        //?}
     }
 }
