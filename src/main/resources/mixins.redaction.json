@@ -3,16 +3,19 @@
 	"minVersion": "0.7",
 	"package": "org.polyfrost.redaction.mixin",
 	"refmap": "mixins.redaction.refmap.json",
-	"plugin": "org.polyfrost.redaction.plugin.RedactionMixinPlugin",
 	"injectors": {
 		"maxShiftBy": 5
 	},
 	"client": [
-		"client.Mixin_ConnectedToServerEvent",
-		"client.Mixin_LastJoinedServer",
-		"client.Mixin_ServerPreview",
-		"client.Mixin_JoinMultiplayerScreenAccessor",
-		"client.Mixin_OnlineServerEntryAccessor"
+		"client.CameraMixin_CustomHandFOV",
+		"client.DirectJoinServerScreenMixin_ServerPreview",
+		"client.HudMixin_RenderBlackBar",
+		"client.SpectatorGuiMixin_RenderBlackBar",
+		"client.TitleScreenMixin_LastJoinedServer",
+		"client.accessor.HudAccessor",
+		"client.accessor.JoinMultiplayerScreenAccessor",
+		"client.accessor.OnlineServerEntryAccessor",
+		"client.accessor.SpectatorGuiAccessor"
 	],
 	"verbose": true
 }

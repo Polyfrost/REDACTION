@@ -1,26 +1,26 @@
 package org.polyfrost.redaction.client
 
+import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.Checkbox
+import org.polyfrost.oneconfig.api.config.v1.annotations.Color
 import org.polyfrost.oneconfig.api.config.v1.annotations.Include
 import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
 import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
-import org.polyfrost.polyui.color.PolyColor
-import org.polyfrost.polyui.color.argb
 import org.polyfrost.redaction.RedactionConstants
 import org.polyfrost.redaction.client.features.particles.ParticleManager
 
 object RedactionConfig : Config(
     "${RedactionConstants.ID}.json",
     RedactionConstants.NAME,
-        Category.QOL,
+    Category.QOL,
 ) {
-
-    @Switch(
-        title = "Disable Hand Item Lighting",
-        category = "General"
-    )
-    var disableHandLighting = false
+    // TODO
+//    @Switch(
+//        title = "Disable Hand Item Lighting",
+//        category = "General"
+//    )
+//    var disableHandLighting = false
 
     @Switch(
         title = "Customize Hand Item FOV",
@@ -51,6 +51,30 @@ object RedactionConfig : Config(
     @Include var lastServerIP = ""
 
     @Switch(
+        title = "Replace Hotbar with Blackbar",
+        category = "Blackbar"
+    )
+    var blackbar = false
+
+    @Checkbox(
+        title = "Blackbar Slot Numbers",
+        category = "Blackbar"
+    )
+    var blackbarSlotNumbers = false
+
+    @Color(
+        title = "Blackbar Color",
+        category = "Blackbar"
+    )
+    var blackbarColor = PolyColor.BLACK.withAlpha(85)
+
+    @Color(
+        title = "Blackbar Item Highlight Color",
+        category = "Blackbar"
+    )
+    var blackbarItemColor = PolyColor.WHITE
+
+    @Switch(
         title = "Add Snow in Inventory",
         category = "Inventory",
         subcategory = "Snow"
@@ -66,12 +90,13 @@ object RedactionConfig : Config(
     )
     var particles = 100
 
-    @org.polyfrost.oneconfig.api.config.v1.annotations.Color(
+    @Color(
         title = "Snow Color",
         category = "Inventory",
-        subcategory = "Snow"
+        subcategory = "Snow",
+        alpha = false
     )
-    var snowColor = argb(-1)
+    var snowColor = PolyColor.WHITE
 
     @Switch(
         title = "Draw Lines between Snowflakes",
@@ -90,10 +115,11 @@ object RedactionConfig : Config(
     )
     var lineWidth = 1f
 
-    @org.polyfrost.oneconfig.api.config.v1.annotations.Color(
+    @Color(
         title = "Line Color",
         category = "Inventory",
-        subcategory = "Lines"
+        subcategory = "Lines",
+        alpha = false
     )
     var lineColor = PolyColor.WHITE
 
@@ -104,15 +130,16 @@ object RedactionConfig : Config(
 
         addDependency("handFOV", "customHandFOV")
 
-        addDependency("particles", "addSnow")
-        addDependency("snowColor", "addSnow")
+        listOf(
+            "blackbarSlotNumbers", "blackbarColor", "blackbarItemColor"
+        ).forEach { addDependency(it, "blackbar") }
 
-        addDependency("connectSnow", "addSnow")
-        addDependency("lineWidth", "addSnow")
-        addDependency("lineWidth", "connectSnow")
-        addDependency("lineColor", "addSnow")
-        addDependency("lineColor", "connectSnow")
+        listOf(
+            "particles", "snowColor", "connectSnow", "lineWidth", "lineColor"
+        ).forEach { addDependency(it, "addSnow") }
 
+        listOf(
+            "lineWidth", "lineColor"
+        ).forEach { addDependency(it, "connectSnow") }
     }
-
 }

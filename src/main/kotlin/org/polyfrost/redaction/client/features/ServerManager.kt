@@ -1,21 +1,20 @@
 package org.polyfrost.redaction.client.features
 
-import dev.deftu.omnicore.api.client.network.currentServerAddress
-import dev.deftu.omnicore.api.client.network.isInSingleplayer
 import org.polyfrost.oneconfig.api.event.v1.eventHandler
-import org.polyfrost.oneconfig.api.ui.v1.Notifications
+import org.polyfrost.oneconfig.api.event.v1.events.ServerJoinEvent
+import org.polyfrost.oneconfig.api.notifications.v1.Notifications
 import org.polyfrost.oneconfig.utils.v1.JsonUtils
 import org.polyfrost.oneconfig.utils.v1.Multithreading
+import org.polyfrost.oneconfig.utils.v1.dsl.mc
 import org.polyfrost.redaction.RedactionConstants
 import org.polyfrost.redaction.client.RedactionConfig
-import org.polyfrost.redaction.client.events.ConnectedToServerEvent
 
 object ServerManager {
     private var lastCacheAttempt = 0L
     private val serverList = hashMapOf<String, String>()
 
     fun initialize() {
-        eventHandler<ConnectedToServerEvent> { _ ->
+        eventHandler<ServerJoinEvent> { _ ->
             saveLastServerIp()
         }
 
@@ -40,8 +39,8 @@ object ServerManager {
     }
 
     private fun saveLastServerIp() {
-        if (!isInSingleplayer) { // Don't save the IP if we're connected/connecting to a singleplayer world
-            RedactionConfig.lastServerIP = currentServerAddress ?: ""
+        if (mc.singleplayerServer == null || mc.singleplayerServer!!.isPublished) { // Don't save the IP if we're connected/connecting to a singleplayer world
+            RedactionConfig.lastServerIP = mc.currentServer?.ip ?: ""
             RedactionConfig.save()
         }
     }
@@ -49,12 +48,12 @@ object ServerManager {
     private fun cacheServerNames() {
         val json = JsonUtils.parseFromUrl("https://servermappings.lunarclientcdn.com/servers.json")
         if (json == null) {
-            Notifications.enqueue(Notifications.Type.Warning, RedactionConstants.NAME, "Failed to cache server names for direct connect preview: Could not fetch/parse")
+            Notifications.info(RedactionConstants.NAME, "Failed to cache server names for direct connect preview: Could not fetch/parse")
             return
         }
 
         if (!json.isJsonArray) {
-            Notifications.enqueue(Notifications.Type.Warning, RedactionConstants.NAME, "Failed to cache server names for direct connect preview: Unexpected JSON format")
+            Notifications.info(RedactionConstants.NAME, "Failed to cache server names for direct connect preview: Unexpected JSON format")
             return
         }
 

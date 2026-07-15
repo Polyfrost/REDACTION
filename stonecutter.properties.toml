@@ -1,0 +1,58 @@
+mod.name = "REDACTION"
+mod.description = "THE CLEANEST MINECRAFT EXPERIENCE EVER (no hacks included)."
+mod.id = "redaction"
+mod.group = "org.polyfrost"
+mod.version = "2.0.0-alpha.1"
+
+publish.modrinth.id = "Gapz72zt"
+
+deps.fabric_loader = "0.19.3"
+loomx.loom_version = "1.17-SNAPSHOT"
+
+deps.oneconfig = "1.0.0-beta.7"
+
+["1.21.1"]
+deps.parchment = "2024.11.17"
+deps.yalmm = "3"
+
+deps.fabric_api = "0.116.13+1.21.1"
+
+["1.21.4"]
+deps.parchment = "2025.03.23"
+deps.yalmm = "3"
+
+deps.fabric_api = "0.119.4+1.21.4"
+
+["1.21.5"]
+deps.parchment = "2025.06.15"
+deps.yalmm = "3"
+
+deps.fabric_api = "0.128.2+1.21.5"
+
+["1.21.8"]
+deps.parchment = "2025.09.14"
+deps.yalmm = "3"
+
+deps.fabric_api = "0.136.1+1.21.8"
+
+["1.21.10"]
+deps.parchment = "2025.10.12"
+deps.yalmm = "3"
+
+deps.fabric_api = "0.138.4+1.21.10"
+
+["1.21.11"]
+deps.parchment = "2025.12.20"
+
+deps.fabric_api = "0.141.4+1.21.11"
+
+["26.1"]
+mod.mc_compat = "~26.1"
+mod.mc_releases = ["26.1", "26.1.1", "26.1.2"]
+
+deps.fabric_api = "0.145.1+26.1"
+
+["26.2"]
+mod.mc_compat = "~26.2"
+
+deps.fabric_api = "0.153.0+26.2"

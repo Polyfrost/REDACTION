@@ -37,8 +37,8 @@ class ParticleGrid(
     }
 
     fun query(x: Int, y: Int, fastStorage: FastIntArrayList): IntArray {
-        val cellX = (x / cellSize).toInt().coerceIn(0, columns - 1)
-        val cellY = (y / cellSize).toInt().coerceIn(0, rows - 1)
+        val cellX = (x / cellSize).coerceIn(0, columns - 1)
+        val cellY = (y / cellSize).coerceIn(0, rows - 1)
         fastStorage.clear()
 
         val minX = (cellX - 1).coerceAtLeast(0)

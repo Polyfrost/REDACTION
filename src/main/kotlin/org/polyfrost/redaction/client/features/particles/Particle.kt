@@ -1,10 +1,9 @@
 package org.polyfrost.redaction.client.features.particles
 
-import dev.deftu.omnicore.api.client.render.OmniResolution
+import org.polyfrost.oneconfig.utils.v1.dsl.mc
 import kotlin.random.Random
 
 class Particle(
-    random: Random,
     initialX: Float,
     initialY: Float
 ) {
@@ -18,21 +17,21 @@ class Particle(
     var y: Float = initialY
         private set
 
-    private val ySpeed = random.nextFloat() * 0.5f
-    private val xSpeed = random.nextFloat() * 0.5f
+    private val ySpeed = Random.nextFloat() * 0.5f
+    private val xSpeed = Random.nextFloat() * 0.5f
 
-    val size: Float = 0.3f + random.nextFloat() * 1.3f
+    val size: Float = 0.3f + Random.nextFloat() * 1.3f
 
     fun update() {
         y += ySpeed
         x += xSpeed
 
         when {
-            x > OmniResolution.scaledWidth -> x = 1f
-            x < 1 -> x = OmniResolution.scaledWidth.toFloat()
+            x > mc.window.guiScaledWidth -> x = 1f
+            x < 1 -> x = mc.window.guiScaledWidth.toFloat()
 
-            y > OmniResolution.scaledHeight -> y = 1f
-            y < 1 -> y = OmniResolution.scaledHeight.toFloat()
+            y > mc.window.guiScaledHeight -> y = 1f
+            y < 1 -> y = mc.window.guiScaledHeight.toFloat()
         }
     }
 
