@@ -60,9 +60,9 @@ abstract class DirectJoinServerScreenMixin_ServerPreview extends Screen {
         //? if >=26.1 {
         redaction$serverPreview.extractContent(
         //?} elif >=1.21.10 {
-        /*redaction$serverEntry.renderContent(
+        /*redaction$serverPreview.renderContent(
         *///?} else
-        //redaction$serverEntry.render(
+        //redaction$serverPreview.render(
                 graphics,
                 //? if <1.21.10 {
                 /*0,
