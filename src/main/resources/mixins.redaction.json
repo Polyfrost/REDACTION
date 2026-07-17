@@ -1,21 +1,21 @@
 {
-  "compatibilityLevel": "JAVA_8",
-  "minVersion": "0.7",
-  "package": "org.polyfrost.redaction.mixin",
-  "refmap": "mixins.redaction.refmap.json",
-  "plugin": "org.polyfrost.redaction.plugin.RedactionMixinPlugin",
-  "injectors": {
-    "maxShiftBy": 5
-  },
-  "client": [
-    "EntityRendererMixin",
-    "EntityRendererMixin_OptiFine",
-    "GuiIngameMixin",
-    "GuiMainMenuMixin",
-    "GuiScreenServerListMixin",
-    "MinecraftAccessor",
-    "PatcherEntityRendererHookMixin",
-    "RenderItemMixin"
-  ],
-  "verbose": true
+	"compatibilityLevel": "JAVA_8",
+	"minVersion": "0.7",
+	"package": "org.polyfrost.redaction.mixin",
+	"refmap": "mixins.redaction.refmap.json",
+	"injectors": {
+		"maxShiftBy": 5
+	},
+	"client": [
+		"client.CameraMixin_CustomHandFOV",
+		"client.DirectJoinServerScreenMixin_ServerPreview",
+		"client.HudMixin_RenderBlackBar",
+		"client.SpectatorGuiMixin_RenderBlackBar",
+		"client.TitleScreenMixin_LastJoinedServer",
+		"client.accessor.HudAccessor",
+		"client.accessor.JoinMultiplayerScreenAccessor",
+		"client.accessor.OnlineServerEntryAccessor",
+		"client.accessor.SpectatorGuiAccessor"
+	],
+	"verbose": true
 }
