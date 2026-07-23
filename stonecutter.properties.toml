@@ -2,7 +2,7 @@ mod.name = "REDACTION"
 mod.description = "THE CLEANEST MINECRAFT EXPERIENCE EVER (no hacks included)."
 mod.id = "redaction"
 mod.group = "org.polyfrost"
-mod.version = "2.0.0"
+mod.version = "2.0.1"
 
 publish.modrinth.id = "Gapz72zt"
 
