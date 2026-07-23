@@ -72,7 +72,7 @@ object RedactionConfig : Config(
         title = "Blackbar Item Highlight Color",
         category = "Blackbar"
     )
-    var blackbarItemColor = PolyColor.WHITE
+    var blackbarItemColor = PolyColor.rgb(255, 255, 255)
 
     @Switch(
         title = "Add Snow in Inventory",
@@ -96,7 +96,7 @@ object RedactionConfig : Config(
         subcategory = "Snow",
         alpha = false
     )
-    var snowColor = PolyColor.WHITE
+    var snowColor = PolyColor.rgb(255, 255, 255)
 
     @Switch(
         title = "Draw Lines between Snowflakes",
@@ -121,7 +121,7 @@ object RedactionConfig : Config(
         subcategory = "Lines",
         alpha = false
     )
-    var lineColor = PolyColor.WHITE
+    var lineColor = PolyColor.rgb(255, 255, 255)
 
     init {
         addCallback("particles") {
