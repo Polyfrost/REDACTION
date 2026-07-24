@@ -28,3 +28,9 @@ build
 run
 .DS_Store
 Thumbs.db
+
+# test byproducts
+.fabric
+versions/*/logs
+versions/*/mods
+versions/*/oneconfig

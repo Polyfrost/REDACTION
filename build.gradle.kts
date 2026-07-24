@@ -66,6 +66,9 @@ dependencies {
     for (module in listOf("fabric-command-api-v2", "fabric-screen-api-v1", "fabric-resource-loader-v0", "fabric-transitive-access-wideners-v1", "fabric-lifecycle-events-v1")) {
         modImplementation(fabricApi.module(module, sc.properties["deps.fabric_api"]))
     }
+
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.2")
+    testImplementation("net.fabricmc:fabric-loader-junit:${property("deps.fabric_loader")}")
 }
 
 loom {
@@ -76,6 +79,10 @@ loom {
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
+
     processResources {
         val props = mapOf(
             "mod_id" to modId,
