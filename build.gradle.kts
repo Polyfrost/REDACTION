@@ -29,8 +29,7 @@ repositories {
     maven("https://central.sonatype.com/repository/maven-snapshots") {
         content { includeGroup("net.kyori") }
     }
-    //maven("https://maven.terraformersmc.com/releases") {
-    maven("https://maven.gnomecraft.net/releases/") {
+    maven("https://maven.terraformersmc.com/") {
         content { includeGroup("com.terraformersmc") }
     }
     maven("https://maven.parchmentmc.org") {
