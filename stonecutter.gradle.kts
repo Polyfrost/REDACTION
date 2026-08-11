@@ -10,6 +10,12 @@ stonecutter {
             string(current.parsed < "26.1") {
                 replace("GuiGraphicsExtractor", "GuiGraphics")
             }
+            // `ResourceLocation` was renamed to `Identifier` in 1.21.11,
+            // and `RenderType` moved to the `renderer.rendertype` package in the same version.
+            string(current.parsed < "1.21.11") {
+                replace("Identifier", "ResourceLocation")
+                replace("renderer.rendertype.RenderType", "renderer.RenderType")
+            }
         }
     }
 
