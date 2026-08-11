@@ -30,8 +30,7 @@ object ServerManager {
         if (serverList.isEmpty() && System.currentTimeMillis() - lastCacheAttempt > 10_000) {
             lastCacheAttempt = System.currentTimeMillis()
 
-            // Block until the cache is populated so that we can return an actual value
-            // This check is here in case the initial request either fails or if the user disabled the feature before startup but enabled it later
+            // Block here so a lookup still returns a real name when startup caching failed or was disabled
             cacheServerNames()
         }
 
@@ -39,7 +38,7 @@ object ServerManager {
     }
 
     private fun saveLastServerIp() {
-        if (mc.singleplayerServer == null || mc.singleplayerServer!!.isPublished) { // Don't save the IP if we're connected/connecting to a singleplayer world
+        if (mc.singleplayerServer == null || mc.singleplayerServer!!.isPublished) { // Skip unpublished singleplayer worlds
             RedactionConfig.lastServerIP = mc.currentServer?.ip ?: ""
             RedactionConfig.save()
         }

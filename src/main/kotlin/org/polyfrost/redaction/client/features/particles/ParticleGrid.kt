@@ -10,24 +10,21 @@ class ParticleGrid(
     private val cells = Array(rows * columns) { IntArray(0) }
 
     fun rebuild(particles: Collection<Particle>) {
-        // Clear cells
+        // Counting sort particles into per cell buckets
         for (i in cells.indices) {
             cells[i] = IntArray(0)
         }
 
-        // Count
         val counts = IntArray(rows * columns)
         for (particle in particles) {
             val index = indexOf(particle)
             counts[index]++
         }
 
-        // Alloc
         for (i in cells.indices) {
             cells[i] = IntArray(counts[i])
         }
 
-        // Fill
         counts.fill(0)
         for ((i, particle) in particles.withIndex()) {
             val index = indexOf(particle)
