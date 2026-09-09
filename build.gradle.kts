@@ -83,6 +83,7 @@ dependencies {
                 containsUnpick()
             }
             mappings(rootProject.file("mappings/feather-overrides.tiny"))
+
         })
     } else {
         loomx.applyMojangMappings()
@@ -103,8 +104,27 @@ dependencies {
     testImplementation("net.fabricmc:fabric-loader-junit:$loaderversion")
 }
 
+sourceSets.main { // here's my easy workaround for mixins on each version
+    if (stonecutter.eval(stonecutter.current.version, "=1.8.9")) {
+        java.exclude("org/polyfrost/redaction/mixin/client/*.java")
+        java.exclude("org/polyfrost/redaction/mixin/client/accessor/*.java")
+    } else {
+        java.exclude("**/mixin/client/legacy/**")
+    }
+}
+
+tasks.withType<JavaCompile> {
+    if (stonecutter.eval(stonecutter.current.version, "=1.8.9")) {
+        exclude("org/polyfrost/redaction/mixin/client/*.java")
+        exclude("org/polyfrost/redaction/mixin/client/accessor/*.java")
+    } else {
+        exclude("**/mixin/client/legacy/**")
+    }
+}
+
 loom {
-    fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
+    if (!isOrnithe) fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
+    else fabricModJsonPath = rootProject.file("src/main/resources/ornithe.mod.json")
 
     decompilerOptions.named("vineflower") {
         options.put("mark-corresponding-synthetics", "1")
@@ -160,14 +180,25 @@ tasks {
         val props = mapOf(
             "mod_id" to modid,
             "mod_name" to modname,
+            "mod_description" to (findProperty("mod_description") ?: "Redaction Mod"),
             "mod_version" to modversion,
             "mc_compat" to versionrange,
-            "loader_version" to loaderversion
+            "loader_version" to loaderversion,
+            "oneconfig_version" to oneconfigversion
         )
 
         inputs.properties(props)
 
-        filesMatching("fabric.mod.json") { expand(props) }
+        if (isOrnithe) {
+            exclude("fabric.mod.json")
+            exclude("mixins.*.json")
+            rename("ornithe.mod.json", "fabric.mod.json")
+            filesMatching("ornithe.mod.json") { expand(props) }
+        } else {
+            exclude("ornithe.mod.json")
+            exclude("legacy-mixins.json")
+            filesMatching("fabric.mod.json") { expand(props) }
+        }
     }
 
     jar {
