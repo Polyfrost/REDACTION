@@ -151,6 +151,7 @@ object ParticleRenderer {
         val tess = net.minecraft.client.render.vertex.Tesselator.getInstance()
         val buf = tess.buffer
 
+        buf.begin(4, net.minecraft.client.render.vertex.DefaultVertexFormat.POSITION)
         for (particle in particles) {
             val cx = particle.x
             val cy = particle.y
@@ -159,20 +160,19 @@ object ParticleRenderer {
             var currentX = cx + sin(currentAngle) * particle.size
             var currentY = cy + cos(currentAngle) * particle.size
 
-            buf.begin(6, net.minecraft.client.render.vertex.DefaultVertexFormat.POSITION)
-            buf.vertex(cx.toDouble(), cy.toDouble(), 0.0).end()
             repeat(SEGMENTS) {
                 val nextAngle = currentAngle + STEP
                 val nextX = cx + sin(nextAngle) * particle.size
                 val nextY = cy + cos(nextAngle) * particle.size
-                buf.vertex(currentX.toDouble(), currentY.toDouble(), 0.0).end()
+                buf.vertex(cx.toDouble(), cy.toDouble(), 0.0).nextVertex()
+                buf.vertex(currentX.toDouble(), currentY.toDouble(), 0.0).nextVertex()
+                buf.vertex(nextX.toDouble(), nextY.toDouble(), 0.0).nextVertex()
                 currentAngle = nextAngle
                 currentX = nextX
                 currentY = nextY
             }
-            buf.vertex((cx + sin(0f) * particle.size).toDouble(), (cy + cos(0f) * particle.size).toDouble(), 0.0).end()
-            tess.end()
         }
+        tess.end()
 
         net.minecraft.client.render.platform.GlStateManager.enableTexture()
         net.minecraft.client.render.platform.GlStateManager.disableBlend()
@@ -204,6 +204,7 @@ object ParticleRenderer {
         val tess = net.minecraft.client.render.vertex.Tesselator.getInstance()
         val buf = tess.buffer
 
+        var hasConnections = false
         for ((i, particle) in particles.withIndex()) {
             if (!particle.isMouseOver(mouseX, mouseY)) continue
 
@@ -220,19 +221,24 @@ object ParticleRenderer {
                 val distance = sqrt(dx * dx + dy * dy)
                 if (distance >= Particle.CONNECT_RANGE || distance <= 0f) continue
 
+                if (!hasConnections) {
+                    buf.begin(7, net.minecraft.client.render.vertex.DefaultVertexFormat.POSITION)
+                    hasConnections = true
+                }
+
                 val nx = dx / distance
                 val ny = dy / distance
                 val offsetX = ny * halfWidth
                 val offsetY = -nx * halfWidth
 
-                buf.begin(7, net.minecraft.client.render.vertex.DefaultVertexFormat.POSITION)
-                buf.vertex((particle.x + offsetX).toDouble(), (particle.y + offsetY).toDouble(), 0.0).end()
-                buf.vertex((other.x + offsetX).toDouble(), (other.y + offsetY).toDouble(), 0.0).end()
-                buf.vertex((other.x - offsetX).toDouble(), (other.y - offsetY).toDouble(), 0.0).end()
-                buf.vertex((particle.x - offsetX).toDouble(), (particle.y - offsetY).toDouble(), 0.0).end()
-                tess.end()
+                buf.vertex((particle.x + offsetX).toDouble(), (particle.y + offsetY).toDouble(), 0.0).nextVertex()
+                buf.vertex((other.x + offsetX).toDouble(), (other.y + offsetY).toDouble(), 0.0).nextVertex()
+                buf.vertex((other.x - offsetX).toDouble(), (other.y - offsetY).toDouble(), 0.0).nextVertex()
+                buf.vertex((particle.x - offsetX).toDouble(), (particle.y - offsetY).toDouble(), 0.0).nextVertex()
             }
         }
+
+        if (hasConnections) tess.end()
 
         net.minecraft.client.render.platform.GlStateManager.enableTexture()
         net.minecraft.client.render.platform.GlStateManager.disableBlend()
