@@ -1,5 +1,6 @@
 package org.polyfrost.redaction.client.features
 
+//? if >1.8.9 {
 import net.minecraft.client.AttackIndicatorStatus
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -7,14 +8,22 @@ import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.HumanoidArm
 import net.minecraft.world.entity.player.Player
-import org.polyfrost.oneconfig.utils.v1.dsl.mc
 import org.polyfrost.redaction.client.RedactionConfig
 import org.polyfrost.redaction.mixin.client.accessor.HudAccessor
 import org.polyfrost.redaction.mixin.client.accessor.SpectatorGuiAccessor
 import net.minecraft.client.gui.spectator.categories.SpectatorPage
+//?} else {
+/*
+import net.minecraft.client.gui.GuiElement
+import net.minecraft.entity.living.player.PlayerEntity
+import org.polyfrost.redaction.client.RedactionConfig
+*///?}
+import org.polyfrost.oneconfig.utils.v1.dsl.mc
+
 import kotlin.math.roundToInt
 
 object BlackBar {
+    //? if >1.8.9 {
     private val HOTBAR_ATTACK_INDICATOR_BACKGROUND_SPRITE = Identifier.withDefaultNamespace("hud/hotbar_attack_indicator_background")
     private val HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE = Identifier.withDefaultNamespace("hud/hotbar_attack_indicator_progress")
 
@@ -205,6 +214,7 @@ object BlackBar {
         //? if 1.21.1
         //com.mojang.blaze3d.systems.RenderSystem.disableBlend()
     }
+    //?}
 
     private fun lerp(start: Float, end: Float, delta: Float): Float {
         return start + (end - start) * delta.coerceIn(0f, 1f)
@@ -215,4 +225,24 @@ object BlackBar {
         val a = ((argb ushr 24) * alphaMultiplier).toInt()
         return (argb and 0x00FFFFFF) or (a shl 24)
     }
+    //? if 1.8.9 {
+    /*
+    fun render(player: PlayerEntity) {
+        val scaledWidth = mc.window.guiScaledWidth
+        val scaledHeight = mc.window.guiScaledHeight
+        val y = scaledHeight - 22
+        val x = scaledWidth / 2 - 90 + player.inventory.selectedSlot * 20
+
+        if (RedactionConfig.blackbarColor.alpha != 0) {
+            drawRectEnhanced(0, y, scaledWidth, 22, RedactionConfig.blackbarColor.argb)
+        }
+        if (RedactionConfig.blackbarItemColor.alpha != 0) {
+            drawRectEnhanced(x, y, 22, 22, RedactionConfig.blackbarItemColor.argb)
+        }
+    }
+
+    fun drawRectEnhanced(x: Int, y: Int, width: Int, height: Int, color: Int) {
+        GuiElement.fill(x, y, width + x, height + y, color)
+    }
+     *///?}
 }

@@ -1,30 +1,51 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import net.ornithemc.ploceus.api.PloceusGradleExtensionApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("dev.kikugie.loom-back-compat")
     id("org.jetbrains.kotlin.jvm") version "2.4.10"
+    id("net.fabricmc.fabric-loom-remap") version "1.17-SNAPSHOT" apply false
+    id("ploceus") version "1.17.4" apply false
     id("dev.deftu.gradle.bloom") version "0.2.0"
     id("me.modmuss50.mod-publish-plugin") version "2.2.0"
+}
+
+val isOrnithe = stonecutter.current.version == "1.8.9"
+val ploceus = if (isOrnithe) {
+    pluginManager.apply("net.fabricmc.fabric-loom-remap")
+    pluginManager.apply("ploceus")
+
+    configurations.configureEach {
+        exclude(group = "org.lwjgl.lwjgl")
+    }
+
+    extensions.getByType<PloceusGradleExtensionApi>().apply {
+        setIntermediaryGeneration(2)
+    }
+} else {
+    null
 }
 
 val modid: String = sc.properties["mod.id"]
 val modname: String = sc.properties["mod.name"]
 val modversion: String = sc.properties["mod.version"]
-val moddescription: String = sc.properties["mod.description"]
 val mcversion: String = sc.current.version
 val versionrange: String = sc.properties.getOrNull<String>("mod.mc_compat") ?: mcversion
 val loaderversion: String = sc.properties["deps.fabric_loader"]
 val oneconfigversion: String = sc.properties["deps.oneconfig"]
-val fapiversion: String = sc.properties["deps.fabric_api"]
+val loader = if (isOrnithe) "ornithe" else "fabric"
 
 version = "$modversion+$mcversion"
-base.archivesName = modname
+base.archivesName = modid
 
 val requiredJava: JavaVersion = when {
     sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
-    else -> JavaVersion.VERSION_21
+    sc.current.parsed >= "1.20.5" -> JavaVersion.VERSION_21
+    sc.current.parsed >= "1.18" -> JavaVersion.VERSION_17
+    sc.current.parsed >= "1.17" -> JavaVersion.VERSION_16
+    else -> JavaVersion.VERSION_25
 }
 
 val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")
@@ -44,6 +65,9 @@ repositories {
         name = "Sonatype Snapshots"
         content { includeGroup("net.kyori") }
     }
+    maven("https://maven.cloverclient.com/releases") {
+        content { includeGroup("pl.tomgirl") }
+    }
     strictMaven("https://maven.deftu.dev/releases", "Deftu", "dev.deftu")
     strictMaven("https://maven.terraformersmc.com/", "TerraformersMC", "com.terraformersmc")
     strictMaven("https://maven.fabricmc.net/", "FabricMC", "net.fabricmc")
@@ -53,30 +77,54 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:$mcversion")
-    loomx.applyMojangMappings()
+    if (isOrnithe) {
+        mappings(ploceus!!.layeredMappings {
+            mappings("net.ornithemc:feather-gen2:$mcversion+build.${sc.properties["feather_version"] as String}:v2") {
+                containsUnpick()
+            }
+            mappings(rootProject.file("mappings/feather-overrides.tiny"))
+
+        })
+    } else {
+        loomx.applyMojangMappings()
+    }
 
     modImplementation("net.fabricmc:fabric-loader:$loaderversion")
-    modImplementation("org.polyfrost.oneconfig:$mcversion-fabric:$oneconfigversion")
-    for (module in arrayOf("config", "config-impl", "events", "utils")) {
+    modImplementation("org.polyfrost.oneconfig:$mcversion-$loader:$oneconfigversion")
+    for (module in arrayOf("commands", "config", "config-impl", "events", "internal", "ui", "utils", "hud")) {
         implementation("org.polyfrost.oneconfig:$module:$oneconfigversion")
     }
 
-    for (module in arrayOf(
-        "fabric-command-api-v2",
-        "fabric-screen-api-v1",
-        "fabric-resource-loader-v0",
-        "fabric-transitive-access-wideners-v1",
-        "fabric-lifecycle-events-v1"
-    )) {
-        modImplementation(fabricApi.module(module, fapiversion))
+    if (!isOrnithe) {
+        val fapiversion: String = sc.properties["deps.fabric_api"]
+        modImplementation("net.fabricmc.fabric-api:fabric-api:$fapiversion")
     }
 
     testImplementation("org.junit.jupiter:junit-jupiter:${sc.properties.get<String>("deps.junit")}")
     testImplementation("net.fabricmc:fabric-loader-junit:$loaderversion")
 }
 
+sourceSets.main { // here's my easy workaround for mixins on each version
+    if (stonecutter.eval(stonecutter.current.version, "=1.8.9")) {
+        java.exclude("org/polyfrost/redaction/mixin/client/*.java")
+        java.exclude("org/polyfrost/redaction/mixin/client/accessor/*.java")
+    } else {
+        java.exclude("**/mixin/client/legacy/**")
+    }
+}
+
+tasks.withType<JavaCompile> {
+    if (stonecutter.eval(stonecutter.current.version, "=1.8.9")) {
+        exclude("org/polyfrost/redaction/mixin/client/*.java")
+        exclude("org/polyfrost/redaction/mixin/client/accessor/*.java")
+    } else {
+        exclude("**/mixin/client/legacy/**")
+    }
+}
+
 loom {
-    fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
+    if (!isOrnithe) fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
+    else fabricModJsonPath = rootProject.file("src/main/resources/ornithe.mod.json")
 
     decompilerOptions.named("vineflower") {
         options.put("mark-corresponding-synthetics", "1")
@@ -132,16 +180,25 @@ tasks {
         val props = mapOf(
             "mod_id" to modid,
             "mod_name" to modname,
+            "mod_description" to (findProperty("mod_description") ?: "Redaction Mod"),
             "mod_version" to modversion,
-            "mod_description" to moddescription,
             "mc_compat" to versionrange,
+            "loader_version" to loaderversion,
             "oneconfig_version" to oneconfigversion
         )
 
         inputs.properties(props)
 
-        filesMatching("fabric.mod.json") { expand(props) }
-        filesMatching("mixins.*.json") { expand("java" to "JAVA_${requiredJava.majorVersion}") }
+        if (isOrnithe) {
+            exclude("fabric.mod.json")
+            exclude("mixins.*.json")
+            rename("ornithe.mod.json", "fabric.mod.json")
+            filesMatching("ornithe.mod.json") { expand(props) }
+        } else {
+            exclude("ornithe.mod.json")
+            exclude("legacy-mixins.json")
+            filesMatching("fabric.mod.json") { expand(props) }
+        }
     }
 
     jar {
@@ -162,10 +219,10 @@ tasks {
     }
 }
 
-val modrinthId = listOf("publish.modrinth.id", "publish.modrinth")
+val modrinthId = listOf("oneconfig.publish.modrinth", "publish.modrinth")
     .firstNotNullOfOrNull { sc.properties.getOrNull<String>(it) ?: findProperty(it)?.toString() }
     ?.takeIf { it.isNotBlank() }
-val modrinthToken = listOf("publish.modrinth.token", "modrinth.token")
+val modrinthToken = listOf("oneconfig.publish.modrinth.token", "publish.modrinth.token", "modrinth.token")
     .firstNotNullOfOrNull { findProperty(it) }?.toString()?.takeIf { it.isNotBlank() }
 
 val changelogs = rootProject.file("CHANGELOG.md").takeIf { it.exists() }?.readText() ?: "No changelog provided."
