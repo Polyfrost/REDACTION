@@ -198,6 +198,7 @@ object ParticleRenderer {
 
         net.minecraft.client.render.platform.GlStateManager.enableBlend()
         net.minecraft.client.render.platform.GlStateManager.disableTexture()
+        net.minecraft.client.render.platform.GlStateManager.disableCull()
         net.minecraft.client.render.platform.GlStateManager.blendFuncSeparate(770, 771, 1, 0)
         net.minecraft.client.render.platform.GlStateManager.color4f(r, g, b, 1f)
 
@@ -240,6 +241,7 @@ object ParticleRenderer {
         if (hasConnections) tess.end()
 
         net.minecraft.client.render.platform.GlStateManager.enableTexture()
+        net.minecraft.client.render.platform.GlStateManager.enableCull()
         net.minecraft.client.render.platform.GlStateManager.disableBlend()
         net.minecraft.client.render.platform.GlStateManager.color4f(1f, 1f, 1f, 1f)
     }
