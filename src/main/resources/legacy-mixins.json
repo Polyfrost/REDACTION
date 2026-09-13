@@ -10,7 +10,12 @@
   },
   "client": [
     "accessor.MinecraftAccessor",
-    "ScreenMixin_RenderParticles"
+    "accessor.ServerListEntryWidgetAccessor",
+    "ScreenMixin_RenderParticles",
+    "GameRendererMixin_CustomHandFOV",
+    "GameGuiMixin_RenderBlackBar",
+    "TitleScreenMixin_LastJoinedServer",
+    "DirectConnectScreenMixin_ServerPreview"
   ],
   "verbose": true
 }

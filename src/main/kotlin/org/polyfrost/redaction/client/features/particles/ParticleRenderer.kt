@@ -206,13 +206,12 @@ object ParticleRenderer {
 
         var hasConnections = false
         for ((i, particle) in particles.withIndex()) {
-            if (!particle.isMouseOver(mouseX, mouseY)) continue
-
             val candidates = grid.query(particle.x.roundToInt(), particle.y.roundToInt(), fastStorage)
             for (j in candidates) {
                 if (i >= j) continue
 
                 val other = particles.elementAt(j)
+                if (!particle.isMouseOver(mouseX, mouseY) && !other.isMouseOver(mouseX, mouseY)) continue
                 if (abs(other.x - particle.x) >= Particle.CONNECT_RANGE || abs(other.y - particle.y) >= Particle.CONNECT_RANGE) continue
 
                 val dx = other.x - particle.x
