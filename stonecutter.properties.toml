@@ -5,7 +5,7 @@ mod.group = "org.polyfrost"
 mod.version = "2.0.1"
 
 deps.fabric_loader = "0.19.3"
-deps.oneconfig = "1.1.4"
+deps.oneconfig = "1.2.5"
 deps.junit = "6.1.3"
 
 loomx.loom_version = "1.17-SNAPSHOT"
@@ -51,3 +51,8 @@ deps.fabric_api = "0.145.1+26.1"
 mod.mc_compat = "~26.2"
 mod.mc_releases = ["26.2"]
 deps.fabric_api = "0.157.0+26.2"
+
+["26.3"]
+mod.mc_compat = "~26.3"
+mod.mc_releases = ["26.3"]
+deps.fabric_api = "0.161.0+26.3"

@@ -1,7 +1,7 @@
 package org.polyfrost.redaction.client.features.particles
 
 //? if >=26.2 {
-import com.mojang.blaze3d.PrimitiveTopology
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology
 //?} else
 //import com.mojang.blaze3d.vertex.VertexFormat
 
@@ -12,7 +12,7 @@ import org.polyfrost.redaction.client.features.particles.render.ParticleRenderSt
 //import net.minecraft.client.renderer.rendertype.RenderType
 
 //? if >=1.21.5 {
-import com.mojang.blaze3d.pipeline.RenderPipeline
+import com.mojang.renderpearl.api.pipeline.RenderPipeline
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.resources.Identifier
 import org.polyfrost.redaction.RedactionConstants
