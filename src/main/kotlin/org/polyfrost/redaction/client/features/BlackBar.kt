@@ -231,7 +231,7 @@ object BlackBar {
         val scaledWidth = mc.window.guiScaledWidth
         val scaledHeight = mc.window.guiScaledHeight
         val y = scaledHeight - 22
-        val x = scaledWidth / 2 - 90 + player.inventory.selectedSlot * 20
+        val x = scaledWidth / 2 - 91 + player.inventory.selectedSlot * 20
 
         if (RedactionConfig.blackbarColor.alpha != 0) {
             drawRectEnhanced(0, y, scaledWidth, 22, RedactionConfig.blackbarColor.argb)
