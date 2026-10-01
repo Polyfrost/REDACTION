@@ -254,7 +254,7 @@ publishMods {
 
     modLoaders.add("fabric")
 
-    dryRun = modrinthId == null || modrinthToken == null
+    dryRun = modrinthId == null || modrinthToken == null || !isOrnithe
 
     if (modrinthId != null) {
         modrinth {
