@@ -263,7 +263,7 @@ publishMods {
 
             minecraftVersions.addAll(compatibleVersions.ifEmpty { listOf(mcversion) })
 
-            requires("oneconfig", "fabric-api", "fabric-language-kotlin")
+            requires("oneconfig", "fabric-language-kotlin")
         }
     }
 }
