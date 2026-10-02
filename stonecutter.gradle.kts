@@ -2,11 +2,15 @@ plugins {
     id("dev.kikugie.stonecutter")
 }
 
-stonecutter active "26.2" /* [SC] DO NOT EDIT */
+stonecutter active "26.3" /* [SC] DO NOT EDIT */
 
 stonecutter {
     parameters {
         replacements {
+            string(current.parsed < "26.3") {
+                replace("com.mojang.renderpearl.api.pipeline.RenderPipeline", "com.mojang.blaze3d.pipeline.RenderPipeline")
+                replace("com.mojang.renderpearl.api.pipeline.PrimitiveTopology", "com.mojang.blaze3d.PrimitiveTopology")
+            }
             string(current.parsed < "26.1") {
                 replace("GuiGraphicsExtractor", "GuiGraphics")
             }
