@@ -219,7 +219,7 @@ tasks {
     }
 }
 
-val modrinthId = listOf("oneconfig.publish.modrinth", "publish.modrinth")
+val modrinthId = listOf("oneconfig.publish.modrinth", "publish.modrinth.id", "publish.modrinth")
     .firstNotNullOfOrNull { sc.properties.getOrNull<String>(it) ?: findProperty(it)?.toString() }
     ?.takeIf { it.isNotBlank() }
 val modrinthToken = listOf("oneconfig.publish.modrinth.token", "publish.modrinth.token", "modrinth.token")
