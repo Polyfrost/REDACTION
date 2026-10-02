@@ -252,7 +252,7 @@ publishMods {
     changelog = changelogs
     type = STABLE
 
-    modLoaders.add("fabric")
+    modLoaders.add("ornithe")
 
     dryRun = modrinthId == null || modrinthToken == null || !isOrnithe
 
