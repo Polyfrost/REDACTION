@@ -1,3 +1,2 @@
-## 2.1.0
-- Added support for Minecraft 26.3
-- Port to 1.8.9
+## Unreleased changes
+- 1.8.9: Joining a server no longer re-enables the "Last Server Joined Button" option
