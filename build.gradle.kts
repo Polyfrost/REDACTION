@@ -219,10 +219,10 @@ tasks {
     }
 }
 
-val modrinthId = listOf("oneconfig.publish.modrinth", "publish.modrinth.id", "publish.modrinth")
+val modrinthId = listOf("publish.modrinth.id", "publish.modrinth")
     .firstNotNullOfOrNull { sc.properties.getOrNull<String>(it) ?: findProperty(it)?.toString() }
     ?.takeIf { it.isNotBlank() }
-val modrinthToken = listOf("oneconfig.publish.modrinth.token", "publish.modrinth.token", "modrinth.token")
+val modrinthToken = listOf("publish.modrinth.token", "modrinth.token")
     .firstNotNullOfOrNull { findProperty(it) }?.toString()?.takeIf { it.isNotBlank() }
 
 val changelogs = rootProject.file("CHANGELOG.md").takeIf { it.exists() }?.readText() ?: "No changelog provided."
@@ -252,9 +252,9 @@ publishMods {
     changelog = changelogs
     type = STABLE
 
-    modLoaders.add("ornithe")
+    modLoaders.add(loader)
 
-    dryRun = modrinthId == null || modrinthToken == null || !isOrnithe
+    dryRun = modrinthId == null || modrinthToken == null
 
     if (modrinthId != null) {
         modrinth {
@@ -264,6 +264,7 @@ publishMods {
             minecraftVersions.addAll(compatibleVersions.ifEmpty { listOf(mcversion) })
 
             requires("oneconfig", "fabric-language-kotlin")
+            if (!isOrnithe) requires("fabric-api")
         }
     }
 }
