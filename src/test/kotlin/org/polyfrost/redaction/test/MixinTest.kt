@@ -1,13 +1,16 @@
 package org.polyfrost.redaction.test
 
-import net.minecraft.SharedConstants
-import net.minecraft.server.Bootstrap
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.spongepowered.asm.mixin.MixinEnvironment
 import org.spongepowered.asm.mixin.MixinEnvironment.Option
 import org.spongepowered.asm.mixin.transformer.IMixinTransformer
+
+//? if >1.8.9 {
+import net.minecraft.SharedConstants
+import net.minecraft.server.Bootstrap
+//?}
 
 /**
  * Audits mixins for validity without launching a full Minecraft client
@@ -19,8 +22,11 @@ class MixinTest {
         @JvmStatic
         @BeforeAll
         fun setupEnvironment() {
+            // OSL's registry sync isn't initialized in unit tests, so bootstrapping 1.8.9 throws
+            //? if >1.8.9 {
             SharedConstants.tryDetectVersion()
             Bootstrap.bootStrap()
+            //?}
         }
     }
 

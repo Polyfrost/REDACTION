@@ -1,0 +1,2 @@
+<!-- Shadows the log4j2.xml in the 1.8.9 Minecraft jar, otherwise Fabric Loader classifies that jar as a logging library and can't find the game in unit tests -->
+<Configuration/>
