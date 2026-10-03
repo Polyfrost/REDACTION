@@ -12,7 +12,7 @@ plugins {
     id("me.modmuss50.mod-publish-plugin") version "2.2.0"
 }
 
-val isOrnithe = stonecutter.current.version == "1.8.9"
+val isOrnithe = sc.current.version == "1.8.9"
 val ploceus = if (isOrnithe) {
     pluginManager.apply("net.fabricmc.fabric-loom-remap")
     pluginManager.apply("ploceus")
@@ -31,6 +31,7 @@ val ploceus = if (isOrnithe) {
 val modid: String = sc.properties["mod.id"]
 val modname: String = sc.properties["mod.name"]
 val modversion: String = sc.properties["mod.version"]
+val moddescription: String = sc.properties["mod.description"]
 val mcversion: String = sc.current.version
 val versionrange: String = sc.properties.getOrNull<String>("mod.mc_compat") ?: mcversion
 val loaderversion: String = sc.properties["deps.fabric_loader"]
@@ -38,14 +39,11 @@ val oneconfigversion: String = sc.properties["deps.oneconfig"]
 val loader = if (isOrnithe) "ornithe" else "fabric"
 
 version = "$modversion+$mcversion"
-base.archivesName = modid
+base.archivesName = modname
 
 val requiredJava: JavaVersion = when {
-    sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
-    sc.current.parsed >= "1.20.5" -> JavaVersion.VERSION_21
-    sc.current.parsed >= "1.18" -> JavaVersion.VERSION_17
-    sc.current.parsed >= "1.17" -> JavaVersion.VERSION_16
-    else -> JavaVersion.VERSION_25
+    isOrnithe || sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
+    else -> JavaVersion.VERSION_21
 }
 
 val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")
@@ -79,11 +77,10 @@ dependencies {
     minecraft("com.mojang:minecraft:$mcversion")
     if (isOrnithe) {
         mappings(ploceus!!.layeredMappings {
-            mappings("net.ornithemc:feather-gen2:$mcversion+build.${sc.properties["feather_version"] as String}:v2") {
+            mappings("net.ornithemc:feather-gen2:$mcversion+build.${sc.properties.get<String>("deps.feather_build")}:v2") {
                 containsUnpick()
             }
             mappings(rootProject.file("mappings/feather-overrides.tiny"))
-
         })
     } else {
         loomx.applyMojangMappings()
@@ -104,27 +101,13 @@ dependencies {
     testImplementation("net.fabricmc:fabric-loader-junit:$loaderversion")
 }
 
-sourceSets.main { // here's my easy workaround for mixins on each version
-    if (stonecutter.eval(stonecutter.current.version, "=1.8.9")) {
-        java.exclude("org/polyfrost/redaction/mixin/client/*.java")
-        java.exclude("org/polyfrost/redaction/mixin/client/accessor/*.java")
-    } else {
-        java.exclude("**/mixin/client/legacy/**")
-    }
-}
-
-tasks.withType<JavaCompile> {
-    if (stonecutter.eval(stonecutter.current.version, "=1.8.9")) {
-        exclude("org/polyfrost/redaction/mixin/client/*.java")
-        exclude("org/polyfrost/redaction/mixin/client/accessor/*.java")
-    } else {
-        exclude("**/mixin/client/legacy/**")
-    }
+// 1.8.9 has its own mixins under versions/1.8.9/src
+if (isOrnithe) sourceSets.main {
+    java.exclude("org/polyfrost/redaction/mixin/client/*.java", "org/polyfrost/redaction/mixin/client/accessor/*.java")
 }
 
 loom {
-    if (!isOrnithe) fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json")
-    else fabricModJsonPath = rootProject.file("src/main/resources/ornithe.mod.json")
+    fabricModJsonPath = rootProject.file("src/main/resources/${if (isOrnithe) "ornithe" else "fabric"}.mod.json")
 
     decompilerOptions.named("vineflower") {
         options.put("mark-corresponding-synthetics", "1")
@@ -180,10 +163,9 @@ tasks {
         val props = mapOf(
             "mod_id" to modid,
             "mod_name" to modname,
-            "mod_description" to (findProperty("mod_description") ?: "Redaction Mod"),
             "mod_version" to modversion,
+            "mod_description" to moddescription,
             "mc_compat" to versionrange,
-            "loader_version" to loaderversion,
             "oneconfig_version" to oneconfigversion
         )
 

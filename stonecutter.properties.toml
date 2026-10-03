@@ -8,7 +8,6 @@ publish.modrinth.id = "Gapz72zt"
 
 deps.fabric_loader = "0.19.3"
 deps.oneconfig = "1.2.5"
-deps.polyui = "2.1.7"
 deps.junit = "6.1.3"
 
 loomx.loom_version = "1.17-SNAPSHOT"
@@ -16,9 +15,8 @@ loomx.loom_version = "1.17-SNAPSHOT"
 ["1.8.9"]
 mod.mc_compat = "1.8.9"
 mod.mc_releases = ["1.8.9"]
-feather_build = 1
 deps.oneconfig = "1.1.12" # 1.2.5 not published for 1.8.9-ornithe
-deps.osl_entrypoints = "0.6.1+mc13w16a-mc1.14.4"
+deps.feather_build = "2"
 
 ["1.21.1"]
 mod.mc_compat = "1.21.1"
