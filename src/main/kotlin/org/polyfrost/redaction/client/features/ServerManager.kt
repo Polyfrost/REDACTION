@@ -38,10 +38,20 @@ object ServerManager {
     }
 
     private fun saveLastServerIp() {
+        //? if >1.8.9 {
         if (mc.singleplayerServer == null || mc.singleplayerServer!!.isPublished) { // Skip unpublished singleplayer worlds
             RedactionConfig.lastServerIP = mc.currentServer?.ip ?: ""
+            RedactionConfig.lastServerJoined = true
             RedactionConfig.save()
         }
+        //?} else {
+
+        /*if (!mc.isSingleplayer) {
+            RedactionConfig.lastServerIP = mc.currentServerEntry?.ip ?: ""
+            RedactionConfig.lastServerJoined = true
+            RedactionConfig.save()
+        }
+        *///?}
     }
 
     private fun cacheServerNames() {
