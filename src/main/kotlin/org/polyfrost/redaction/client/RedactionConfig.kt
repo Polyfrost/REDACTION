@@ -1,5 +1,6 @@
 package org.polyfrost.redaction.client
 
+import java.util.function.Predicate
 import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.Property
@@ -9,6 +10,7 @@ import org.polyfrost.oneconfig.api.config.v1.annotations.Include
 import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
 import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
 import org.polyfrost.redaction.RedactionConstants
+import org.polyfrost.redaction.client.features.ServerManager
 import org.polyfrost.redaction.client.features.particles.ParticleManager
 
 object RedactionConfig : Config(
@@ -135,6 +137,15 @@ object RedactionConfig : Config(
         addCallback("particles") {
             ParticleManager.updateParticles()
         }
+
+        addCallback("modEnabled", Predicate<Boolean> { enabled ->
+            if (enabled && serverPreview) ServerManager.cacheServerNamesAsync()
+            false
+        })
+        addCallback("serverPreview", Predicate<Boolean> { enabled ->
+            if (enabled && modEnabled) ServerManager.cacheServerNamesAsync()
+            false
+        })
 
         addDependency("handFOV", "customHandFOV")
 

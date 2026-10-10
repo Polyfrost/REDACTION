@@ -19,9 +19,16 @@ object ServerManager {
         }
 
         if (RedactionConfig.modEnabled && RedactionConfig.serverPreview) {
-            Multithreading.submit {
-                cacheServerNames()
-            }
+            cacheServerNamesAsync()
+        }
+    }
+
+    fun cacheServerNamesAsync() {
+        val now = System.currentTimeMillis()
+        if (serverList.isNotEmpty() || now - lastCacheAttempt < 10_000) return
+        lastCacheAttempt = now
+        Multithreading.submit {
+            cacheServerNames()
         }
     }
 
