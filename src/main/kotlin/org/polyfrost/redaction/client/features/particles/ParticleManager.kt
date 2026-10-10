@@ -138,7 +138,7 @@ object ParticleManager {
 
     //? if >1.8.9 {
     private fun renderParticles(graphics: GuiGraphicsExtractor, screen: Screen) {
-        if (!RedactionConfig.addSnow || screen !is AbstractContainerScreen<*>) {
+        if (!RedactionConfig.modEnabled || !RedactionConfig.addSnow || screen !is AbstractContainerScreen<*>) {
             return
         }
 
@@ -196,7 +196,7 @@ object ParticleManager {
     //?} else {
     /*@JvmStatic
     fun renderParticlesLegacy(mouseX: Int, mouseY: Int) {
-        if (!RedactionConfig.addSnow) return
+        if (!RedactionConfig.modEnabled || !RedactionConfig.addSnow) return
 
         val width = mc.window.guiScaledWidth
         val height = mc.window.guiScaledHeight

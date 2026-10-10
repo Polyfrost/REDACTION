@@ -17,7 +17,7 @@ public class TitleScreenMixin_LastJoinedServer extends net.minecraft.client.gui.
     @Inject(method = "initWidgetsNormal", at = @At("TAIL"))
     private void onInitWidgetsNormal(int height, int offset, CallbackInfo ci) {
         String ip = RedactionConfig.INSTANCE.getLastServerIP();
-        if (RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
             int j = this.height / 4 + 48;
             buttons.add(new ButtonWidget(45678998, this.width / 2 - 50, j + 112, 100, 20, ip));
         }
@@ -26,7 +26,7 @@ public class TitleScreenMixin_LastJoinedServer extends net.minecraft.client.gui.
     @Inject(method = "buttonClicked", at = @At("TAIL"))
     private void onButtonClicked(ButtonWidget button, CallbackInfo ci) {
         String ip = RedactionConfig.INSTANCE.getLastServerIP();
-        if (button.id == 45678998 && RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
+        if (button.id == 45678998 && RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
             ServerListEntry entry = new ServerListEntry(ServerManager.getServerName(ip), ip, Minecraft.getInstance().isLocalServer());
             this.minecraft.setScreen(new ConnectScreen(this, this.minecraft, entry));
         }

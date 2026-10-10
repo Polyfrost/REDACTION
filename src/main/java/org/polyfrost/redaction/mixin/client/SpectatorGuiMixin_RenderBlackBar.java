@@ -31,7 +31,7 @@ abstract class SpectatorGuiMixin_RenderBlackBar {
         SpectatorPage page,
         Operation<Void> original
     ) {
-        if (RedactionConfig.INSTANCE.getBlackbar()) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getBlackbar()) {
             BlackBar.extractSpectatorBlackBar(graphics, alpha, screenCenter, y, page, (SpectatorGuiAccessor) this);
         } else {
             original.call(instance, graphics, alpha, screenCenter, y, page);

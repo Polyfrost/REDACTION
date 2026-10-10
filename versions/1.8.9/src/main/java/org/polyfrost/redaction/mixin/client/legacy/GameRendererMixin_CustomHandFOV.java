@@ -48,7 +48,7 @@ public abstract class GameRendererMixin_CustomHandFOV {
     private float modifyFOV(float constant) {
         if (overrideHandFov) {
             overrideHandFov = false;
-            if (RedactionConfig.INSTANCE.getCustomHandFOV()) {
+            if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getCustomHandFOV()) {
                 return RedactionConfig.INSTANCE.getHandFOV();
             }
         }

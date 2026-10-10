@@ -24,7 +24,7 @@ public abstract class GameGuiMixin_RenderBlackBar {
 
     @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
     private void renderBlackBar(Window window, float tickDelta, CallbackInfo ci) {
-        if (RedactionConfig.INSTANCE.getBlackbar()) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getBlackbar()) {
             Entity camera = this.minecraft.getCamera();
             if (!(camera instanceof PlayerEntity)) return;
             PlayerEntity player = (PlayerEntity) camera;

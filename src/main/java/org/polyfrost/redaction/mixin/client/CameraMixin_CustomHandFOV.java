@@ -12,7 +12,7 @@ abstract class CameraMixin_CustomHandFOV {
     //~ if 1.21.1 'float' -> 'double' {
     @ModifyExpressionValue(method = "calculateHudFov", at = @At(value = "CONSTANT", args = "floatValue=70"))
     private float modifyFov(float original) {
-        if (RedactionConfig.INSTANCE.getCustomHandFOV()) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getCustomHandFOV()) {
             return RedactionConfig.INSTANCE.getHandFOV();
         }
 

@@ -36,7 +36,7 @@ abstract class DirectJoinServerScreenMixin_ServerPreview extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void initServerPreview(CallbackInfo ci) {
-        if (!RedactionConfig.INSTANCE.getServerPreview()) return;
+        if (!(RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getServerPreview())) return;
 
         if (!redaction$initialized) {
             createServerPreview();
@@ -49,7 +49,7 @@ abstract class DirectJoinServerScreenMixin_ServerPreview extends Screen {
     //~ if <26.1 'extractRenderState' -> 'render'
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void drawServerPreview(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
-        if (!RedactionConfig.INSTANCE.getServerPreview() || redaction$serverData == null || redaction$serverPreview == null) {
+        if (!(RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getServerPreview()) || redaction$serverData == null || redaction$serverPreview == null) {
             return;
         }
 

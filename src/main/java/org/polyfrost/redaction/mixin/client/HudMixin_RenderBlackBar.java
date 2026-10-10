@@ -29,7 +29,7 @@ abstract class HudMixin_RenderBlackBar {
             //~}
     )
     private void renderBlackBar(net.minecraft.client.gui.Hud instance, GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, Operation<Void> original) {
-        if (RedactionConfig.INSTANCE.getBlackbar()) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getBlackbar()) {
             Player player = this.getCameraPlayer();
             if (player == null) return;
             //~ if <26.2 'HudAccessor' -> 'HudAccessor'

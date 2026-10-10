@@ -27,7 +27,7 @@ public class DirectConnectScreenMixin_ServerPreview extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void initServerPreview(CallbackInfo ci) {
-        if (RedactionConfig.INSTANCE.getServerPreview()) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getServerPreview()) {
             MultiplayerScreen screen;
             if (this.parent instanceof MultiplayerScreen multiplayerScreen) {
                 screen = multiplayerScreen;
@@ -45,7 +45,7 @@ public class DirectConnectScreenMixin_ServerPreview extends Screen {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;render()V"))
     private void drawServerPreview(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        if (RedactionConfig.INSTANCE.getServerPreview() && redaction$serverPreview != null) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getServerPreview() && redaction$serverPreview != null) {
             ServerListEntryWidgetAccessor accessor = (ServerListEntryWidgetAccessor) redaction$serverPreview;
             ServerListEntry entry = accessor.getEntry();
             String text = this.serverField.getText();

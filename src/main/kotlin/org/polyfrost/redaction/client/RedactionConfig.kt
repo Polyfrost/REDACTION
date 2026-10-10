@@ -15,6 +15,13 @@ object RedactionConfig : Config(
     RedactionConstants.NAME,
     Category.QOL,
 ) {
+    @Switch(
+        title = "Global Mod Toggle",
+        description = "Toggle all mod features on or off.",
+        category = "General"
+    )
+    var modEnabled = true
+
     // TODO
 //    @Switch(
 //        title = "Disable Hand Item Lighting",

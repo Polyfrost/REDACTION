@@ -37,7 +37,7 @@ abstract class TitleScreenMixin_LastJoinedServer extends Screen {
         if (multiplayerDisabledReason != null) return i;
 
         String ip = RedactionConfig.INSTANCE.getLastServerIP();
-        if (RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
             return 98;
         }
 
@@ -58,7 +58,7 @@ abstract class TitleScreenMixin_LastJoinedServer extends Screen {
         if (multiplayerDisabledReason != null) return;
 
         String ip = RedactionConfig.INSTANCE.getLastServerIP();
-        if (RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
+        if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getLastServerJoined() && !ip.trim().isEmpty()) {
             this.addRenderableWidget(Button.builder(Component.literal(ip), (button) -> {
                 ConnectScreen.startConnecting(
                         this,

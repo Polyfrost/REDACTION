@@ -18,7 +18,7 @@ object ServerManager {
             saveLastServerIp()
         }
 
-        if (RedactionConfig.serverPreview) {
+        if (RedactionConfig.modEnabled && RedactionConfig.serverPreview) {
             Multithreading.submit {
                 cacheServerNames()
             }
