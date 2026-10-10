@@ -2,6 +2,7 @@ package org.polyfrost.redaction.client
 
 import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
+import org.polyfrost.oneconfig.api.config.v1.Property
 import org.polyfrost.oneconfig.api.config.v1.annotations.Checkbox
 import org.polyfrost.oneconfig.api.config.v1.annotations.Color
 import org.polyfrost.oneconfig.api.config.v1.annotations.Include
@@ -148,5 +149,12 @@ object RedactionConfig : Config(
         listOf(
             "lineWidth", "lineColor"
         ).forEach { addDependency(it, "connectSnow") }
+    }
+
+    override fun initialize(byConfigManager: Boolean) {
+        super.initialize(byConfigManager)
+        val tree = tree ?: return
+        val toggle = Property.recast<Boolean>(getProperty("modEnabled"))
+        tree.onAllProps { _, option -> if (option !== toggle) option.addDisplayCondition(toggle, false) }
     }
 }
