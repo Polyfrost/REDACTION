@@ -5,6 +5,7 @@ mod.group = "org.polyfrost"
 mod.version = "2.1.1"
 
 publish.modrinth.id = "Gapz72zt"
+publish.curseforge.id = "1147999"
 
 deps.fabric_loader = "0.19.3"
 deps.oneconfig = "1.4.0"
