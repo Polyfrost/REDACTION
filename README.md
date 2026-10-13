@@ -13,6 +13,8 @@ A flat hotbar that runs the full width of your screen.
 - Slot numbers on your items
 - The highlight slides between slots (Fabric versions)
 
+![Blackbar](.github/images/blackbar.gif)
+
 ### Inventory snow
 
 Adds snow behind your inventory screen.
@@ -20,11 +22,15 @@ Adds snow behind your inventory screen.
 - Choose how many there are and what color they have
 - Connect the ones near your cursor with lines
 
+![Inventory snow](.github/images/inventory-snow.gif)
+
 ### And a few more
 
 - A title screen button that rejoins the last server you played on
 - A live server preview in Direct Connect while you type the address
 - Custom FOV for your hand and held item
+
+![Server preview](.github/images/server-preview.gif)
 
 ## Supported versions
 
