@@ -1,40 +1,45 @@
 # REDACTION
 
-![Dev Workflow Status](https://img.shields.io/github/v/release/Polyfrost/REDACTION.svg?style=for-the-badge&color=1452cc&label=release)
+[![Modrinth downloads](https://img.shields.io/modrinth/dt/Gapz72zt?style=flat&logo=modrinth&label=Modrinth&color=1bd96a)](https://modrinth.com/mod/redaction)
+[![CurseForge downloads](https://img.shields.io/curseforge/dt/1147999?style=flat&logo=curseforge&label=CurseForge&color=f16436)](https://www.curseforge.com/minecraft/mc-mods/redaction)
 
-## About
-Redaction adds HUDs to your game that are normally classified as "cheat-client" modules.
-
-
-## Features
-
-### General
-
-- Disable Hand Item Lighting - Removes the lighting on held items
-- Custom Hand Item FOV - Allows to set a different FOV for the first person hand.
-- Server Preview in Direct Connect - Shows a preview of the server info in the direct connect GUI.
-- Last Server Joined Button - Shows the last server the user joined in the main menu.
+REDACTION is a collection of small visual tweaks.
 
 ### Blackbar
 
-Replaces the vanilla inventory with a "blackbar". 
+A flat hotbar that runs the full width of your screen.
 
-![REDACTION preview](https://user-images.githubusercontent.com/45589059/135241198-7f3f4978-0864-4365-942f-a3f4233821ac.png)
-(text not included. use [EvergreenHUD](https://modrinth.com/mod/evergreenhud) for that.)
+- Custom bar and highlight colors
+- Slot numbers on your items
+- The highlight slides between slots (Fabric versions)
 
-Includes following customization:
-- Whether to show slot numbers
-- Update speed
-- Blackbar color
-- Blackbar item highlight color
+![Blackbar](.github/images/blackbar.gif)
 
-### Inventory
+### Inventory snow
 
-Adds snow in the inventory.
+Adds snow behind your inventory screen.
 
-<img width="1512" alt="Screenshot 2023-03-18 at 12 31 49 PM" src="https://user-images.githubusercontent.com/45589059/226082387-4087fbcb-c3dc-43d3-83dc-27261873f3fb.png">
+- Choose how many there are and what color they have
+- Connect the ones near your cursor with lines
 
-Includes following customization:
+![Inventory snow](.github/images/inventory-snow.gif)
 
-- Amount of snow
-- Snow color
+### And a few more
+
+- A title screen button that rejoins the last server you played on
+- A live server preview in Direct Connect while you type the address
+- Custom FOV for your hand and held item
+
+![Server preview](.github/images/server-preview.gif)
+
+## Supported versions
+
+- Minecraft 1.8.9 on Ornithe.
+- Minecraft 1.21.1-26.3 on Fabric.
+
+REDACTION needs [OneConfig](https://modrinth.com/mod/oneconfig) and Fabric Language Kotlin. The Fabric builds also need Fabric API.
+
+## Support
+
+- Report bugs and ask questions on the [Polyfrost Discord](https://polyfrost.org/discord).
+- Check [Polyfrost Status](https://status.polyfrost.org/) if a Polyfrost service is down.
