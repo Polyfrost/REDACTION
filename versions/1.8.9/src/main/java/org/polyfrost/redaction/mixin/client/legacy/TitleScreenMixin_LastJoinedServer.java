@@ -1,6 +1,7 @@
 package org.polyfrost.redaction.mixin.client.legacy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.menu.TitleScreen;
 import net.minecraft.client.gui.screen.menu.multiplayer.ConnectScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -13,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TitleScreen.class)
-public class TitleScreenMixin_LastJoinedServer extends net.minecraft.client.gui.screen.Screen {
+public class TitleScreenMixin_LastJoinedServer extends Screen {
     @Inject(method = "initWidgetsNormal", at = @At("TAIL"))
     private void onInitWidgetsNormal(int height, int offset, CallbackInfo ci) {
         String ip = RedactionConfig.INSTANCE.getLastServerIP();

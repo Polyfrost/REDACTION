@@ -2,13 +2,15 @@ package org.polyfrost.redaction.mixin.client.accessor;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+//~ if <26.2 'Hud' -> 'Gui'
+import net.minecraft.client.gui.Hud;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 //~ if <26.2 'Hud' -> 'Gui'
-@Mixin(net.minecraft.client.gui.Hud.class)
+@Mixin(Hud.class)
 public interface HudAccessor {
     @Invoker
     //~ if <26.1 'invokeExtractSlot' -> 'invokeRenderSlot'

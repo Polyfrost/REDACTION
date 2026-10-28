@@ -4,6 +4,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+//~ if <26.2 'Hud' -> 'Gui'
+import net.minecraft.client.gui.Hud;
 import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.Nullable;
 import org.polyfrost.redaction.client.RedactionConfig;
@@ -14,7 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 //~ if <26.2 'Hud' -> 'Gui'
-@Mixin(net.minecraft.client.gui.Hud.class)
+@Mixin(Hud.class)
 abstract class HudMixin_RenderBlackBar {
     @Shadow protected abstract @Nullable Player getCameraPlayer();
 
@@ -28,7 +30,7 @@ abstract class HudMixin_RenderBlackBar {
             )
             //~}
     )
-    private void renderBlackBar(net.minecraft.client.gui.Hud instance, GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, Operation<Void> original) {
+    private void renderBlackBar(Hud instance, GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, Operation<Void> original) {
         if (RedactionConfig.INSTANCE.getModEnabled() && RedactionConfig.INSTANCE.getBlackbar()) {
             Player player = this.getCameraPlayer();
             if (player == null) return;

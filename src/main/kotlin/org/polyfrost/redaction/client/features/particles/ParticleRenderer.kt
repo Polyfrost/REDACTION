@@ -1,7 +1,19 @@
 package org.polyfrost.redaction.client.features.particles
 
-//? if >1.8.9
+//? if >=1.21.8 {
+import org.joml.Matrix3x2fc
+//?} else if >1.8.9
+//import com.mojang.blaze3d.vertex.PoseStack
+//? if >=1.21.8 && <=1.21.10
+//import org.joml.Matrix3x2f
+
+//? if >1.8.9 {
 import com.mojang.blaze3d.vertex.VertexConsumer
+//?} else {
+/*import net.minecraft.client.render.platform.GlStateManager
+import net.minecraft.client.render.vertex.DefaultVertexFormat
+import net.minecraft.client.render.vertex.Tesselator
+*///?}
 import org.polyfrost.oneconfig.utils.v1.dsl.mc
 import org.polyfrost.redaction.client.RedactionConfig
 import kotlin.math.PI
@@ -23,9 +35,9 @@ object ParticleRenderer {
     fun drawParticles(
         vertexConsumer: VertexConsumer,
         //? if >=1.21.8 {
-        pose: org.joml.Matrix3x2fc,
+        pose: Matrix3x2fc,
         //?} else
-        //pose: com.mojang.blaze3d.vertex.PoseStack,
+        //pose: PoseStack,
         particles: Collection<Particle>
     ) {
         val color = RedactionConfig.snowColor.argb or 0xFF000000.toInt()
@@ -58,9 +70,9 @@ object ParticleRenderer {
     fun connectParticles(
         vertexConsumer: VertexConsumer,
         //? if >=1.21.8 {
-        pose: org.joml.Matrix3x2fc,
+        pose: Matrix3x2fc,
         //?} else
-        //pose: com.mojang.blaze3d.vertex.PoseStack,
+        //pose: PoseStack,
         particles: Collection<Particle>,
         mouseX: Int,
         mouseY: Int
@@ -116,15 +128,15 @@ object ParticleRenderer {
 
     private fun VertexConsumer.addVertex(
         //? if >=1.21.8 {
-        pose: org.joml.Matrix3x2fc,
+        pose: Matrix3x2fc,
         //?} else
-        //pose: com.mojang.blaze3d.vertex.PoseStack,
+        //pose: PoseStack,
         x: Float,
         y: Float
     ): VertexConsumer {
         //? if >=1.21.8 {
         return this.addVertexWith2DPose(
-            //~ if <=1.21.10 'pose' -> 'pose as org.joml.Matrix3x2f'
+            //~ if <=1.21.10 'pose' -> 'pose as Matrix3x2f'
             pose,
             x,
             y,
@@ -143,15 +155,15 @@ object ParticleRenderer {
         val g = (color shr 8 and 0xFF) / 255f
         val b = (color and 0xFF) / 255f
 
-        net.minecraft.client.render.platform.GlStateManager.enableBlend()
-        net.minecraft.client.render.platform.GlStateManager.disableTexture()
-        net.minecraft.client.render.platform.GlStateManager.blendFuncSeparate(770, 771, 1, 0)
-        net.minecraft.client.render.platform.GlStateManager.color4f(r, g, b, 1f)
+        GlStateManager.enableBlend()
+        GlStateManager.disableTexture()
+        GlStateManager.blendFuncSeparate(770, 771, 1, 0)
+        GlStateManager.color4f(r, g, b, 1f)
 
-        val tess = net.minecraft.client.render.vertex.Tesselator.getInstance()
+        val tess = Tesselator.getInstance()
         val buf = tess.buffer
 
-        buf.begin(4, net.minecraft.client.render.vertex.DefaultVertexFormat.POSITION)
+        buf.begin(4, DefaultVertexFormat.POSITION)
         for (particle in particles) {
             val cx = particle.x
             val cy = particle.y
@@ -174,9 +186,9 @@ object ParticleRenderer {
         }
         tess.end()
 
-        net.minecraft.client.render.platform.GlStateManager.enableTexture()
-        net.minecraft.client.render.platform.GlStateManager.disableBlend()
-        net.minecraft.client.render.platform.GlStateManager.color4f(1f, 1f, 1f, 1f)
+        GlStateManager.enableTexture()
+        GlStateManager.disableBlend()
+        GlStateManager.color4f(1f, 1f, 1f, 1f)
     }
 
     fun connectParticles(particles: Collection<Particle>, mouseX: Int, mouseY: Int) {
@@ -196,13 +208,13 @@ object ParticleRenderer {
         val b = (color and 0xFF) / 255f
         val halfWidth = RedactionConfig.lineWidth / 2f
 
-        net.minecraft.client.render.platform.GlStateManager.enableBlend()
-        net.minecraft.client.render.platform.GlStateManager.disableTexture()
-        net.minecraft.client.render.platform.GlStateManager.disableCull()
-        net.minecraft.client.render.platform.GlStateManager.blendFuncSeparate(770, 771, 1, 0)
-        net.minecraft.client.render.platform.GlStateManager.color4f(r, g, b, 1f)
+        GlStateManager.enableBlend()
+        GlStateManager.disableTexture()
+        GlStateManager.disableCull()
+        GlStateManager.blendFuncSeparate(770, 771, 1, 0)
+        GlStateManager.color4f(r, g, b, 1f)
 
-        val tess = net.minecraft.client.render.vertex.Tesselator.getInstance()
+        val tess = Tesselator.getInstance()
         val buf = tess.buffer
 
         var hasConnections = false
@@ -222,7 +234,7 @@ object ParticleRenderer {
                 if (distance >= Particle.CONNECT_RANGE || distance <= 0f) continue
 
                 if (!hasConnections) {
-                    buf.begin(7, net.minecraft.client.render.vertex.DefaultVertexFormat.POSITION)
+                    buf.begin(7, DefaultVertexFormat.POSITION)
                     hasConnections = true
                 }
 
@@ -240,10 +252,10 @@ object ParticleRenderer {
 
         if (hasConnections) tess.end()
 
-        net.minecraft.client.render.platform.GlStateManager.enableTexture()
-        net.minecraft.client.render.platform.GlStateManager.enableCull()
-        net.minecraft.client.render.platform.GlStateManager.disableBlend()
-        net.minecraft.client.render.platform.GlStateManager.color4f(1f, 1f, 1f, 1f)
+        GlStateManager.enableTexture()
+        GlStateManager.enableCull()
+        GlStateManager.disableBlend()
+        GlStateManager.color4f(1f, 1f, 1f, 1f)
     }
     *///?}
 }

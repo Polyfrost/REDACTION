@@ -1,5 +1,12 @@
 package org.polyfrost.redaction.client.features
 
+//? if >=1.21.8 {
+import net.minecraft.client.renderer.RenderPipelines
+//?} elif >=1.21.4
+//import net.minecraft.client.renderer.rendertype.RenderType
+//? if 1.21.1
+//import com.mojang.blaze3d.systems.RenderSystem
+
 //? if >1.8.9 {
 import net.minecraft.client.AttackIndicatorStatus
 import net.minecraft.client.DeltaTracker
@@ -181,13 +188,13 @@ object BlackBar {
         val progress = (attackStrengthScale * 19f).toInt()
 
         //? if 1.21.1
-        //com.mojang.blaze3d.systems.RenderSystem.enableBlend()
+        //RenderSystem.enableBlend()
 
         graphics.blitSprite(
             //? if >=1.21.8 {
-            net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED,
+            RenderPipelines.GUI_TEXTURED,
             //?} elif >=1.21.4
-            //net.minecraft.client.renderer.rendertype.RenderType::guiTextured,
+            //RenderType::guiTextured,
             HOTBAR_ATTACK_INDICATOR_BACKGROUND_SPRITE,
             indicatorX,
             yInt + 2,
@@ -197,9 +204,9 @@ object BlackBar {
 
         graphics.blitSprite(
             //? if >=1.21.8 {
-            net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED,
+            RenderPipelines.GUI_TEXTURED,
             //?} elif >=1.21.4
-            //net.minecraft.client.renderer.rendertype.RenderType::guiTextured,
+            //RenderType::guiTextured,
             HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE,
             18,
             18,
@@ -212,7 +219,7 @@ object BlackBar {
         )
 
         //? if 1.21.1
-        //com.mojang.blaze3d.systems.RenderSystem.disableBlend()
+        //RenderSystem.disableBlend()
     }
     //?}
 
