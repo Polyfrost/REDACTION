@@ -11,6 +11,7 @@
 	"client": [
 		"client.CameraMixin_CustomHandFOV",
 		"client.DirectJoinServerScreenMixin_ServerPreview",
+		"client.FirstPersonHandsAndItemsRendererMixin_DisableHandLighting",
 		"client.HudMixin_RenderBlackBar",
 		"client.SpectatorGuiMixin_RenderBlackBar",
 		"client.TitleScreenMixin_LastJoinedServer",

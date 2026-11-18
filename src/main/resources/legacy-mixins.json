@@ -13,6 +13,9 @@
     "accessor.ServerListEntryWidgetAccessor",
     "ScreenMixin_RenderParticles",
     "GameRendererMixin_CustomHandFOV",
+    "GameRendererMixin_DisableHandLighting",
+    "ItemInHandRendererMixin_DisableHandLighting",
+    "ItemRendererMixin_DisableHandLighting",
     "GameGuiMixin_RenderBlackBar",
     "TitleScreenMixin_LastJoinedServer",
     "DirectConnectScreenMixin_ServerPreview"

@@ -24,12 +24,12 @@ object RedactionConfig : Config(
     )
     var modEnabled = true
 
-    // TODO
-//    @Switch(
-//        title = "Disable Hand Item Lighting",
-//        category = "General"
-//    )
-//    var disableHandLighting = false
+    @Switch(
+        title = "Disable Hand Item Lighting",
+        description = "Render the held item and hand at full brightness.",
+        category = "General"
+    )
+    var disableHandLighting = false
 
     @Switch(
         title = "Customize Hand Item FOV",
