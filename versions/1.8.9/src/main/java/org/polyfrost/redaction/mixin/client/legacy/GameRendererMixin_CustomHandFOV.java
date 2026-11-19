@@ -1,11 +1,12 @@
 package org.polyfrost.redaction.mixin.client.legacy;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.platform.GlStateManager;
-import org.polyfrost.redaction.client.RedactionConfig;
 import org.lwjgl.util.glu.Project;
 import org.objectweb.asm.Opcodes;
+import org.polyfrost.redaction.client.RedactionConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -44,7 +45,7 @@ public abstract class GameRendererMixin_CustomHandFOV {
         }
     }
 
-    @ModifyConstant(method = "getFov", constant = @Constant(floatValue = 70.0F, ordinal = 0))
+    @ModifyExpressionValue(method = "getFov", at = @At(value = "CONSTANT", args = "floatValue=70.0F", ordinal = 0))
     private float modifyFOV(float constant) {
         if (overrideHandFov) {
             overrideHandFov = false;
